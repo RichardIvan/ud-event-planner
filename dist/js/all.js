@@ -1,7 +1,6 @@
 'use strict';
 
 var ref = new Firebase('https://event-creator.firebaseio.com/');
-console.log(ref);
 
 console.log('hello world');
 
@@ -15,6 +14,9 @@ var body = document.getElementsByTagName('body')[0];
 var style = window.getComputedStyle(body, null).getPropertyValue('font-size');
 var bodyHeight = body.clientHeight;
 var fontSize = parseFloat(style);
+
+// sign in button in navigation menu
+var signIn = document.getElementById('sign-in');
 
 var newAccountContainer = document.getElementsByClassName('new-account-container')[0];
 var newEventContainer = document.getElementsByClassName('new-event-container')[0];
@@ -68,6 +70,7 @@ farawayButton.addEventListener('click', function () {
 	});
 });
 
+// MAIN NAVIGATION ITEMS
 var hamburgerIcon = document.getElementsByClassName('icon')[0];
 var navOverlay = document.getElementById('nav-overlay');
 var fadedOverlay = document.getElementById('faded-overlay');
@@ -76,7 +79,28 @@ var createAccount = document.getElementById('create-account');
 
 var cancelButtons = document.getElementsByClassName('cancel-button');
 
-console.log(cancelButtons);
+var user = ref.getAuth();
+if (user) {
+	console.log(user);
+	console.log(user.uid);
+	signIn.children[0].lastChild.data = "My Account";
+	signIn.setAttribute('onclick', 'showMyAccount()');
+} else {
+	var creds = {};
+	creds.email = 'richardivan.com@gmail.com';
+	creds.password = '1Richard';
+
+	// pop a login overlay;
+
+	// this is after clicking login button with filled in form data
+	ref.authWithPassword(creds, function (error, data) {
+		if (error) {
+			console.log(error);
+		} else {
+			console.log(data);
+		}
+	});
+}
 
 var closeAccountAndEventOverlay = function () {
 	createAccount.classList.add('aside');
@@ -863,8 +887,13 @@ var emailCheck = function () {
 	}
 };
 
-var signIn = document.getElementById('sign-in');
-signIn.addEventListener('click', function () {
+// open signUp after clicking a sign in button
+// this will be changed, because the user will first try to sign in,
+// if this sign in fails, then the New account overlay will be opened with the
+// password and email prefilled
+
+var showNewAccount = function () {
+
 	console.log('sign in');
 
 	createAccount.querySelector('h2').innerText = "New Account";
@@ -889,7 +918,13 @@ signIn.addEventListener('click', function () {
 			main.classList.remove('visible');
 		}, 300);
 	}, 100);
-});
+};
+
+var showMyAccount = function () {
+	console.log('open my account YO?');
+};
+
+var showSignIn = function () {};
 
 // this script is taken and used from
 // https://gist.github.com/ricardozea/abb9f98a19f6d04a0269
