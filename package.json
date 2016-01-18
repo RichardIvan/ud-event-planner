@@ -1,0 +1,29 @@
+{
+  "name": "Event Creator Project",
+  "version": "1.0.0",
+  "description": "Project for creating Events",
+  "main": "index.html",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Richard Ivan",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp-babel": "^6.1.1",
+    "gulp-exit": "0.0.2",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-zopfli": "^1.0.0",
+    "imagemin-pngquant": "^4.2.0",
+    "ngrok": "^0.2.2",
+    "psi": "^2.0.2",
+    "run-sequence": "^1.1.5"
+  },
+  "dependencies": {
+    "gulp-imageoptim": "^0.3.4",
+    "imageoptim-cli": "^1.11.6"
+  }
+}

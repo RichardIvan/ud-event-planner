@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Gather</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="js/lib/hammer.min.js" async></script>
+    <!-- // <script src="js/lib/hammerTime.min.js"></script> -->
+    <script src="js/lib/zenscroll-min.js" async></script>
+    <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script async>
+  </head>
+  <body id="top">
+
+    <section id="main" class="visible">
+
+      <div id="nav">
+        <!-- <div>
+          
+        </div> -->
+        <div>
+          <!-- <div></div> -->
+          <div class="icon">
+            <i class="fa fa-bars"></i>
+          </div>
+          <!-- <div></div> -->
+        </div>
+        <!-- <div>
+
+        </div> -->
+          
+        <div>
+
+        <!-- might not need search form id -->
+          <form id="search-form" action="#" onsubmit="event.preventDefault(); onSearch()">
+            <input id="search-input" placeholder="Search Events" type="search">
+          </form>
+          </div>
+        <div>
+          <div class="icon">
+            <i class="fa fa-search"></i>
+          </div>
+        </div>
+      </div>
+
+      <section id="distance-nav">
+        <ul>
+          <li class="nearby-button"><a href="#nearby">Nearby</a><div class="buttons-separator"></div><div class="buttons-separator"></div></li>
+          <li class="closeby-button"><a href="#closeby">Closeby</a></li>
+          <li class="faraway-button"><a href="#faraway">Faraway</a></li>
+        </ul>
+      </section>
+
+      <section id="distance-lists">
+
+        <section id="nearby-list">
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+
+            <div class="event-info">
+
+              <h2>Cool Birthday Party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+
+            <div class="event-info">
+
+              <h2>Snacky snacky snack party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Reading Club Presents the Newest Books in 2016</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Brutal Birthday Party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Brutal Birthday Party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+        </section>
+
+        <section id="closeby-list">
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Brutal Birthday Party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+              
+              <h2>Snacky snacky snack party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Reading Club Presents the Newest Books in 2016</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Brutal Birthday Party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Brutal Birthday Party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+        </section>
+
+        <section id="faraway-list">
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Faraway Brutal Birthday Party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+              
+              <h2>Snacky snacky snack party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Reading Club Presents the Newest Books in 2016</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Brutal Birthday Party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+          <div class="event-item">
+            <div class="map-image">
+              <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+            </div>
+            
+            <div class="event-info">
+
+              <h2>Brutal Birthday Party</h2>
+              <ul>
+                <li>7AM - 8AM / 21.21.21</li>
+                <li>Arnost</li>
+                <li>Public</li>
+              </ul>
+              
+            </div>
+            <div class="bottom-border"></div>
+          </div>
+        </section>
+
+      </section>
+
+    </section>
+
+    <div id="fa">
+
+        <div class="icon">
+          <i class="fa fa-plus"></i>
+        </div>
+
+    </div>
+
+    <section id="overlay">
+      <div id="error-container">
+        <div><p>Error</p></div>
+        <div><a href="#">Dismiss</a></div>
+      </div>
+      <section id="create-event" class="container">
+        <div class="header">
+          <h2>Create Event</h2>
+        </div>
+        <div class="fab-container">
+
+            <div class="labels">
+              <ul>
+                <li><label for="event-name">Event Name</label></li>
+                <li><label for="event-type">Event Type</label></li>
+                <li><label for="host">Host</label></li>
+                <li><label for="event-start-time">Event Start Time</label></li>
+                <li><label for="event-end-time">Event End Time</label></li>
+                <li><label for="guest-list">Guest List</label></li>
+                <li><label for="event-location">Event Location</label></li>
+                <li><label for="event-privacy">Privacy</label></li>
+              </ul>
+            </div>
+            <div class="inputs">
+              <form id="new-event-form" action="" onsubmit="finalCheck" autocomplete="on">
+                <input id="event-name" placeholder="Event Name" type="text">
+                <input id="event-type" placeholder="Event Type" type="text">
+                <input id="host" placeholder="Host" type="text">
+                <input id="event-start-time" placeholder="Start time" type="text">
+                <input id="event-end-time" placeholder="End time" type="text">
+                <input id="guest-list" placeholder="Privacy" type="text">
+                <input id="event-location" placeholder="Place" type="text">
+                <input id="event-privacy" placeholder="Privacy" type="text">
+              </form>
+            </div>
+
+        </div>
+        <div class="footer">
+
+        </div>
+      </section>
+
+      <section id="create-account" class="container">
+        <div class="header">
+          <div>
+            <h2>New Account</h2>
+          </div>
+          <div>
+            <div id="reset-fields" class="icon">
+              <i class="fa fa-repeat"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="new-account-container">
+
+            <div class="labels">
+              <ul>
+                <li><label for="name">Name</label></li>
+                <li><label for="email">Email</label></li>
+                <li><label for="pass">Password</label></li>
+                <li><label for="retype-pass">Re-type Password</label></li>
+                <li><label for="birthday">Birthday</label></li>
+                <li><label for="employer">Employer</label></li>
+                <li><label for="jobtitle">Job Title</label></li>
+              </ul>
+            </div>
+            <div class="inputs">
+              <div></div>
+              <form id="new-account-form" action="" onsubmit="finalCheck" autocomplete="on">
+                <input id="name" placeholder="Name" type="text" required onblur="nameCheck()">
+                <input id="email" placeholder="Email" type="text" required onblur="emailCheck()">
+                <input id="pass" placeholder="Password" onblur="checkPass()" type="password" required>
+                <input id="retype-pass" placeholder="Re-Type Password" onblur="checkPass()" type="password" required>
+                <input id="birthday" placeholder="Birthday - DD/MM/YYYY" type="datetime" required onblur="checkDOB()">
+                <input id="employer" placeholder="Employer" type="text" autocomplete="on">
+                <input id="jobtitle" placeholder="Job Title" type="text">
+              </form>
+              <div></div>
+            </div>
+            <div></div>
+
+        </div>
+
+        <div class="new-event-container">
+
+            <div class="labels">
+              <ul>
+                <li><label for="event-name">Event Name</label></li>
+                <li><label for="event-type">Event Type</label></li>
+                <li><label for="host">Host</label></li>
+                <li><label for="event-start-time">Event Start Time</label></li>
+                <li><label for="event-end-time">Event End Time</label></li>
+                <li><label for="guest-list">Guest List</label></li>
+                <li><label for="event-location">Event Location</label></li>
+                <li><label for="event-privacy">Privacy</label></li>
+              </ul>
+            </div>
+            <div class="inputs">
+              <div></div>
+              <form id="new-event-form" action="" onsubmit="finalCheck" autocomplete="on">
+                <input id="event-name" placeholder="Event Name" type="text">
+                <input id="event-type" placeholder="Event Type" type="text">
+                <input id="host" placeholder="Event Host" type="text">
+                <input id="event-start-time" placeholder="Start time" type="text">
+                <input id="event-end-time" placeholder="End time" type="text">
+                <input id="guest-list" placeholder="Guest list" type="text">
+                <input id="event-location" placeholder="Place" type="text">
+                <input id="event-privacy" placeholder="Privacy" type="text">
+              </form>
+              <div></div>
+            </div>
+            <div></div>
+
+        </div>
+
+        <div class="footer">
+          <div class="cancel-button"><a href="#"><p>Cancel</p></a><div class="buttons-separator"></div></div>
+          <div>
+            <div class="next-button" onclick="focusNextElement()"><a href="#"><p>Next</p></a></div>
+            <div class="submit-button" onclick="submitNewAccount()"><a href="#"><p>Confirm</p></a></div>
+          </div>
+
+        </div>
+      </section>
+
+    </section>
+
+    <div id="faded-overlay">
+
+    </div>
+
+    <section id="event-overlay">
+      <div class="map-image">
+        <div>
+          <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+          <div class="close-button">
+            <i class="fa fa-times"></i>
+          </div>
+        </div>
+      </div>
+      <div class="header">
+        <h2>Hello world</h2>
+      </div>
+      <div class="content">
+        <div class="wrapper">
+          <p>Hello world</p>
+        </div>
+      </div>
+      
+    </section>
+
+    <section id="nav-overlay">
+
+      <div class="container">
+        <div class="image">
+          <img src="img/nav_bg.jpg" alt="Material Design Background Image">
+        </div>
+        <div class="menu-items">
+          <ul>
+            <li id="sign-in"><a href="#"><i class="fa fa-user"></i>Sign In</a></li>
+            <li><a href="#"><i class="fa fa-at"></i>My Events</a></li>
+            <li><a href="#"><i class="fa fa-sign-out"></i>Logout</a></li>
+          </ul>
+        </div>
+        <div class="filler">
+          
+        </div>
+      </div>
+
+    </section>
+
+    <script src="js/all.js" async></script>
+
+  </body>
+</html>
