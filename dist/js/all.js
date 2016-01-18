@@ -3,8 +3,6 @@
 var ref = new Firebase('https://event-creator.firebaseio.com/');
 console.log(ref);
 
-ref.set({ 'what': "isUp" });
-
 console.log('hello world');
 
 console.log(document.styleSheet);
@@ -80,30 +78,34 @@ var cancelButtons = document.getElementsByClassName('cancel-button');
 
 console.log(cancelButtons);
 
+var closeAccountAndEventOverlay = function () {
+	createAccount.classList.add('aside');
+	main.classList.add('visible');
+
+	setTimeout(function () {
+		// remove all the classes
+		createAccount.classList.remove('aside');
+
+		overlay.classList.remove('visible');
+		newAccountContainer.classList.remove('visible', 'visibly');
+		newEventContainer.classList.remove('visible', 'visibly');
+
+		// newAccountContainer.classList.remove( 'visible' );
+		newAccountHeader.classList.remove('visible');
+		newAccountFooter.classList.remove('visible');
+
+		overlay.classList.remove('from-left', 'visible', 'from-left-to-middle');
+	}, 300);
+	// console.log( 'hello' );
+};
+
 var len = cancelButtons.length;
 for (var i = 0; i < len; i++) {
 	// console.log( i );
 	// console.log( cancelButtons[i] );
 	cancelButtons[i].addEventListener('click', function () {
 
-		createAccount.classList.add('aside');
-		main.classList.add('visible');
-
-		setTimeout(function () {
-			// remove all the classes
-			createAccount.classList.remove('aside');
-
-			overlay.classList.remove('visible');
-			newAccountContainer.classList.remove('visible', 'visibly');
-			newEventContainer.classList.remove('visible', 'visibly');
-
-			// newAccountContainer.classList.remove( 'visible' );
-			newAccountHeader.classList.remove('visible');
-			newAccountFooter.classList.remove('visible');
-
-			overlay.classList.remove('from-left', 'visible', 'from-left-to-middle');
-		}, 300);
-		// console.log( 'hello' );
+		closeAccountAndEventOverlay();
 	});
 }
 
@@ -568,6 +570,14 @@ var showError = function (error) {
 			console.log('Invalid Email');
 			flashError('Invalid Email Address');
 			break;
+		case 12:
+			console.log('Email Already in Use');
+			flashError('Email Already in Use');
+			break;
+		case 13:
+			console.log('Account Successfully Created');
+			flashError('Account Successfully Created');
+			break;
 	}
 };
 
@@ -652,6 +662,7 @@ var submitNewAccount = function () {
 	ref.createUser(credentials, function (error, user) {
 		if (error) {
 			console.log(error);
+			showError(12);
 		} else {
 			console.log(user);
 			ref.authWithPassword(credentials, function (error, user) {
@@ -667,6 +678,13 @@ var submitNewAccount = function () {
 					obj.job = newAccountForm.jobtitle.value;
 					console.log(obj);
 					ref.child(uid).set(obj);
+
+					// if the previous state was that the user wanted to
+					// create an event but didn't have an account, then
+					// the state shoudl return to event creation page.
+					closeAccountAndEventOverlay();
+					showError(13);
+					// close the overlay and all
 				}
 			});
 		}
