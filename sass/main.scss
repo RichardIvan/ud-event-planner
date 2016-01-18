@@ -418,10 +418,10 @@ body {
 
     ul {
         position: absolute;
-        bottom: 1.7em;
+        bottom: 0em !important;
         padding-left: 0.5em;
     }
-    
+
     li {
         list-style-type: none;
         margin-top: 0.5em;
@@ -1139,4 +1139,85 @@ body {
     .content {
         opacity: 0;
     }
+}
+
+#sign-in-overlay.visible {
+    z-index: 30;
+    opacity: 1;
+
+    transition: opacity 0.3s ease-in-out;
+    transition-delay: 0.6s;
+    // .container {
+    //     z-index: 40;
+    // }
+}
+
+#sign-in-overlay {
+
+    opacity: 0;
+    z-index: 0;
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 80%;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    div:first-child {
+        flex-grow: 1;
+    }
+
+    div:nth-child( 2 ) {
+        height: 20em;
+        background: #656565;
+        padding: 1em;
+        color: white;
+    }
+
+    div:nth-child( 3 ) {
+        flex-grow: 1
+    }
+
+
+    .container {
+        position: relative;
+        
+    }
+
+    h2 {
+        // position: absolute;
+        margin: 0;
+        margin-top: 1em;
+        // margin-right: 2em;
+        position: relative;
+        float: right;
+        right: 1em;
+        // margin-left: 60%;
+
+    }
+
+    label, form {
+        width: 100%;
+    }
+
+    form {
+        margin: 0 auto;
+        height: 100%;
+        padding: 1em;
+    }
+    input {
+        padding:1em;
+        width: 80%;
+    }
+
+    label {
+        float: left;
+        padding: 1em;
+    }
+
 }

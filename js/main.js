@@ -93,7 +93,7 @@ if ( user ) {
 	console.log( user );
 	console.log( user.uid );
 	signIn.children[0].lastChild.data = "My Account";
-	signIn.setAttribute( 'onclick', 'showMyAccount()' );
+	// signIn.setAttribute( 'onclick', 'showMyAccount()' );
 } else {
 	var creds = {};
 	creds.email = 'richardivan.com@gmail.com';
@@ -366,9 +366,13 @@ for ( var i = 0; i < len; i++ ) {
 // 	})
 // })
 
-fadedOverlay.addEventListener( 'click', function() {
+var closeNav = function() {
 	navOverlay.classList.remove( 'opened' );
 	fadedOverlay.classList.remove( 'opened' );
+}
+
+fadedOverlay.addEventListener( 'click', function() {
+	closeNav();
 })
 
 hamburgerIcon.addEventListener( 'click', function() {
@@ -479,6 +483,9 @@ var onSearch = function() {
 	saerchInput.blur();
 	// console.log( 'saerchForm' );
 }
+
+
+
 
 var passField = document.getElementById( 'pass' );
 var rePassField = document.getElementById( 'retype-pass' );
@@ -991,8 +998,27 @@ var showMyAccount = function() {
 	console.log( 'open my account YO?' );
 }
 
+
+// SIGN IN OVERLAY AND VIEW
+
+var signInForm = document.getElementById( 'sign-in-form' );
+var signInOverLay = document.getElementById( 'sign-in-overlay' );
+
+var hideSignIn = function() {
+	fadedOverlay.setAttribute( 'onclick', '' );
+	fadedOverlay.classList.remove( 'opened' );
+	signInOverLay.classList.remove( 'visible' );
+	console.dir( 'sign in hide');
+}
+
 var showSignIn = function() {
-	
+	closeNav();
+	fadedOverlay.setAttribute( 'onclick', 'hideSignIn()')
+	setTimeout( function() {
+		fadedOverlay.classList.add( 'opened' );
+	}, 300 );
+	signInOverLay.classList.add( 'visible' );
+	console.dir( 'sign in show');
 }
 
 // this script is taken and used from
