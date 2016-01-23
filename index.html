@@ -15,6 +15,23 @@
   </head>
   <body id="top">
 
+    <div class="event-item">
+      <div class="map-image">
+        <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
+      </div>
+
+      <div class="event-info">
+
+        <h2>Cool Birthday Party</h2>
+        <ul>
+          <li>7AM - 8AM / 21.21.21</li>
+          <li>Arnost</li>
+        </ul>
+
+      </div>
+      <div class="bottom-border"></div>
+    </div>
+
     <section id="main" class="visible">
       <div id="nav">
         <!-- <div>
@@ -56,7 +73,7 @@
       <section id="distance-lists">
 
         <section id="nearby-list">
-          <div class="event-item">
+          <!-- <div class="event-item">
             <div class="map-image">
               <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
             </div>
@@ -140,10 +157,14 @@
               
             </div>
             <div class="bottom-border"></div>
-          </div>
+          </div> -->
+
+          
         </section>
 
         <section id="closeby-list">
+          
+
           <div class="event-item">
             <div class="map-image">
               <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
@@ -229,9 +250,14 @@
             </div>
             <div class="bottom-border"></div>
           </div>
+
+
         </section>
 
         <section id="faraway-list">
+          
+
+
           <div class="event-item">
             <div class="map-image">
               <img src="img/download.png" alt="This is a map of a random place displayed on Google map">
@@ -317,6 +343,9 @@
             </div>
             <div class="bottom-border"></div>
           </div>
+
+
+
         </section>
 
       </section>
@@ -397,7 +426,7 @@
             <div class="inputs">
               <div></div>
               <form id="new-event-form" action="" onsubmit="finalCheck()" autocomplete="on">
-                <input id="event-name" placeholder="Event Name" type="text">
+                <input id="event-name" placeholder="Event Name" type="text" onblur="checkIfNewEventFormReadyForSubmit()">
                 <input list="types" id="event-type" placeholder="Event Type" type="text">
                 <datalist id="types">
                   <option value="Birthday">
@@ -409,12 +438,17 @@
                   <option value="Halloween">
                 </datalist>
                 <input id="host" placeholder="Event Host" type="text">
-                <input id="event-start-date" placeholder="Event date - DD/MM/YY" type="text" onblur="checkStartDate()">
-                <input id="event-start-time" placeholder="Start time - HH:MM" type="text" onblur="checkStartTime()">
-                <input id="event-end-date" placeholder="Event End Date - DD/MM/YY" type="text" onblur="checkEndDate()">
-                <input id="event-end-time" placeholder="End time - HH:MM" type="text" onblur="checkEndTime()">
-                <input id="google-event-location" placeholder="Place" type="text" autocomplete="on">
-                <input id="event-privacy" placeholder="Privacy" type="text">
+                <input id="event-start-date" placeholder="Event date - DD/MM/YY" type="text" onblur="checkStartDate(); checkIfNewEventFormReadyForSubmit()">
+                <input id="event-start-time" placeholder="Start time - HH:MM" type="text" onblur="checkStartTime(); checkIfNewEventFormReadyForSubmit()">
+                <input id="event-end-date" placeholder="Event End Date - DD/MM/YY" type="text" onblur="checkEndDate(); checkIfNewEventFormReadyForSubmit()">
+                <input id="event-end-time" placeholder="End time - HH:MM" type="text" onblur="checkEndTime(); checkIfNewEventFormReadyForSubmit()">
+                <input id="google-event-location" placeholder="Place" type="text" autocomplete="on" onblur="checkIfNewEventFormReadyForSubmit()">
+
+                <h3>Private</h3>
+                <div id="privacy-button" onclick="togglePrivacy()">
+                  <div class="button-overlay off"></div>
+                  <span>On</span><span>Off</span>
+                </div>
               </form>
               <div></div>
             </div>

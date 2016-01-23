@@ -459,6 +459,8 @@ faButton.addEventListener('click', function (e) {
 		faButton.classList.add('expand-animation');
 
 		createAccount.querySelector('h2').innerText = "Create Event";
+		createAccount.querySelector('.next-button').setAttribute('onclick', 'focusNextElementInNewEvent()');
+		createAccount.querySelector('.submit-button').setAttribute('onclick', 'submitNewEvent()');
 
 		overlay.classList.add('visible');
 		// newAccountContainer.classList.add( 'visible' );
@@ -621,9 +623,17 @@ var showError = function (error) {
 			console.log('Incorrect minute format');
 			flashError('Invalid event end date format');
 			break;
-		case 21:
+		case 22:
 			console.log('No support for device location');
 			flashError('No support for device location');
+			break;
+		case 23:
+			console.log('Invalid Date Format');
+			flashError('Invalid Date Format');
+			break;
+		case 24:
+			console.log('Event Successfully Created');
+			flashError('Event Successfully Created');
 			break;
 	}
 };
@@ -820,7 +830,7 @@ var submitNewAccount = function () {
 					obj.employer = newAccountForm.employer.value;
 					obj.job = newAccountForm.jobtitle.value;
 					console.log(obj);
-					ref.child(uid).child('info').set(obj);
+					ref.child('users').child(uid).child('info').set(obj);
 
 					// if the previous state was that the user wanted to
 					// create an event but didn't have an account, then
@@ -1071,10 +1081,6 @@ var showMyAccount = function () {
 //
 //
 
-var resetNewEventFields = function () {
-	form;
-};
-
 //
 //
 // SIGN IN OVERLAY AND VIEW
@@ -1246,22 +1252,31 @@ var verifyDate = function (date) {
 	}
 };
 
+var getDayMonthYear = function (date) {
+
+	var dateObj = {};
+
+	dateObj.day = parseInt(date.substring(0, 2));
+	dateObj.month = parseInt(date.substring(2, 4));
+	dateObj.year = parseInt(date.substring(4, 6));
+
+	return dateObj;
+};
+
 var checkEventDateFormat = function (start) {
 
 	var date, len;
-
-	var dateObj = {};
 
 	if (start) {
 
 		date = newEventForm['event-start-date'].value;
 		len = date.length;
-		dateObj.start = true;
+		// dateObj.start = true;
 	} else {
 
-		date = newEventForm['event-end-date'].value;
-		len = date.length;
-	}
+			date = newEventForm['event-end-date'].value;
+			len = date.length;
+		}
 
 	console.log(date);
 
@@ -1269,24 +1284,26 @@ var checkEventDateFormat = function (start) {
 
 		if (len === 6) {
 
-			dateObj.day = parseInt(date.substring(0, 2));
-			dateObj.month = parseInt(date.substring(2, 4));
-			dateObj.year = parseInt(date.substring(4, 6));
-
-			verifyDate(dateObj);
+			verifyDate(getDayMonthYear(date));
 		} else if (len === 8) {
 
-			dateObj.day = parseInt(date.substring(0, 2));
-			dateObj.month = parseInt(date.substring(3, 5));
-			dateObj.year = parseInt(date.substring(6, 8));
+			var d = date.split('/');
+			var date = d.join('');
 
-			verifyDate(dateObj);
+			if (date.length === 6) {
+
+				verifyDate(getDayMonthYear(date));
+			} else showError(23);
 		} else {
 
 			if (start) {
 				// show error stating that the startdate format is wrong
 				showError(20);
-			} else showError(21);
+				return;
+			} else {
+				showError(21);
+				return;
+			}
 		}
 	}
 };
@@ -1377,6 +1394,8 @@ var initAutocomplete = function () {
 
 	autocomplete.addListener('place_changed', function () {
 		var place = autocomplete.getPlace();
+		input.data = place;
+		console.dir(input);
 		console.log(place);
 		console.log(place.types.length);
 		if (place.types.length > 1) {
@@ -1389,18 +1408,258 @@ var initAutocomplete = function () {
 			input.value = place['address_components'][1]['long_name'] + ' ' + place['address_components'][0]['long_name'];
 		}
 	});
-
-	console.log("AUROCOMPLETE INITIATED");
 };
 
-initAutocomplete();
+var privacy = true;
+var togglePrivacy = function () {
 
-var map = new google.maps.Map(document.getElementById('map'), {
-	center: { lat: -33.8688, lng: 151.2195 },
-	zoom: 13
-});
+	var button = newEventContainer.querySelector('#privacy-button');
+	var buttonSwitch = button.children[0];
+	buttonSwitch.classList.toggle('off');
+	console.log(privacy);
+	if (!privacy) {
+		privacy = !privacy;
+	} else privacy = !privacy;
+	console.log(privacy);
+	console.dir(button);
+};
 
-console.log(map);
+var eventObject = {};
+var saveEventToDb = function (obj) {
+
+	console.log(obj);
+
+	// the private event has a property that is called access..
+	// and there is user id's being pushed to that endpoint .. this
+	// then has a rule within the security tab in firebase that
+	// checks if the user id is there...
+
+	// upon save, update the events' ID
+	// with what firebase gave it
+
+	// update logged in users' created events,
+	// so these can be displayed in my events
+
+	if (!obj.privacy) {
+		// save to public events
+		console.log('save to public events');
+		var pushedData = ref.child('events/public').push(obj, function (error, data) {
+			if (error) {
+				console.dir(error);
+			} else {
+
+				var id = pushedData.key();
+
+				ref.child('events/public').child(id).update({ 'id': id }, function (error, data) {
+
+					if (error) {
+						console.dir(error);
+					} else {
+						console.log(data);
+					}
+				});
+
+				console.log(id);
+				console.dir(id);
+				// update the saved item with ID..
+
+				// update the user.events with the event id
+			}
+		});
+	} else {
+			// save to private events
+			console.log('save to private events');
+		}
+
+	showError(24);
+};
+
+var isBeingSubmitted = false;
+var submitNewEvent = function () {
+
+	if (!isBeingSubmitted) {
+
+		closeAccountAndEventOverlay();
+
+		console.log(newEventForm);
+		console.dir(newEventForm);
+
+		var len = newEventForm.length;
+
+		var obj = {};
+
+		for (var i = 0; i < len; i++) {
+			var name = newEventForm[i].id;
+			var value = newEventForm[i].value;
+
+			if (value !== '') {
+				obj[name] = value;
+			}
+		}
+
+		console.log(obj);
+
+		obj['location-data'] = {};
+		obj['location-data'].lat = newEventForm['google-event-location'].data.geometry.location.lat();
+		obj['location-data'].lng = newEventForm['google-event-location'].data.geometry.location.lng();
+		obj['privacy'] = privacy;
+
+		saveEventToDb(obj);
+		resetFields();
+	}
+
+	// ref.createUser( credentials, function( error, user ) {
+	// 	if ( error ) {
+	// 		console.log( error );
+	// 		showError( 12 );
+	// 	} else {
+	// 		console.log( user );
+	// 		ref.authWithPassword( credentials, function( error, user ) {
+	// 			if( error ) {
+	// 				console.log( error );
+	// 			} else {
+	// 				console.log( user );
+
+	// 				var uid = user.auth.uid;
+	// 				var obj = {};
+	// 				obj.name = newAccountForm.name.value;
+	// 				obj.birthday = newAccountForm.birthday.value;
+	// 				obj.employer = newAccountForm.employer.value;
+	// 				obj.job = newAccountForm.jobtitle.value;
+	// 				console.log( obj );
+	// 				ref.child( uid ).child( 'info' ).set( obj );
+
+	// 				// if the previous state was that the user wanted to
+	// 				// create an event but didn't have an account, then
+	// 				// the state shoudl return to event creation page.
+	// 				closeAccountAndEventOverlay();
+
+	// 				resetFields();
+
+	// 				showError( 13 );
+
+	// 				changeSignInButtonToMyAccount();
+
+	// 				// figure out the State of the applicatino and if the user
+	// 				// was creating a new event before
+	// 				// the app should switch back to that state..
+
+	// 				// showSignIn();
+
+	// 				// close the overlay and all
+	// 			}
+	// 		})
+	// 	}
+	// })
+};
+
+var focusNextElementInNewEvent = function (element) {
+
+	console.log('FOCUS NEXT ELEMENT');
+
+	// checkIfFormReadyForSubmit( true );
+	var elements = [newEventForm['event-name'], newEventForm['event-start-date'], newEventForm['event-start-time'], newEventForm['event-end-date'], newEventForm['event-end-time'], newEventForm['google-event-location']];
+	var len = elements.length;
+
+	console.log(elements);
+
+	for (var i = 0; i < len; i++) {
+		if (elements[i].value === '') {
+			elements[i].scrollIntoView(true);
+			// element.scrollIntoView(true);
+			elements[i].focus();
+			return;
+		}
+	}
+
+	checkIfNewEventFormReadyForSubmit();
+
+	// if ( elements[0].value === '' ) {
+	// 	elements[0].focus();
+	// } else if ( elements[1].value === '' ) {
+	// 	elements[1].scrollIntoView(true);
+	// 	elements[1].focus();
+	// } else {
+
+	// }
+};
+
+var checkIfNewEventFormReadyForSubmit = function (status) {
+
+	console.log('CHECK IF NEW EVENT READY FOR SUBMIT');
+
+	var elements = [newEventForm['event-name'], newEventForm['event-start-date'], newEventForm['event-start-time'], newEventForm['event-end-date'], newEventForm['event-end-time'], newEventForm['google-event-location']];
+	var len = elements.length;
+
+	for (var i = 0; i < len; i++) {
+		var element = elements[i];
+		if (element.value === '') {
+			swapButtons(false);
+			return;
+		}
+	}
+	swapButtons(true);
+};
+
+var buildEvents = function (evts) {
+
+	var events = evts;
+
+	// console.log( events );
+
+	var keys = Object.keys(events);
+	var len = keys.length;
+	// console.log( keys );
+
+	for (var a = 0; a < len; a++) {
+		var key = keys[a];
+		// console.log( key );
+		var evt = events[key];
+		// console.log( evt );
+		// console.log(  );
+		nearbyList.appendChild(new Event(evt));
+	}
+};
+
+console.log(events);
+var eventItem = document.getElementsByClassName('event-item')[0];
+
+var Event = function (info) {
+
+	console.log('building event');
+
+	console.log(info);
+	var lat = info['location-data'].lat;
+	var lng = info['location-data'].lng;
+
+	var clone = eventItem.cloneNode(true);
+
+	var mapImg = clone.querySelector('img');
+	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=16&size=400x400&maptype=terrain&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk';
+	mapImg.setAttribute('src', url);
+	var h2 = clone.querySelector('h2');
+	h2.innerText = info['event-name'];
+	var ul = clone.querySelector('ul');
+	var startTime = info['event-start-time'];
+	startTime = startTime.substring(0, 2) + ':' + startTime.substring(2, 4);
+	var endTime = info['event-end-time'];
+	endTime = endTime.substring(0, 2) + ':' + endTime.substring(2, 4);
+	var startDate = info['event-start-date'];
+	startDate = startDate.substring(0, 2) + '.' + startDate.substring(2, 4) + '.' + startDate.substring(4, 6);
+	ul.children[0].innerText = startTime + ' - ' + endTime + ' / ' + startDate;
+	ul.children[1].innerText = info['google-event-location'];
+	return clone;
+};
+
+var events;
+var loadEvents = function () {
+	ref.child('events/public').once('value', function (snap) {
+		events = snap.val();
+		console.log(events);
+		buildEvents(events);
+	});
+};
+loadEvents();
 /*! Hammer.JS - v2.0.6 - 2016-01-06
  * http://hammerjs.github.io/
  *

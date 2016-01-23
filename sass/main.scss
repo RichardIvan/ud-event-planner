@@ -38,6 +38,10 @@ body {
     margin: 0;
 }
 
+body > .event-item {
+    display: none;
+}
+
 #main {
     transform: scale( 0.9 );
     transition: transform .3s ease-in-out;
@@ -313,8 +317,8 @@ body {
 
     background: #FFF;
 
-    display: flex;
-    flex-wrap: wrap;
+    // display: flex;
+    // flex-wrap: wrap;
 
     z-index: 30;
     padding-bottom: 1em;
@@ -1243,3 +1247,46 @@ body {
     }
 
 }
+
+#privacy-button {
+    padding: 1.8em;
+    background: white;
+    width: 15%;
+    position: relative;
+    float: right;
+    margin-right: 5%;
+    margin-top: 1em;
+
+    span {
+        text-transform: uppercase;
+        padding-right: 1em;
+        // padding-left: 0.5em;
+    }
+
+    
+
+    .button-overlay.off {
+        transform: translateX( 90% );
+    }
+
+    .button-overlay {
+        transform: translateX( 0% );
+        transition: transform .3s ease-in-out;
+        position: absolute;
+        background: #A3A0A1;
+        height: 80%;
+        width: 45%;
+        top: 10%;
+        left: 6%;
+    }
+
+}
+
+#new-event-form h3 {
+        position: relative;
+        float: left;
+        left: 2em;
+        top: 0.2em;
+        text-transform: uppercase;
+        font-size: 2em;
+    }
