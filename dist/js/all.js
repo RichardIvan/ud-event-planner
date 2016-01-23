@@ -2,6 +2,12 @@
 
 var ref = new Firebase('https://event-creator.firebaseio.com/');
 
+//
+//
+// SETUP CODE
+//
+//
+
 console.log('hello world');
 
 console.log(document.styleSheet);
@@ -15,8 +21,9 @@ var style = window.getComputedStyle(body, null).getPropertyValue('font-size');
 var bodyHeight = body.clientHeight;
 var fontSize = parseFloat(style);
 
+var errorContainer = document.getElementById('error-container');
 // sign in button in navigation menu
-var signIn = document.getElementById('sign-in');
+var signInNavOverlay = document.getElementById('sign-in');
 
 var newAccountContainer = document.getElementsByClassName('new-account-container')[0];
 var newEventContainer = document.getElementsByClassName('new-event-container')[0];
@@ -32,8 +39,20 @@ eventOverlayCloseButton.addEventListener('click', function () {
 	}, 1000);
 });
 
-var newAccountHeader = document.getElementsByClassName('header')[1];
-var newAccountFooter = document.getElementsByClassName('footer')[1];
+//
+// NAV ITEMS
+//
+
+var hamburgerIcon = document.getElementsByClassName('icon')[0];
+var navOverlay = document.getElementById('nav-overlay');
+var fadedOverlay = document.getElementById('faded-overlay');
+
+var createAccount = document.getElementById('create-account');
+
+var cancelButtons = document.getElementsByClassName('cancel-button');
+
+var newAccountHeader = document.getElementsByClassName('header')[0];
+var newAccountFooter = document.getElementsByClassName('footer')[0];
 
 var nearbyList = document.getElementById('nearby-list');
 var closebyList = document.getElementById('closeby-list');
@@ -44,6 +63,22 @@ var closebyButton = document.getElementsByClassName('closeby-button')[0];
 var farawayButton = document.getElementsByClassName('faraway-button')[0];
 
 var viewportElements = [nearbyList, closebyList, farawayList];
+
+//
+//
+// OVERLAY
+//
+//
+
+var signInForm = document.getElementById('sign-in-form');
+var signInOverLay = document.getElementById('sign-in-overlay');
+var h2 = signInOverLay.querySelector('h2');
+
+var passField = document.getElementById('pass');
+var rePassField = document.getElementById('retype-pass');
+
+var newAccountForm = document.getElementById('new-account-form');
+var newEventForm = document.getElementById('new-event-form');
 
 console.log(nearbyButton);
 
@@ -70,37 +105,56 @@ farawayButton.addEventListener('click', function () {
 	});
 });
 
+//
+//
+// NAV MENU
+//
+//
+
+var closeNav = function () {
+	navOverlay.classList.remove('opened');
+	fadedOverlay.classList.remove('opened');
+};
+
+fadedOverlay.addEventListener('click', function () {
+	closeNav();
+});
+
+hamburgerIcon.addEventListener('click', function () {
+	// console.log( 'add' );
+	navOverlay.classList.add('opened');
+	fadedOverlay.classList.add('opened');
+});
+
+//
+//
 // MAIN NAVIGATION ITEMS
-var hamburgerIcon = document.getElementsByClassName('icon')[0];
-var navOverlay = document.getElementById('nav-overlay');
-var fadedOverlay = document.getElementById('faded-overlay');
+//
+//
 
-var createAccount = document.getElementById('create-account');
+var FireAuthData = ref.getAuth();
+if (FireAuthData) {
+	console.log(FireAuthData);
+	console.log(FireAuthData.uid);
+	signInNavOverlay.children[0].lastChild.data = "My Account";
+	signInNavOverlay.setAttribute('onclick', 'showMyAccount()');
 
-var cancelButtons = document.getElementsByClassName('cancel-button');
+	// reauthenticate
+	ref.authWithCustomToken(FireAuthData.token, function (error, data) {
+		if (!error) {
+			console.log('horay');
+		}
+	});
 
-var user = ref.getAuth();
-if (user) {
-	console.log(user);
-	console.log(user.uid);
-	signIn.children[0].lastChild.data = "My Account";
-	// signIn.setAttribute( 'onclick', 'showMyAccount()' );
-} else {
-		var creds = {};
-		creds.email = 'richardivan.com@gmail.com';
-		creds.password = '1Richard';
-
-		// pop a login overlay;
-
-		// this is after clicking login button with filled in form data
-		ref.authWithPassword(creds, function (error, data) {
-			if (error) {
-				console.log(error);
-			} else {
-				console.log(data);
+	var interval = 60000 * 60 * 23;
+	setInterval(function () {
+		ref.authWithCustomToken(FireAuthData.token, function (error, data) {
+			if (!error) {
+				console.log('horay');
 			}
 		});
-	}
+	}, interval);
+}
 
 var closeAccountAndEventOverlay = function () {
 	createAccount.classList.add('aside');
@@ -132,6 +186,12 @@ for (var i = 0; i < len; i++) {
 		closeAccountAndEventOverlay();
 	});
 }
+
+//
+//
+// MAIN VIEW
+//
+//
 
 var extractEventItem = function (elements) {
 	var elements = elements;
@@ -332,21 +392,6 @@ for (var i = 0; i < len; i++) {
 // 	})
 // })
 
-var closeNav = function () {
-	navOverlay.classList.remove('opened');
-	fadedOverlay.classList.remove('opened');
-};
-
-fadedOverlay.addEventListener('click', function () {
-	closeNav();
-});
-
-hamburgerIcon.addEventListener('click', function () {
-	// console.log( 'add' );
-	navOverlay.classList.add('opened');
-	fadedOverlay.classList.add('opened');
-});
-
 // now you have a proper float for the font size (yes, it can be a float, not just an integer)
 // el.style.fontSize = (fontSize + 1) + 'px';
 // console.log( fontSize );
@@ -401,31 +446,42 @@ newAccountContainer.style.height = h;
 newAccountContainer.style.minHeight = h;
 
 faButton.addEventListener('click', function (e) {
-	faButton.classList.add('expand-animation');
 
-	createAccount.querySelector('h2').innerText = "Create Event";
+	// IF the user is not signed in, show sign in/sign up page
+	// else opoen the new event pag
 
-	overlay.classList.add('visible');
-	// newAccountContainer.classList.add( 'visible' );
-	// newEventContainer.classList.add( 'visible' );
-	newEventContainer.classList.add('visibly');
+	console.log(FireAuthData);
 
-	newAccountHeader.classList.add('visible');
-	newAccountFooter.classList.add('visible');
+	if (!FireAuthData) {
 
-	console.log(newAccountHeader);
-	console.log(newAccountFooter);
+		showSignIn();
+	} else {
+		faButton.classList.add('expand-animation');
 
-	setTimeout(function () {
+		createAccount.querySelector('h2').innerText = "Create Event";
 
-		newEventContainer.classList.add('visible');
+		overlay.classList.add('visible');
+		// newAccountContainer.classList.add( 'visible' );
+		// newEventContainer.classList.add( 'visible' );
+		newEventContainer.classList.add('visibly');
+
+		newAccountHeader.classList.add('visible');
+		newAccountFooter.classList.add('visible');
+
+		console.log(newAccountHeader);
+		console.log(newAccountFooter);
 
 		setTimeout(function () {
-			faButton.classList.remove('expand-animation');
-			faButton.classList.remove('expanded');
-			main.classList.remove('visible');
-		}, 300);
-	}, 200);
+
+			newEventContainer.classList.add('visible');
+
+			setTimeout(function () {
+				faButton.classList.remove('expand-animation');
+				faButton.classList.remove('expanded');
+				main.classList.remove('visible');
+			}, 300);
+		}, 200);
+	}
 });
 
 // var el = document.getElementById('foo');
@@ -442,11 +498,6 @@ var onSearch = function () {
 	saerchInput.blur();
 	// console.log( 'saerchForm' );
 };
-
-var passField = document.getElementById('pass');
-var rePassField = document.getElementById('retype-pass');
-
-var newAccountForm = document.getElementById('new-account-form');
 
 // select input value on click within the new Account Form
 // this needs to be refactored and should be accepting any form
@@ -472,76 +523,8 @@ var attachClickAndSelectFunctionToForm = function (forms) {
 
 attachClickAndSelectFunctionToForm(forms);
 
-var swapButtons = function (on) {
-	var accFooter = document.getElementsByClassName('footer')[1];
-	console.dir(accFooter);
-	if (on) {
-		for (var i = 0; i < 2; i++) {
-			accFooter.children[1].children[i].classList.add('visible');
-		}
-	} else {
-		for (var i = 0; i < 2; i++) {
-			accFooter.children[1].children[i].classList.remove('visible');
-		}
-	}
-};
-
-var resetFields = document.getElementById('reset-fields');
-resetFields.addEventListener('click', function () {
-	// resetFields.classList.remove( 'end' );
-	resetFields.children[0].classList.add('rotate');
-	setTimeout(function () {
-		resetFields.children[0].classList.remove('rotate');
-	}, 500);
-	for (var i = 0; i < 6; i++) {
-		var element = newAccountForm.children[i];
-		element.value = '';
-	}
-	// resetFields.classList.add( 'end' );
-});
-
-var setFocus = function (el) {
-	console.log(el);
-};
-
-var focusNextElement = function (element) {
-
-	checkIfFormReadyForSubmit(true);
-
-	for (var i = 0; i < 6; i++) {
-		var element = newAccountForm[i];
-		if (element.value === '') {
-			if (i === 0) {
-				newAccountForm[i + 1].scrollIntoView(false);
-			} else {
-				newAccountForm[i - 1].scrollIntoView(true);
-			}
-			// element.scrollIntoView(true);
-			element.focus();
-			return;
-		}
-	}
-};
-
-var checkIfFormReadyForSubmit = function (status) {
-
-	if (status) {
-		for (var i = 0; i < 5; i++) {
-			var element = newAccountForm[i];
-			if (element.value === '') {
-				swapButtons(false);
-				return;
-			}
-		}
-		swapButtons(true);
-	} else {
-		swapButtons(false);
-	}
-};
-
 var showError = function (error) {
 
-	var errorContainer = document.getElementById('error-container');
 	var p = errorContainer.querySelector('p');
 
 	var flashError = function (text) {
@@ -606,8 +589,135 @@ var showError = function (error) {
 			console.log('Account Successfully Created');
 			flashError('Account Successfully Created');
 			break;
+		case 14:
+			console.log('Sign In Successful');
+			flashError('Sign In Successful');
+			break;
+		case 15:
+			console.log('Incorrect email or password');
+			flashError('Incorrect email or password');
+			break;
+		case 16:
+			console.log('Logged out');
+			flashError('Logged out');
+			break;
+		case 17:
+			console.log('The specified user does not exist');
+			flashError('The specified user does not exist');
+			break;
+		case 18:
+			console.log('Incorrect hour format');
+			flashError('Incorrect hour format');
+			break;
+		case 19:
+			console.log('Incorrect minute format');
+			flashError('Incorrect minute format');
+			break;
+		case 20:
+			console.log('Incorrect minute format');
+			flashError('Invalid event start date format');
+			break;
+		case 21:
+			console.log('Incorrect minute format');
+			flashError('Invalid event end date format');
+			break;
 	}
 };
+
+var swapButtons = function (on) {
+	var accFooter = document.getElementsByClassName('footer')[0];
+	console.dir(accFooter);
+	if (on) {
+		for (var i = 0; i < 2; i++) {
+			accFooter.children[1].children[i].classList.add('visible');
+		}
+	} else {
+		for (var i = 0; i < 2; i++) {
+			accFooter.children[1].children[i].classList.remove('visible');
+		}
+	}
+};
+
+var resetFieldsButton = document.getElementById('reset-fields');
+
+var resetFields = function () {
+	resetFieldsButton.children[0].classList.add('rotate');
+	setTimeout(function () {
+		resetFieldsButton.children[0].classList.remove('rotate');
+	}, 500);
+
+	var h2 = overlay.querySelector('h2');
+
+	if (h2.innerText === "NEW ACCOUNT") {
+		var len = newAccountForm.length;
+		for (var i = 0; i < len; i++) {
+			var element = newAccountForm.children[i];
+			element.value = '';
+		}
+	} else {
+		console.log(newEventForm);
+		var len = newEventForm.length;
+		for (var k = 0; k < len; k++) {
+			var element = newEventForm.children[k];
+			console.log(element.value);
+			console.dir(element);
+			element.value = '';
+		}
+	}
+};
+
+resetFieldsButton.addEventListener('click', function () {
+	// resetFieldsButton.classList.remove( 'end' );
+
+	resetFields();
+
+	// resetFields.classList.add( 'end' );
+});
+
+var setFocus = function (el) {
+	console.log(el);
+};
+
+var focusNextElement = function (element) {
+
+	checkIfFormReadyForSubmit(true);
+
+	for (var i = 0; i < 6; i++) {
+		var element = newAccountForm[i];
+		if (element.value === '') {
+			if (i === 0) {
+				newAccountForm[i + 1].scrollIntoView(false);
+			} else {
+				newAccountForm[i - 1].scrollIntoView(true);
+			}
+			// element.scrollIntoView(true);
+			element.focus();
+			return;
+		}
+	}
+};
+
+var checkIfFormReadyForSubmit = function (status) {
+
+	if (status) {
+		for (var i = 0; i < 5; i++) {
+			var element = newAccountForm[i];
+			if (element.value === '') {
+				swapButtons(false);
+				return;
+			}
+		}
+		swapButtons(true);
+	} else {
+		swapButtons(false);
+	}
+};
+
+//
+//
+// NEW ACCOUNT
+//
+//
 
 var validatePass = function (pass) {
 
@@ -698,6 +808,7 @@ var submitNewAccount = function () {
 					console.log(error);
 				} else {
 					console.log(user);
+
 					var uid = user.auth.uid;
 					var obj = {};
 					obj.name = newAccountForm.name.value;
@@ -705,13 +816,25 @@ var submitNewAccount = function () {
 					obj.employer = newAccountForm.employer.value;
 					obj.job = newAccountForm.jobtitle.value;
 					console.log(obj);
-					ref.child(uid).set(obj);
+					ref.child(uid).child('info').set(obj);
 
 					// if the previous state was that the user wanted to
 					// create an event but didn't have an account, then
 					// the state shoudl return to event creation page.
 					closeAccountAndEventOverlay();
+
+					resetFields();
+
 					showError(13);
+
+					changeSignInButtonToMyAccount();
+
+					// figure out the State of the applicatino and if the user
+					// was creating a new event before
+					// the app should switch back to that state..
+
+					// showSignIn();
+
 					// close the overlay and all
 				}
 			});
@@ -900,7 +1023,10 @@ var showNewAccount = function () {
 
 	console.log('sign in');
 
-	createAccount.querySelector('h2').innerText = "New Account";
+	console.log(h2);
+	var h2 = overlay.querySelector('h2');
+
+	h2.innerText = "New Account";
 
 	// this should be bundeled as a function...
 	navOverlay.classList.remove('opened');
@@ -924,14 +1050,32 @@ var showNewAccount = function () {
 	}, 100);
 };
 
+var signInToSignUpTransition = function () {
+	hideSignIn();
+	setTimeout(function () {
+		showNewAccount();
+	}, 300);
+};
+
 var showMyAccount = function () {
 	console.log('open my account YO?');
 };
 
-// SIGN IN OVERLAY AND VIEW
+//
+//
+// NEW EVENT VIEW
+//
+//
 
-var signInForm = document.getElementById('sign-in-form');
-var signInOverLay = document.getElementById('sign-in-overlay');
+var resetNewEventFields = function () {
+	form;
+};
+
+//
+//
+// SIGN IN OVERLAY AND VIEW
+//
+//
 
 var hideSignIn = function () {
 	fadedOverlay.setAttribute('onclick', '');
@@ -947,13 +1091,276 @@ var showSignIn = function () {
 		fadedOverlay.classList.add('opened');
 	}, 300);
 	signInOverLay.classList.add('visible');
+	signInForm.email.focus();
 	console.dir('sign in show');
+};
+
+var signInWithToken = function (data) {
+	console.log(ref.getAuth());
+	var token = data.token;
+	console.log(data);
+	console.log(token);
+	ref.authWithCustomToken(token, function (error, authData) {
+		if (error) {
+			console.log("Login Failed!", error);
+		} else {
+			showError(14);
+			console.log("Authenticated successfully with payload:", authData);
+		}
+	});
+};
+
+var changeSignInButtonToMyAccount = function () {
+	signInNavOverlay.children[0].lastChild.data = "My Account";
+	signInNavOverlay.setAttribute('onclick', 'showMyAccount()');
+};
+
+var signIn = function () {
+
+	// set the sign in button disabled
+	h2.setAttribute('onclick', '');
+	h2.classList.remove('button');
+
+	var credentials = {};
+	credentials.email = signInForm.email.value;
+	credentials.password = signInForm.password.value;
+	ref.authWithPassword(credentials, function (error, authData) {
+		if (error) {
+			console.log(error);
+			console.dir(error);
+			switch (error.code) {
+				case "INVALID_USER":
+					showError(17);
+					break;
+				case "INVALID_PASSWORD":
+					showError(15);
+					break;
+			}
+			resetLoginFields();
+			// showError( 15 );
+		} else {
+				FireAuthData = authData;
+				console.log(authData);
+				hideSignIn();
+
+				// reset Sign in
+				resetLoginFields();
+
+				//
+				changeSignInButtonToMyAccount();
+				showError(14);
+				var interval = 60000 * 60 * 23;
+				setInterval(function () {
+					signInWithToken(authData);
+				}, interval);
+			}
+	});
+};
+
+var loginLen = function () {
+	if (signInForm.email.value !== '') {
+		if (signInForm.password.value.length >= 6) {
+			h2.classList.add('button');
+			h2.setAttribute('onclick', 'signIn()');
+		} else {
+			h2.classList.remove('button');
+			h2.setAttribute('onclick', '');
+		}
+	}
+};
+
+var selectSignInButton = function () {
+	h2.focus();
+};
+
+var signOut = function () {
+	closeNav();
+	ref.unauth();
+
+	FireAuthData = null;
+
+	signInNavOverlay.children[0].lastChild.data = "Sign In";
+	signInNavOverlay.setAttribute('onclick', 'showSignIn()');
+	setTimeout(function () {
+		showError(16);
+	}, 300);
+};
+
+var dismissError = function () {
+	errorContainer.classList.remove('visible');
+};
+
+var resetLoginFields = function () {
+	var len = signInForm.length;
+	for (var i = 0; i < len; i++) {
+		var input = signInForm[i];
+		input.value = '';
+	}
 };
 
 // this script is taken and used from
 // https://gist.github.com/ricardozea/abb9f98a19f6d04a0269
 
 // var selectAll = fucn
+
+//
+//
+// NEW EVENT PAGE
+//
+//
+
+var verifyDate = function (date) {
+
+	// rememeber we hace the start value in the object, so we can
+	// be selecting the fields upon error correctly
+
+	if (date.day > 0 && date.day <= 31) {
+
+		console.log('day OK');
+
+		if (date.month > 0 && date.month <= 12) {
+
+			console.log('month OK');
+
+			if (date.year >= 16) {
+
+				console.log('year OK');
+			} else {
+
+				// show erro nomber year is fucked up
+
+				showError(9);
+			}
+		} else {
+
+			// show erro nomber month is fucked up
+			showError(8);
+		}
+	} else {
+		// show erro nomber day is fucked up
+		showError(7);
+	}
+};
+
+var checkEventDateFormat = function (start) {
+
+	var date, len;
+
+	var dateObj = {};
+
+	if (start) {
+
+		date = newEventForm['event-start-date'].value;
+		len = date.length;
+		dateObj.start = true;
+	} else {
+
+		date = newEventForm['event-end-date'].value;
+		len = date.length;
+	}
+
+	console.log(date);
+
+	if (date !== '') {
+
+		if (len === 6) {
+
+			dateObj.day = parseInt(date.substring(0, 2));
+			dateObj.month = parseInt(date.substring(2, 4));
+			dateObj.year = parseInt(date.substring(4, 6));
+
+			verifyDate(dateObj);
+		} else if (len === 8) {
+
+			dateObj.day = parseInt(date.substring(0, 2));
+			dateObj.month = parseInt(date.substring(3, 5));
+			dateObj.year = parseInt(date.substring(6, 8));
+
+			verifyDate(dateObj);
+		} else {
+
+			if (start) {
+				// show error stating that the startdate format is wrong
+				showError(20);
+			} else showError(21);
+		}
+	}
+};
+
+var checkStartDate = function () {
+
+	checkEventDateFormat(true);
+};
+
+var checkEndDate = function () {
+
+	checkEventDateFormat();
+};
+
+var checkTimeValue = function (start) {
+
+	var time, len, hour, minutes;
+
+	if (start) {
+
+		time = newEventForm['event-start-time'].value;
+		len = time.length;
+	} else {
+
+		time = newEventForm['event-end-time'].value;
+		len = time.length;
+	}
+
+	if (time !== '') {
+
+		if (len === 4) {
+
+			hour = parseInt(time.substring(0, 2), 10);
+			minutes = parseInt(time.substring(2, 4), 10);
+
+			console.log(hour);
+			console.log(minutes);
+		} else if (len === 5) {
+
+			hour = parseInt(time.substring(0, 2), 10);
+			minutes = parseInt(time.substring(3, 5), 10);
+
+			console.log(hour);
+			console.log(minutes);
+		} else {
+
+			return;
+		}
+
+		if (hour >= 0 && hour <= 24) {
+
+			console.log('Hour OK');
+
+			if (minutes >= 0 && minutes <= 60) {
+
+				console.log('Minutes OK');
+			} else {
+
+				// show error the minutes are wrong
+				showError(19);
+			}
+		} else {
+
+			// show error the hour is wrong format
+			showError(18);
+		}
+	}
+};
+
+var checkStartTime = function () {
+
+	checkTimeValue(true);
+};
+
+var checkEndTime = function () {
+
+	checkTimeValue();
+};
 /*! Hammer.JS - v2.0.6 - 2016-01-06
  * http://hammerjs.github.io/
  *

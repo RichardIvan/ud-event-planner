@@ -635,7 +635,7 @@ body {
             flex-direction: column;
             justify-content: center;
 
-            padding-top: 0em;
+            padding-top: 8em;
             padding-bottom: 8em;
 
             margin: 0 auto !important;
@@ -692,6 +692,10 @@ body {
             }
         }
     }
+}
+
+#new-event-form {
+    margin-top: 8em;
 }
 
 .buttons-separator {
@@ -1150,6 +1154,12 @@ body {
     // .container {
     //     z-index: 40;
     // }
+    a {
+        color: white;
+        position: absolute;
+        right: 1em;
+        bottom: 1em;
+    }
 }
 
 #sign-in-overlay {
@@ -1189,6 +1199,15 @@ body {
         
     }
 
+    h2.button {
+        // position: absolute;
+        background: #2F9372;
+        transition: background .1s ease-in-out;
+        border-radius: 1em;
+        // margin-left: 60%;
+
+    }
+
     h2 {
         // position: absolute;
         margin: 0;
@@ -1197,6 +1216,7 @@ body {
         position: relative;
         float: right;
         right: 1em;
+        padding: 0.5em 1em;
         // margin-left: 60%;
 
     }
@@ -1209,10 +1229,12 @@ body {
         margin: 0 auto;
         height: 100%;
         padding: 1em;
+
     }
     input {
         padding:1em;
         width: 80%;
+        color: black;
     }
 
     label {

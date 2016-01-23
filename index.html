@@ -333,47 +333,10 @@
 
     <div id="error-container">
         <div><p>Error</p></div>
-        <div><a href="#">Dismiss</a></div>
+        <div onclick="dismissError()"><a href="#">Dismiss</a></div>
       </div>
 
     <section id="overlay">
-      
-      <section id="create-event" class="container">
-        <div class="header">
-          <h2>Create Event</h2>
-        </div>
-        <div class="fab-container">
-
-            <div class="labels">
-              <ul>
-                <li><label for="event-name">Event Name</label></li>
-                <li><label for="event-type">Event Type</label></li>
-                <li><label for="host">Host</label></li>
-                <li><label for="event-start-time">Event Start Time</label></li>
-                <li><label for="event-end-time">Event End Time</label></li>
-                <li><label for="guest-list">Guest List</label></li>
-                <li><label for="event-location">Event Location</label></li>
-                <li><label for="event-privacy">Privacy</label></li>
-              </ul>
-            </div>
-            <div class="inputs">
-              <form id="new-event-form" action="" onsubmit="finalCheck" autocomplete="on">
-                <input id="event-name" placeholder="Event Name" type="text">
-                <input id="event-type" placeholder="Event Type" type="text">
-                <input id="host" placeholder="Host" type="text">
-                <input id="event-start-time" placeholder="Start time" type="text">
-                <input id="event-end-time" placeholder="End time" type="text">
-                <input id="guest-list" placeholder="Privacy" type="text">
-                <input id="event-location" placeholder="Place" type="text">
-                <input id="event-privacy" placeholder="Privacy" type="text">
-              </form>
-            </div>
-
-        </div>
-        <div class="footer">
-
-        </div>
-      </section>
 
       <section id="create-account" class="container">
         <div class="header">
@@ -433,12 +396,23 @@
             </div>
             <div class="inputs">
               <div></div>
-              <form id="new-event-form" action="" onsubmit="finalCheck" autocomplete="on">
+              <form id="new-event-form" action="" onsubmit="finalCheck()" autocomplete="on">
                 <input id="event-name" placeholder="Event Name" type="text">
-                <input id="event-type" placeholder="Event Type" type="text">
+                <input list="types" id="event-type" placeholder="Event Type" type="text">
+                <datalist id="types">
+                  <option value="Birthday">
+                  <option value="House Party">
+                  <option value="Concert">
+                  <option value="Graduation">
+                  <option value="Wedding">
+                  <option value="Anniversary">
+                  <option value="Halloween">
+                </datalist>
                 <input id="host" placeholder="Event Host" type="text">
-                <input id="event-start-time" placeholder="Start time" type="text">
-                <input id="event-end-time" placeholder="End time" type="text">
+                <input id="event-start-date" placeholder="Event date - DD/MM/YY" type="text" onblur="checkStartDate()">
+                <input id="event-start-time" placeholder="Start time - HH:MM" type="text" onblur="checkStartTime()">
+                <input id="event-end-date" placeholder="Event End Date - DD/MM/YY" type="text" onblur="checkEndDate()">
+                <input id="event-end-time" placeholder="End time - HH:MM" type="text" onblur="checkEndTime()">
                 <input id="guest-list" placeholder="Guest list" type="text">
                 <input id="event-location" placeholder="Place" type="text">
                 <input id="event-privacy" placeholder="Privacy" type="text">
@@ -471,12 +445,13 @@
       </div>
       <div class="container">
         <h2>Sign In</h2>
-        <form id="sign-in-form">
+        <form action="" id="sign-in-form">
           <label for="email" >Email</label>
-          <input id="email" type="text">
+          <input id="email" type="email">
           <label for="password">Password</label>
-          <input id="password" type="text">
+          <input id="password" type="password" onkeyup="loginLen()" onblur="selectSignInButton()">
         </form>
+        <a onclick="signInToSignUpTransition()" href="#">Sign Up</a>
       </div>
       <div onclick="hideSignIn()">
 
@@ -513,7 +488,7 @@
           <ul>
             <li id="sign-in" onclick="showSignIn()"><a href="#"><i class="fa fa-user"></i>Sign In</a></li>
             <li><a href="#"><i class="fa fa-at"></i>My Events</a></li>
-            <li><a href="#"><i class="fa fa-sign-out"></i>Logout</a></li>
+            <li id="sign-out" onclick="signOut()"><a href="#"><i class="fa fa-sign-out"></i>Logout</a></li>
           </ul>
         </div>
         <div class="filler">
