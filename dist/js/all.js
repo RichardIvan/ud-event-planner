@@ -621,6 +621,10 @@ var showError = function (error) {
 			console.log('Incorrect minute format');
 			flashError('Invalid event end date format');
 			break;
+		case 21:
+			console.log('No support for device location');
+			flashError('No support for device location');
+			break;
 	}
 };
 
@@ -1361,6 +1365,142 @@ var checkEndTime = function () {
 
 	checkTimeValue();
 };
+
+var timeout,
+    loc,
+    gettingCoords = false;
+
+var suggestLocation = function () {
+
+	console.log(loc);
+
+	console.log('printint timeout');
+	console.log(timeout);
+	clearTimeout(timeout);
+
+	// check if we can get the location
+
+	var getLocation = function () {
+
+		// probably if we have a location already, we don't have
+		// to query it again since it takes a while
+		if (!gettingCoords) {
+			if (navigator.geolocation) {
+				gettingCoords = true;
+				navigator.geolocation.getCurrentPosition(getSuggestions);
+			} else {
+				showError(22);
+			}
+		}
+	};
+
+	var appendSuggestions = function (suggestions) {
+
+		console.dir(suggestions);
+
+		var len = suggestions.length;
+		var datalist = newEventForm.querySelector('#venues');
+		var datalistChildren = datalist.children;
+		var datalistLen = datalistChildren.length;
+
+		console.log(datalist);
+		console.dir(datalist);
+		console.log(datalistChildren);
+		console.log(datalistLen);
+
+		// for( var z = 0; z < datalistLen; z++ ) {
+		// 	var child = datalistChildren[z];
+		// 	console.log( child );
+		// 	datalist.removeChild( child );
+		// }
+
+		datalist.innerHTML = '';
+
+		for (var i = 0; i < len; i++) {
+
+			var element = document.createElement('option');
+			element.setAttribute('value', suggestions[i].name);
+			datalist.appendChild(element);
+			// console.log( 'VENUE ' + ( i + 1 ) );
+			// console.log( suggestions[i]);
+		}
+
+		console.log(len);
+		console.log(newEventForm.querySelector('#venues').children.length);
+		console.log(datalist.children.length);
+	};
+
+	var getSuggestions = function (langlong) {
+
+		var clientId = 'WJ5LQLRHVQWSAX55BBGY10JT2L4RWZLKCJ1RVGD0VGQLG1S5';
+		var clientSecret = 'RJ3MMUG3MSUEXQTZCSJVILCVEHXCJGNPAQAYTPOLB3BIWJYT';
+		var version = "20162001";
+
+		if (!loc) {
+			loc = langlong;
+		} else {
+			// suck my dick
+		}
+
+		var url = 'https://api.foursquare.com/v2/venues/search?';
+		var req = new XMLHttpRequest();
+		req.onreadystatechange = function () {
+			if (req.readyState === 4 && req.status === 200) {
+
+				console.log('RESPONSE');
+
+				var venues = JSON.parse(req.response).response.venues;
+
+				appendSuggestions(venues);
+			}
+		};
+
+		var lat = loc.coords.latitude;
+		var lon = loc.coords.longitude;
+		var query = newEventForm['event-location'].value;
+
+		var fullUrl = url + 'll=' + lat + ',' + lon + '&client_id=' + clientId + '&client_secret=' + clientSecret + '&v=' + version + '&query=' + query + '&limit=' + 3;
+
+		req.open("GET", fullUrl, true);
+		req.send();
+
+		console.log(loc);
+	};
+
+	if (!loc) {
+		getLocation();
+	} else {
+		getSuggestions();
+		// timeout = setTimeout( getSuggestions, 1000 );
+	}
+
+	console.log('timeout set');
+	console.log('timeout id ' + timeout);
+};
+
+var eventLocationInput = newEventForm['event-location'];
+eventLocationInput.addEventListener('keyup', function (e) {
+
+	switch (e.keyCode) {
+		case 38:
+			break;
+		case 39:
+			break;
+		case 40:
+			break;
+		case 37:
+			break;
+		case 13:
+			break;
+		case 27:
+			break;
+		default:
+			suggestLocation();
+	}
+	console.log(e);
+
+	//
+});
 /*! Hammer.JS - v2.0.6 - 2016-01-06
  * http://hammerjs.github.io/
  *
