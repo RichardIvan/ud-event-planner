@@ -1501,6 +1501,38 @@ eventLocationInput.addEventListener('keyup', function (e) {
 
 	//
 });
+
+var initAutocomplete = function () {
+
+	var input = newEventForm['google-event-location'];
+	var autocomplete = new google.maps.places.Autocomplete(input);
+
+	autocomplete.addListener('place_changed', function () {
+		var place = autocomplete.getPlace();
+		console.log(place);
+		console.log(place.types.length);
+		if (place.types.length > 1) {
+			input.value = place.name;
+		} else {
+
+			console.log(place['address_components'][1]['long_name']);
+			console.log(place['address_components'][0]['long_name']);
+
+			input.value = place['address_components'][1]['long_name'] + ' ' + place['address_components'][0]['long_name'];
+		}
+	});
+
+	console.log("AUROCOMPLETE INITIATED");
+};
+
+initAutocomplete();
+
+var map = new google.maps.Map(document.getElementById('map'), {
+	center: { lat: -33.8688, lng: 151.2195 },
+	zoom: 13
+});
+
+console.log(map);
 /*! Hammer.JS - v2.0.6 - 2016-01-06
  * http://hammerjs.github.io/
  *
