@@ -1215,8 +1215,44 @@ var resetLoginFields = function () {
 
 //
 //
-// NEW EVENT PAGE
 //
+//
+// 										NEW EVENT PAGE
+//
+//
+//
+
+var newEventObject = {};
+
+var saveInputDataToObject = function (id) {
+
+	if (newEventForm[id].value !== '') {
+		newEventObject[id] = newEventForm[id].value;
+	}
+
+	console.log(newEventObject);
+};
+
+var processEventName = function () {
+
+	var id = 'event-name';
+	saveInputDataToObject(id);
+};
+
+var processEventType = function () {
+
+	var id = 'host';
+	saveInputDataToObject(id);
+};
+
+var processEventHost = function () {
+
+	var id = 'event-type';
+	saveInputDataToObject(id);
+};
+
+//
+// EVENT DATE CHECK
 //
 
 var verifyDate = function (date) {
@@ -1308,84 +1344,149 @@ var checkEventDateFormat = function (start) {
 	}
 };
 
-var checkStartDate = function () {
+var processEventStartDate = function () {
 
 	checkEventDateFormat(true);
 };
 
-var checkEndDate = function () {
+var processEventEndDate = function () {
 
 	checkEventDateFormat();
 };
 
+//
+// CHECK EVENT TIME
+//
+
+var saveTimeToObject = function (start, time) {
+	if (start) {
+		newEventObject['event-start-time'] = time;
+	} else newEventObject['event-end-time'] = time;
+
+	console.log(newEventObject);
+};
+
+var focusTimeInput = function (start) {
+
+	if (start) {
+		// focus start input
+		newEventForm['event-start-time'].select();
+	} else {
+		// focus end input
+		newEventForm['event-end-time'].select();
+	}
+};
+
+var getHoursAndMinutes = function (t) {
+
+	var hour, minutes;
+
+	var timeObj = t;
+
+	var start = timeObj.start;
+
+	hour = parseInt(timeObj.time.substring(0, 2), 10);
+	minutes = parseInt(timeObj.time.substring(2, 4), 10);
+
+	console.log(timeObj);
+	console.log(hour);
+	console.log(minutes);
+
+	console.log(hour < 0 && hour > 24);
+	console.log(minutes < 0 && minutes > 60);
+
+	if (hour < 0 || hour > 24) {
+
+		showError(18);
+		focusTimeInput(start);
+		return;
+	}
+
+	if (minutes < 0 || minutes > 59) {
+
+		showError(19);
+		focusTimeInput(start);
+		return;
+	}
+
+	saveTimeToObject(start, timeObj.time);
+};
+
 var checkTimeValue = function (start) {
 
-	var time, len, hour, minutes;
+	var time, len;
+
+	var timeObj = {};
 
 	if (start) {
 
 		time = newEventForm['event-start-time'].value;
 		len = time.length;
+		timeObj.start = true;
 	} else {
 
 		time = newEventForm['event-end-time'].value;
 		len = time.length;
+		timeObj.start = false;
 	}
 
 	if (time !== '') {
 
 		if (len === 4) {
 
-			hour = parseInt(time.substring(0, 2), 10);
-			minutes = parseInt(time.substring(2, 4), 10);
-
-			console.log(hour);
-			console.log(minutes);
+			timeObj.time = time;
+			getHoursAndMinutes(timeObj);
 		} else if (len === 5) {
 
-			hour = parseInt(time.substring(0, 2), 10);
-			minutes = parseInt(time.substring(3, 5), 10);
+			timeObj.time = time.split(':').join('');
 
-			console.log(hour);
-			console.log(minutes);
-		} else {
+			var len = timeObj.time.length;
 
-			return;
-		}
-
-		if (hour >= 0 && hour <= 24) {
-
-			console.log('Hour OK');
-
-			if (minutes >= 0 && minutes <= 60) {
-
-				console.log('Minutes OK');
-			} else {
-
-				// show error the minutes are wrong
-				showError(19);
+			if (len === 4) {
+				getHoursAndMinutes(timeObj);
 			}
 		} else {
 
-			// show error the hour is wrong format
-			showError(18);
+			showError(23);
+			if (start) {
+				newEventForm['event-start-time'].select();
+			} else newEventForm['event-end-time'].select();
+			return;
 		}
 	}
 };
 
-var checkStartTime = function () {
+var processEventStartTime = function () {
 
 	checkTimeValue(true);
 };
 
-var checkEndTime = function () {
+var processEventEndTime = function () {
 
 	checkTimeValue();
 };
 
 //
+// EVENT PLACE
+//
+
+//
 // GOOGLE PLACES API FUNCTION
 //
+
+var savePlaceData = function (p, n) {
+
+	var place = p,
+	    name = n;
+
+	newEventObject['event-location-data'] = {};
+	newEventObject['event-location-data'].name = name;
+
+	newEventObject['event-location-data'].lat = place.geometry.location.lat();
+	newEventObject['event-location-data'].lng = place.geometry.location.lng();
+
+	console.log(newEventObject);
+};
 
 var initAutocomplete = function () {
 
@@ -1394,10 +1495,10 @@ var initAutocomplete = function () {
 
 	autocomplete.addListener('place_changed', function () {
 		var place = autocomplete.getPlace();
-		input.data = place;
-		console.dir(input);
-		console.log(place);
-		console.log(place.types.length);
+		// input.data = place;
+		// console.dir( input );
+		// console.log( place );
+		// console.log( place.types.length );
 		if (place.types.length > 1) {
 			input.value = place.name;
 		} else {
@@ -1407,6 +1508,9 @@ var initAutocomplete = function () {
 
 			input.value = place['address_components'][1]['long_name'] + ' ' + place['address_components'][0]['long_name'];
 		}
+
+		var name = input.value;
+		savePlaceData(place, name);
 	});
 };
 
@@ -1440,10 +1544,10 @@ var saveEventToDb = function (obj) {
 	// update logged in users' created events,
 	// so these can be displayed in my events
 
-	if (!obj.privacy) {
+	if (!newEventObject.privacy) {
 		// save to public events
 		console.log('save to public events');
-		var pushedData = ref.child('events/public').push(obj, function (error, data) {
+		var pushedData = ref.child('events/public').push(newEventObject, function (error, data) {
 			if (error) {
 				console.dir(error);
 			} else {
@@ -1461,6 +1565,10 @@ var saveEventToDb = function (obj) {
 
 				console.log(id);
 				console.dir(id);
+
+				showError(24);
+				newEventObject = new Object();
+
 				// update the saved item with ID..
 
 				// update the user.events with the event id
@@ -1470,8 +1578,6 @@ var saveEventToDb = function (obj) {
 			// save to private events
 			console.log('save to private events');
 		}
-
-	showError(24);
 };
 
 var isBeingSubmitted = false;
@@ -1481,31 +1587,11 @@ var submitNewEvent = function () {
 
 		closeAccountAndEventOverlay();
 
-		console.log(newEventForm);
-		console.dir(newEventForm);
+		newEventObject['privacy'] = privacy;
 
-		var len = newEventForm.length;
-
-		var obj = {};
-
-		for (var i = 0; i < len; i++) {
-			var name = newEventForm[i].id;
-			var value = newEventForm[i].value;
-
-			if (value !== '') {
-				obj[name] = value;
-			}
-		}
-
-		console.log(obj);
-
-		obj['location-data'] = {};
-		obj['location-data'].lat = newEventForm['google-event-location'].data.geometry.location.lat();
-		obj['location-data'].lng = newEventForm['google-event-location'].data.geometry.location.lng();
-		obj['privacy'] = privacy;
-
-		saveEventToDb(obj);
+		saveEventToDb(newEventObject);
 		resetFields();
+		isBeingSubmitted = true;
 	}
 
 	// ref.createUser( credentials, function( error, user ) {
