@@ -1426,52 +1426,65 @@ var processEventHost = function() {
 // EVENT DATE CHECK
 // 
 
+var selectDateElement = function( start ) {
 
-var verifyDate = function( date ) {
+	if ( start ) {
+		newEventForm['event-start-date'].select();
+	} else newEventForm['event-end-date'].select();
+
+}
+
+
+var verifyDate = function( d ) {
 
 	// rememeber we hace the start value in the object, so we can
 	// be selecting the fields upon error correctly
 
-	if ( date.day > 0 && date.day <= 31 ) {
+	var dateObj = d;
+	var start = dateObj.start;
 
-		console.log( 'day OK' );
+	console.log( dateObj );
 
-		if ( date.month > 0 && date.month <= 12 ) {
+	if ( dateObj.day < 0 || dateObj.day > 31 ) {
 
-			console.log( 'month OK' );
-
-			if ( date.year >= 16 ) {
-
-				console.log( 'year OK' );
-
-			} else {
-
-				// show erro nomber year is fucked up
-
-				showError( 9 );
-
-			}
-
-		} else {
-
-			// show erro nomber month is fucked up
-			showError( 8 );
-
-		}
-
-	} else {
-		// show erro nomber day is fucked up
 		showError( 7 );
+		selectDateElement( start );
+		return;
+
 	}
+
+	if ( dateObj.month < 0 || dateObj.month > 12 ) {
+
+		showError( 8 );
+		selectDateElement( start );
+		return;
+
+	}
+
+	if ( dateObj.year < 16 ) {
+
+		showError( 9 );
+		selectDateElement( start );
+		return;
+
+	}
+
+	if ( start ) {
+		newEventObject['event-start-date'] = dateObj.date;
+	} else newEventObject['event-end-date'] = dateObj.date;
+
+	console.log( newEventObject );
 }
 
-var getDayMonthYear = function( date ) {
+var getDayMonthYear = function( d ) {
 
-	var dateObj = {};
+	var dateObj = d;
 
-	dateObj.day = parseInt( date.substring( 0, 2 ) );
-	dateObj.month = parseInt( date.substring( 2, 4 ) );
-	dateObj.year = parseInt( date.substring( 4, 6 ) );
+	dateObj.day = parseInt( dateObj.date.substring( 0, 2 ) );
+	dateObj.month = parseInt( dateObj.date.substring( 2, 4 ) );
+	dateObj.year = parseInt( dateObj.date.substring( 4, 6 ) );
+
+	console.log( dateObj );
 
 	return dateObj;
 }
@@ -1482,18 +1495,19 @@ var checkEventDateFormat = function( start ) {
 	var date,
 		len;
 
-	
+	var dateObj = {};
 
 	if ( start ) {
 
 		date = newEventForm['event-start-date'].value;
 		len = date.length;
-		// dateObj.start = true;
+		dateObj.start = true;
 
 	} else {
 
 		date = newEventForm['event-end-date'].value;
 		len = date.length;
+		dateObj.start = false;
 
 	}
 
@@ -1504,7 +1518,8 @@ var checkEventDateFormat = function( start ) {
 
 		if ( len === 6 ) {
 
-			verifyDate( getDayMonthYear( date ) );
+			dateObj.date = date;
+			verifyDate( getDayMonthYear( dateObj ) );
 
 
 		} else if ( len === 8 ) {
@@ -1514,7 +1529,8 @@ var checkEventDateFormat = function( start ) {
 
 			if( date.length === 6 ) {
 
-				verifyDate( getDayMonthYear( date ) );
+				dateObj.date = date;
+				verifyDate( getDayMonthYear( dateObj ) );
 
 			} else showError( 23 );
 
