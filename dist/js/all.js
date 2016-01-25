@@ -635,6 +635,18 @@ var showError = function (error) {
 			console.log('Event Successfully Created');
 			flashError('Event Successfully Created');
 			break;
+		case 25:
+			console.log('Event End Date Is Before Start Date');
+			flashError('Event End Date Is Before Start Date');
+			break;
+		case 26:
+			console.log('Event End Time Is Before Start Time');
+			flashError('Event End Time Is Before Start Time');
+			break;
+		case 27:
+			console.log('Event Cannot Start Before Today');
+			flashError('Event Cannot Start Before Today');
+			break;
 	}
 };
 
@@ -1599,18 +1611,75 @@ var saveEventToDb = function (obj) {
 		}
 };
 
+var allDatesAreValid = function () {
+
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth() + 1; //January is 0!
+	var yyyy = '' + today.getFullYear();
+	var yy = yyyy.substring(2, 4);
+	console.log(today);
+	console.log(yyyy);
+
+	if (dd < 10) {
+		dd = '0' + dd;
+	};
+
+	if (mm < 10) {
+		mm = '0' + mm;
+	};
+
+	today = dd + '' + mm + '' + yy;
+
+	var today = parseInt(today);
+	var eventStartDate = parseInt(newEventObject['event-start-date']);
+
+	console.log(today);
+	console.log(eventStartDate);
+	console.log(today <= eventStartDate);
+
+	if (today <= eventStartDate) {
+		if (newEventObject['event-end-date'] < newEventObject['event-start-date']) {
+			// the event end date is before the start date
+			console.log('show error 25');
+			showError(25);
+			return false;
+		}
+
+		if (newEventObject['event-start-date'] === newEventObject['event-end-date']) {
+			// the event end date is before the start date
+			if (newEventObject['event-start-time'] >= newEventObject['event-end-time']) {
+				// the event end time is before the start time
+				console.log('show error 26');
+				showError(25);
+				return false;
+			}
+		}
+
+		return true;
+	} else {
+
+		console.log('show error 26');
+		showError(27);
+		return false;
+	}
+};
+
 var isBeingSubmitted = false;
 var submitNewEvent = function () {
 
 	if (!isBeingSubmitted) {
 
-		closeAccountAndEventOverlay();
+		if (allDatesAreValid()) {
 
-		newEventObject['privacy'] = privacy;
+			closeAccountAndEventOverlay();
 
-		saveEventToDb(newEventObject);
-		resetFields();
-		isBeingSubmitted = true;
+			newEventObject['privacy'] = privacy;
+
+			saveEventToDb(newEventObject);
+			resetFields();
+			isBeingSubmitted = true;
+		}
 	}
 
 	// ref.createUser( credentials, function( error, user ) {
