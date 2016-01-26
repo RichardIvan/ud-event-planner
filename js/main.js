@@ -786,12 +786,9 @@ var resetFields = function() {
 		}
 		newAccountObject = {};
 	} else {
-		console.log( newEventForm );
 		var len = newEventForm.length;
 		for ( var k = 0; k < len; k++ ) {
 			var element = newEventForm.children[k];
-			console.log( element.value );
-			console.dir( element );
 			element.value = '';
 		}
 		newEventObject = {};
@@ -985,6 +982,10 @@ var submitNewAccount = function() {
 	console.dir( newAccountForm );
 
 	console.log( newAccountObject );
+
+	Object.keys(newAccountObject).map( function( key ) {
+		newAccountObject[key].trim();
+	})
 
 	// var len = newAccountForm.length;
 
@@ -2365,6 +2366,13 @@ var submitNewEvent = function() {
 
 			newEventObject['privacy'] = privacy;
 
+			Object.keys(newEventObject).map( function( key ) {
+				
+				if ( typeof newEventObject[key] === 'string' ) {
+					newEventObject[key] = newEventObject[key].trim();
+				}
+			})
+
 			saveEventToDb( newEventObject );
 			resetFields();
 			isBeingSubmitted = false;
@@ -2516,7 +2524,7 @@ var Event = function( info ) {
 	var clone = eventItem.cloneNode( true );
 
 	var mapImg = clone.querySelector( 'img' );
-	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=16&size=400x400&maptype=terrain&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
+	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=16&markers=color:red%7Clabel:C%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
 	mapImg.setAttribute( 'src', url );
 	var h2 = clone.querySelector( 'h2' );
 	h2.innerText = info['event-name'];
