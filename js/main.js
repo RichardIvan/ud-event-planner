@@ -187,8 +187,13 @@ if ( FireAuthData ) {
 }
 
 var closeAccountAndEventOverlay = function() {
+
+	createAccount.querySelector( '.submit-button' ).setAttribute( 'onclick', 'submitNewAccount()' );
+	createAccount.querySelector( '.next-button' ).setAttribute( 'onclick', 'focusNextElement()' );
+
 	createAccount.classList.add( 'aside' );
 	main.classList.add( 'visible' );
+
 
 	setTimeout( function(){
 		// remove all the classes
@@ -530,6 +535,9 @@ faButton.addEventListener( 'click', function( e ) {
 
 
 	} else {
+
+		swapButtons( false );
+
 		faButton.classList.add( 'expand-animation' );
 
 		createAccount.querySelector( 'h2' ).innerText = "Create Event";
@@ -776,6 +784,7 @@ var resetFields = function() {
 			var element = newAccountForm.children[i];
 			element.value = '';
 		}
+		newAccountObject = {};
 	} else {
 		console.log( newEventForm );
 		var len = newEventForm.length;
@@ -785,6 +794,7 @@ var resetFields = function() {
 			console.dir( element );
 			element.value = '';
 		}
+		newEventObject = {};
 	}
 }
 
@@ -841,12 +851,60 @@ var checkIfFormReadyForSubmit = function( status ) {
 };
 
 
+
+
+// 
+// ACCOUNT AND EVENT UTILITY
+// 
+
+
+var saveInputDataToObject = function( id, obj ) {
+
+	// obj === true if it is the event object
+	if ( obj ) {
+		if ( newEventForm[id].value !== '' ) {
+			newEventObject[id] = newEventForm[id].value;
+		}
+	} else {
+		if ( newAccountForm[id].value !== '' ) {
+			newAccountObject[id] = newAccountForm[id].value;
+		}
+	}
+
+	console.log( newEventObject );
+
+}
+
+
+
+// 
+// 
 // 
 // 
 // NEW ACCOUNT
 // 
 // 
+// 
+// 
 
+
+
+
+
+var newAccountObject = {};
+
+
+var processEmployer = function() {
+
+	saveInputDataToObject( 'employer', false );
+
+}
+
+var processJobTitle = function() {
+
+	saveInputDataToObject( 'jobtitle', false );
+
+}
 
 var validatePass = function( pass ) {
 
@@ -903,7 +961,12 @@ var checkPass = function() {
 		newAccountForm['retype-pass'].select();
 		showError( 5 );
 
-	} else inputValid = true;
+	} else {
+
+		saveInputDataToObject( 'pass', false );
+		inputValid = true;
+
+	}
 
 	if ( inputValid ) {
 		checkIfFormReadyForSubmit( true );
@@ -921,13 +984,13 @@ var submitNewAccount = function() {
 	console.log( newAccountForm );
 	console.dir( newAccountForm );
 
-	var len = newAccountForm.length;
-	var email = newAccountForm.email.value;
-	var passWord = newAccountForm.pass.value;
+	console.log( newAccountObject );
+
+	// var len = newAccountForm.length;
 
 	var credentials = {};
-	credentials.email = email;
-	credentials.password = passWord;
+	credentials.email = newAccountObject['email'];
+	credentials.password = newAccountObject['pass'];
 
 	ref.createUser( credentials, function( error, user ) {
 		if ( error ) {
@@ -943,32 +1006,43 @@ var submitNewAccount = function() {
 
 					var uid = user.auth.uid;
 					var obj = {};
-					obj.name = newAccountForm.name.value;
-					obj.birthday = newAccountForm.birthday.value;
-					obj.employer = newAccountForm.employer.value;
-					obj.job = newAccountForm.jobtitle.value;
-					console.log( obj );
-					ref.child( 'users' ).child( uid ).child( 'info' ).set( obj );
+					delete newAccountObject['email'];
+					delete newAccountObject['pass'];
+					// obj.name = newAccountForm.name.value;
+					// obj.birthday = newAccountForm.birthday.value;
+					// obj.employer = newAccountForm.employer.value;
+					// obj.job = newAccountForm.jobtitle.value;
+					// console.log( obj );
+					ref.child( 'users' ).child( uid ).child( 'info' ).set( newAccountObject, function( error, data ) {
+
+						if ( error ) {
+							console.log( 'error' );
+						} else {
+
+							closeAccountAndEventOverlay();
+
+							changeSignInButtonToMyAccount();
+
+							resetFields();
+							newAccountObject = {};
+
+							showError( 13 );
+
+						}
+
+					} );
 
 					// if the previous state was that the user wanted to
 					// create an event but didn't have an account, then
 					// the state shoudl return to event creation page.
-					closeAccountAndEventOverlay();
-
-					resetFields();
-
-					showError( 13 );
-
-					changeSignInButtonToMyAccount();
 
 					// figure out the State of the applicatino and if the user
 					// was creating a new event before
 					// the app should switch back to that state..
-					
 
 
 					// showSignIn();
-					
+
 					// close the overlay and all
 				}
 			})
@@ -981,6 +1055,7 @@ var nameCheck = function() {
 	var name = newAccountForm.name.value;
 	var re = /^[a-zA-Z\s]+$/;
 	if ( name.length !== 0 && re.test( name ) ) {
+		saveInputDataToObject( 'name', false );
 		return true;
 	} else if ( name.length === 0 ) {
 		return false;
@@ -1118,38 +1193,59 @@ var checkDOB = function() {
 		return;
 	}
 
+	// THE BIRTHDAY IS CORRECT, IF IT WASN'T THE FUNCTION WOULD NOT GET THIS FAR
 	checkIfFormReadyForSubmit( true );
+	saveInputDataToObject( 'birthday', false );
 	//console.log( newAccountForm.birthday );
 }
 
 var emailCheck = function() {
+	
 	var email = newAccountForm.email.value;
 	var len = email.length;
 
 	if ( len === 0 ) {
+		
 		checkIfFormReadyForSubmit( false );
 		return
+
 	} else {
+
 		if ( len <= 6 ) {
+			
 			showError( 11 );
 			newAccountForm.email.select();
 			// showError invalid email
+
 		} else {
+			
 			var twoParts = email.split( '@' );
+
 			if ( twoParts.length === 2 ) {
+
 				var secondPart = twoParts[1].split( '.' );
 				var len = secondPart.length
+
 				if ( len === 2 || len === 3 ) {
+
+					// EMAIL IS CORRECT!
+
 					checkIfFormReadyForSubmit( true );
+					saveInputDataToObject( 'email', false );
+
 				} else {
+
 					showError( 11 );
 					newAccountForm.email.select();
 					// invalid email
+
 				}
 			} else {
+
 				showError( 11 );
 				newAccountForm.email.select();
 				// invalid email
+
 			}
 		}
 	}
@@ -1401,34 +1497,24 @@ var resetLoginFields = function() {
 
 var newEventObject = {};
 
-var saveInputDataToObject = function( id ) {
-
-	if ( newEventForm[id].value !== '' ) {
-		newEventObject[id] = newEventForm[id].value;
-	}
-
-	console.log( newEventObject );
-
-}
-
 
 var processEventName = function() {
 
 	var id = 'event-name';
-	saveInputDataToObject( id );
+	saveInputDataToObject( id, true );
 }
 
 
 var processEventType = function() {
 
 	var id = 'host';
-	saveInputDataToObject( id );
+	saveInputDataToObject( id, true );
 }
 
 var processEventHost = function() {
 
 	var id = 'event-type';
-	saveInputDataToObject( id );
+	saveInputDataToObject( id, true );
 }
 
 
@@ -1443,6 +1529,364 @@ var selectDateElement = function( start ) {
 	if ( start ) {
 		newEventForm['event-start-date'].select();
 	} else newEventForm['event-end-date'].select();
+
+}
+
+var compareDates = function( primaryDate, secondaryDate, s  ) {
+
+	var d1 = primaryDate;
+	var d2 = secondaryDate;
+
+	var start = s;
+
+	// var dd = parseInt( sD.substr( 0, 2 ) );
+	// var mm = parseInt( sD.substr( 2, 2 ) );
+	// var yy = parseInt( sD.substr( 4, 2 ) );
+
+	var DateObject = function( date ) {
+		var obj = {
+			date: date,
+			day: parseInt( date.substr( 0, 2 ) ),
+			month: parseInt( date.substr( 2, 2 ) ),
+			year: parseInt( date.substr( 4, 2 ) )
+		};
+		return obj;
+	}
+
+	var p1 = new DateObject( d1 );
+	var p2 = new DateObject( d2 );
+
+
+	console.log( p1 );
+	console.log( p2 );
+
+	// var check = function( primD, secD ) {
+
+	// 	var primValue = primD;
+	// 	var secValue = secD;
+
+	// 	if ( primValue <= secValue || primValue === secValue ) {
+
+
+	// 		console.log ( primValue );
+	// 		console.log( secValue );
+
+	// 		console.log( 'DATES OK' );
+	// 		return true;
+
+	// 	} else {
+
+	// 		console.log( 'day is before current day' );
+	// 		console.log( 'date preceeds today or event start date' );
+
+	// 		console.log( 'show error 26');
+	// 		showError( 27 );
+	// 		return false;
+
+	// 	}
+
+	// }
+
+
+	var isTimeGreater = function() {
+
+		var t1 = parseInt( newEventObject['event-start-time'] );
+		var t2 = parseInt( newEventObject['event-end-time'] );
+
+		console.log( t1 !== NaN || t2 !== NaN );
+
+		console.log( t1 );
+		console.log( t2 );
+
+		if ( t1 !== NaN || t2 !== NaN ) {
+			
+			console.log( t1 );
+			console.log( t2 );
+
+			return ( t1 >= t2 ) ? false : true;
+
+		}
+		
+
+		// if ( parseInt(newEventObject['event-start-time'] ) >= parseInt( newEventObject['event-end-time'] ) ) {
+		// 	// the event end time is before the start time
+		// 	console.log( 'show error 26');
+		// 	showError( 26 );
+		// 	return false;
+		// } else {
+
+		// 	// return error stating the time cant be lower
+
+		// }
+
+	}
+
+
+	// var checkDay = function() {
+
+	// 	if ( p1.day <= p2.day ) {
+
+	// 		if ( p1.day === p2.day ) {
+
+	// 			console.log( 'day is the same' );
+
+				
+
+	// 		}
+
+	// 	} else {
+
+	// 		console.log( 'day is before current day' );
+
+	// 		console.log( 'show error 26');
+	// 		showError( 27 );
+	// 		return false;
+
+	// 	}
+
+	// }
+
+	// var checkMonth = function() {
+
+	// 	if ( p1.month <= p2.month ) {
+
+	// 		if ( p1.month === p2.month ) {
+
+	// 			console.log( 'month is the same' );
+
+				
+
+	// 		}
+
+	// 	} else {
+
+	// 		console.log( 'month is before current month' );
+
+	// 		// return month cant be this
+	// 		console.log( 'show error 26');
+	// 		showError( 27 );
+	// 		return false;
+
+	// 	}
+
+	// }
+
+	// var checkYear = function() {
+	// 	if ( p1.year <= p2.year ) {
+
+	// 		if ( p1.year === p2.year ) {
+
+	// 			console.log( 'year is the same' );
+	// 			return true;
+
+	// 		}
+
+	// 	} else {
+
+	// 		console.log( 'year is before current year' );
+
+	// 		console.log( 'show error 26');
+	// 		showError( 27 );
+	// 		return false;
+
+	// 	}
+	// }
+
+	var selectIncorrectField = function( time ) {
+
+		if ( start ) {
+
+			if ( time ) {
+
+				newEventForm['event-start-time'].select();
+
+			} else {
+
+				newEventForm['event-start-date'].select();
+
+			}
+
+		} else {
+
+			if ( time ) {
+
+				newEventForm['event-end-time'].select();
+
+			} else {
+
+				newEventForm['event-end-date'].select();
+
+			}
+
+		}
+
+	}
+
+	var isGreaterOrEqual = function( v1, v2 ) {
+
+		return ( v1 <= v2 ) ? true : false;
+
+	}
+
+
+	var isSame = function( v1, v2 ) {
+
+		return ( v1 === v2 ) ? true : false;
+
+
+	}
+
+	if ( isGreaterOrEqual( p1.year, p2.year ) ) {
+
+		console.log( 'isGreaterOrEqual no. 1' );
+
+		if ( isSame( p1.year, p2.year ) ) {
+
+			console.log( 'isSame no. 1' );
+
+			if ( isGreaterOrEqual( p1.month, p2.month ) ) {
+
+				console.log( 'isGreaterOrEqual no. 2' );
+
+				if ( isSame( p1.month, p2.month ) ) {
+
+					console.log( 'isSame no. 2' );
+
+					if ( isGreaterOrEqual( p1.day, p2.day ) ) {
+
+						console.log( 'isGreaterOrEqual no. 3' );
+
+						if ( isSame( p1.day, p2.day ) ) {
+
+							console.log( 'isSame no. 2' );
+
+							console.log( isTimeGreater() );
+
+							if ( !isTimeGreater() ) {
+
+								showError( 26 );
+								selectIncorrectField( true );
+
+							} else return true;
+
+						} else return true;
+
+					} else {
+
+						showError( 27 );
+						selectIncorrectField( false );
+
+					}
+
+				} else return true;
+
+			} else {
+
+				showError( 27 );
+				selectIncorrectField( false );
+
+			}
+
+		} else return true;
+
+	} else {
+
+		showError( 27 );
+		selectIncorrectField( false );
+
+	}
+
+}
+
+
+var validateDateAgainstToday = function( dObj ) {
+
+	var dateObj = dObj;
+
+	console.log( dateObj );
+
+	// var sD = newEventForm['event-start-date'].value;
+	// var eD = newEventForm['event-end-date'].value;
+
+	// if ( sd !== '' || eD !== '' ) {
+
+
+
+	// }
+
+	if( dateObj.start ) {
+
+		var today = new Date();
+
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = '' + today.getFullYear()
+		var yy = parseInt( yyyy.substr( 2, 4 ) );
+
+		if(dd<10) {
+			dd='0'+dd;
+		};
+
+		if(mm<10) {
+			mm='0'+mm;
+		};
+
+		today = dd+''+mm+''+ yy;
+
+		// today = {};
+		// today.day = dd;
+		// today.month = mm;
+		// today.year = yy;
+
+		// console.log( dd );
+		// console.log( mm );
+		// console.log( yy );
+
+
+		if ( compareDates( today, dateObj.date, true ) ) {
+
+			newEventObject['event-start-date'] = dateObj.date;
+			console.log( newEventObject );
+
+		};
+
+		// var today = parseInt( today );
+		// var eventStartDate = parseInt( newEventObject['event-start-date'] );
+
+
+		// var eventStartDay = dateObj.day;
+		// var eventStartMonth = dateObj.month;
+		// var eventStartYear = dateObj.year;
+
+	} else {
+
+		var sD = newEventObject['event-start-date'];
+
+		console.log( sD );
+
+		// var dd = parseInt( sD.substr( 0, 2 ) );
+		// var mm = parseInt( sD.substr( 2, 2 ) );
+		// var yy = parseInt( sD.substr( 4, 2 ) );
+
+		// console.log( dd );
+		// console.log( mm );
+		// console.log( yy );
+
+		// var sD = {};
+		// sD.day = dd;
+		// sD.month = mm;
+		// sD.year = yy;
+
+		if ( compareDates( sD, dateObj.date, false ) ) {
+
+			newEventObject['event-end-date'] = dateObj.date;
+			console.log( newEventObject );
+
+		};
+
+	}
+
+	
 
 }
 
@@ -1481,11 +1925,16 @@ var verifyDate = function( d ) {
 
 	}
 
-	if ( start ) {
-		newEventObject['event-start-date'] = dateObj.date;
-	} else newEventObject['event-end-date'] = dateObj.date;
+
+	if ( validateDateAgainstToday( dateObj ) ) {
+		// if the date is wrong, then the fucntion would not get this far
+		if ( start ) {
+			newEventObject['event-start-date'] = dateObj.date;
+		} else newEventObject['event-end-date'] = dateObj.date;
+	}
 
 	console.log( newEventObject );
+	console.log( newAccountObject );
 }
 
 var getDayMonthYear = function( d ) {
@@ -1531,6 +1980,9 @@ var checkEventDateFormat = function( start ) {
 		if ( len === 6 ) {
 
 			dateObj.date = date;
+
+
+
 			verifyDate( getDayMonthYear( dateObj ) );
 
 
@@ -1542,7 +1994,13 @@ var checkEventDateFormat = function( start ) {
 			if( date.length === 6 ) {
 
 				dateObj.date = date;
+
+
+
 				verifyDate( getDayMonthYear( dateObj ) );
+
+
+
 
 			} else showError( 23 );
 
@@ -1605,6 +2063,51 @@ var focusTimeInput = function( start ) {
 
 }
 
+
+var isTimeGreater = function( one, two ) {
+
+	console.log( 'one' );
+	console.log( 'two' )
+	console.log( one );
+	console.log( two )
+
+	var t1 = parseInt( newEventObject['event-start-time'] );
+	var t2 = parseInt( newEventObject['event-end-time'] );
+
+	if ( one !== undefined && two !== undefined ) {
+
+		t1 = parseInt( one );
+		t2 = parseInt( two );
+
+	}
+
+	console.log( t1 !== NaN || t2 !== NaN );
+
+	console.log( t1 );
+	console.log( t2 );
+
+	if ( t1 !== NaN || t2 !== NaN ) {
+
+		console.log( t1 );
+		console.log( t2 );
+
+		return ( t1 >= t2 ) ? false : true;
+
+	}
+
+
+	// if ( parseInt(newEventObject['event-start-time'] ) >= parseInt( newEventObject['event-end-time'] ) ) {
+	// 	// the event end time is before the start time
+	// 	console.log( 'show error 26');
+	// 	showError( 26 );
+	// 	return false;
+	// } else {
+
+	// 	// return error stating the time cant be lower
+
+	// }
+
+}
 
 var getHoursAndMinutes = function( t ) {
 
@@ -1834,75 +2337,29 @@ var saveEventToDb = function( obj ) {
 		console.log( 'save to private events' );
 	}
 
-	
 }
 
 
-var allDatesAreValid = function() {
 
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1; //January is 0!
-	var yyyy = '' + today.getFullYear();
-	var yy = yyyy.substring( 2, 4 );
-	console.log( today );
-	console.log( yyyy );
+var allTimesAreValid = function() {
 
-	if(dd<10) {
-		dd='0'+dd;
-	};
+	var d1 = newEventObject['event-start-date'];
+	var d2 = newEventObject['event-end-date'];
 
-	if(mm<10) {
-		mm='0'+mm;
-	};
+	console.log( compareDates( d1, d2 ) );
 
-	today = dd+''+mm+ '' + yy;
-
-	var today = parseInt( today );
-	var eventStartDate = parseInt( newEventObject['event-start-date'] );
-
-	console.log( today );
-	console.log( eventStartDate );
-	console.log( today <= eventStartDate );
-
-	if ( today <= eventStartDate ) {
-		if ( newEventObject['event-end-date'] < newEventObject['event-start-date'] ) {
-			// the event end date is before the start date
-			console.log( 'show error 25');
-			showError( 25 );
-			return false;
-		}
-
-		if ( newEventObject['event-start-date'] === newEventObject['event-end-date'] ) {
-			// the event end date is before the start date
-			if ( newEventObject['event-start-time'] >= newEventObject['event-end-time'] ) {
-				// the event end time is before the start time
-				console.log( 'show error 26');
-				showError( 25 );
-				return false;
-			}
-		}
-
-		return true;
-
-	} else {
-
-		console.log( 'show error 26');
-		showError( 27 );
-		return false;
-
-	}
-
-	
+	return compareDates( d1, d2 );
 
 }
+
 
 var isBeingSubmitted = false;
 var submitNewEvent = function() {
 
 	if ( !isBeingSubmitted ) {
 
-		if ( allDatesAreValid() ) {
+		isBeingSubmitted = true;
+		if ( allTimesAreValid() ) {
 
 			closeAccountAndEventOverlay();
 
@@ -1910,9 +2367,9 @@ var submitNewEvent = function() {
 
 			saveEventToDb( newEventObject );
 			resetFields();
-			isBeingSubmitted = true;
+			isBeingSubmitted = false;
 
-		}
+		} else isBeingSubmitted = false;
 		
 	}
 

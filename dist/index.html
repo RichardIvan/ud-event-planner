@@ -400,8 +400,8 @@
                 <input id="pass" placeholder="Password" onblur="checkPass()" type="password" required>
                 <input id="retype-pass" placeholder="Re-Type Password" onblur="checkPass()" type="password" required>
                 <input id="birthday" placeholder="Birthday - DD/MM/YYYY" type="datetime" required onblur="checkDOB()">
-                <input id="employer" placeholder="Employer" type="text" autocomplete="on">
-                <input id="jobtitle" placeholder="Job Title" type="text">
+                <input id="employer" placeholder="Employer" type="text" autocomplete="on" onblur="processEmployer()">
+                <input id="jobtitle" placeholder="Job Title" type="text" onblur="processJobTitle()">
               </form>
               <div></div>
             </div>
