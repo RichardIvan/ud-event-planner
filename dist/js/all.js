@@ -2195,13 +2195,14 @@ var Event = function (info) {
 	console.log('building event');
 
 	console.log(info);
-	var lat = info['location-data'].lat;
-	var lng = info['location-data'].lng;
+	console.dir(info);
+	var lat = info['event-location-data'].lat;
+	var lng = info['event-location-data'].lng;
 
 	var clone = eventItem.cloneNode(true);
 
 	var mapImg = clone.querySelector('img');
-	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=16&markers=color:red%7Clabel:C%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk';
+	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=19&markers=color:red%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk';
 	mapImg.setAttribute('src', url);
 	var h2 = clone.querySelector('h2');
 	h2.innerText = info['event-name'];
@@ -2213,7 +2214,7 @@ var Event = function (info) {
 	var startDate = info['event-start-date'];
 	startDate = startDate.substring(0, 2) + '.' + startDate.substring(2, 4) + '.' + startDate.substring(4, 6);
 	ul.children[0].innerText = startTime + ' - ' + endTime + ' / ' + startDate;
-	ul.children[1].innerText = info['google-event-location'];
+	ul.children[1].innerText = info['event-location-data'].name;
 	return clone;
 };
 
