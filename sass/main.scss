@@ -53,7 +53,15 @@ body > .event-item {
     // transition
     // visibility: hidden;
 
+    height: 100%;
+    width: 100%;
+
     transform: scale( 1 );
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
 }
 
 #error-container.visible {
@@ -132,7 +140,7 @@ body > .event-item {
     flex-wrap: wrap;
     height: 4em;
     background: #F65857;
-    position: fixed;
+    // position: fixed;
     z-index: 10 !important;
 
     width: 100%;
@@ -212,8 +220,8 @@ body > .event-item {
     height: 4em;
     width: 100% !important;
     
-    position: fixed;
-    margin-top: 4em;
+    position: relative;
+    // margin-top: 4em;
 
     
 
@@ -298,6 +306,10 @@ body > .event-item {
 
 
 #distance-lists {
+
+    position: absolute;
+    top: 0;
+
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -311,19 +323,24 @@ body > .event-item {
     border-top: 1px solid grey;
     box-shadow: inset 0px 5px 10px -5px grey;
 
+
     margin-top: 8em;
 
     min-width: 100%;
 
-    background: #FFF;
+    background: #424242;
 
     // display: flex;
     // flex-wrap: wrap;
 
     z-index: 30;
+    z-index: 60000 !important;
     padding-bottom: 1em;
 
     .event-item.expand {
+
+        z-index: 60000 !important;
+
         width: 100%;
         border-radius: 0px;
         transition: all .3s ease-in-out;
@@ -337,14 +354,25 @@ body > .event-item {
         
         height: 15em;
 
-        background: #D5D5D5;
-        width: 95%;
+        // background: #D5D5D5;
+        width: 100%;
         margin: 1em auto 0 auto;
-        border-radius: 10px;
+        // border-radius: 10px;
         overflow: hidden;
 
-        z-index: 60 !important;
-        
+        z-index: 60000 !important;
+
+        position: relative;
+
+        // border-top: 1px solid;
+        // border-bottom: 1px solid;
+
+        box-shadow: 1px 1px 10px black;
+    }
+
+    .event-item:nth-child( 1 ) {
+        margin-top: 0;
+        box-shadow: none;
     }
 
     .event-item.step1 {
@@ -397,7 +425,8 @@ body > .event-item {
     .event-info {
         opacity: 1;
         margin-top: 1em;
-        width: 55%;
+        width: 100%;
+        height: 100%;
         position: relative;
     }
 
@@ -409,27 +438,55 @@ body > .event-item {
 
     .bottom-border {
         opacity: 1;
-        position: relative;
-        bottom: -1em;
+        position: absolute;
+        bottom: 0;
+        left: 0;
         height: 0.5em;
         background: #25A197;
         width: 100%;
+
     }
 
     h2 {
-        margin-left: 0px;
+        margin-left: 1.5em;
+        display: inline-block;
+        position: relative;
+        padding: 0.2em 0.5em;
+        span {
+                height: 100%;
+                width: 100%;
+                background: black;
+                position: absolute;
+                left: 0;
+                top: 0;
+                opacity: 0.2;
+        }
     }
 
     ul {
         position: absolute;
-        bottom: 0em !important;
-        padding-left: 0.5em;
+        bottom: 3em;
+        padding-left: 3em;
+
+        span {
+
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            left: 2em;
+            background: black;
+            opacity: 0.2;
+            padding-bottom: 4em;
+        }
     }
 
     li {
         list-style-type: none;
         margin-top: 0.5em;
         margin-left: 0;
+
+        
     }
 }
 
@@ -886,48 +943,72 @@ body > .event-item {
 
 @keyframes overlayAnimation {
   0% {
+    top: 0;
+    height: 15em;
     bottom: 100%;
-    box-shadow: 0px 0px 0px #000;
+    // box-shadow: 0px 0px 0px #000;
     background: #D5D5D5;
   }
   1% {
-    bottom: 100%;
-    box-shadow: 0px 0px 0px #000;
+    // top: 15em;
+    top: 0;
+    height: 15em;
+    // bottom: 100%;
+    // box-shadow: 0px 0px 0px #000;
     background: #D5D5D5;
   }
   20% {
-    bottom: 100%;
-    box-shadow: 0px 0px 0px #000;
+    // top: 15em;
+    top: 0;
+    height: 15em;
+    // bottom: 100%;
+    // box-shadow: 0px 0px 0px #000;
     background: #D5D5D5;
   }
-  29% {
-    bottom: 70%;
-    box-shadow: 0px 0px 0px #000;
-    background: #D5D5D5;
-  }
+  // 29% {
+  //   top: 15em;
+  //   // bottom: 70%;
+  //   height: 0em;
+  //   // box-shadow: 0px 0px 0px #000;
+  //   background: #D5D5D5;
+  // }
   30% {
-    bottom: 70%;
-    box-shadow: 1px 1px 20px black;
+    // top: 15em;
+    // bottom: 70%;
+    top: 0;
+    height: 18em;
+    // box-shadow: 1px 1px 20px black;
     background: #D5D5D5;
   }
   60% {
-    bottom: 70%;
-    box-shadow: 1px 1px 20px black;
+    top: 0;
+    // top: 15em;
+    // bottom: 70%;
+    height: 18em;
+    // box-shadow: 1px 1px 20px black;
     background: #D5D5D5;
   }
   65% {
-    bottom: 65%;
-    box-shadow: 1px 1px 20px black;
+    top: 0;
+    // top: 15em;
+    height: 18em;
+    // bottom: 65%;
+    // box-shadow: 1px 1px 20px black;
     background: #D5D5D5;
   }
-  85% {
-    bottom: 65%;
-    box-shadow: 1px 1px 20px black;
-    background: #D5D5D5;
-  }
+  // 85% {
+  //   top: 15em;
+  //   // bottom: 65%;
+  //   height: 3em;
+  //   // box-shadow: 1px 1px 20px black;
+  //   background: #D5D5D5;
+  // }
   100% {
-    bottom: 0%;
-    box-shadow: 1px 1px 20px black;
+    top: 0;
+    // top: 15em;
+    // bottom: 0%;
+    height: 100%;
+    // box-shadow: 1px 1px 20px black;
     background: #4B5668;
   }
 }
@@ -943,6 +1024,7 @@ body > .event-item {
     z-index: 100;
     position: fixed;
     // bottom: 70% !important;
+    top: 0;
     bottom: 0 ;
     border-radius: 0px;
     background: #4B5668;
@@ -951,14 +1033,15 @@ body > .event-item {
     // box-shadow: 0px 0px 0px black;
 
     // background: red;
-    animation: overlayAnimation 2s;
+    animation: overlayAnimation 1s;
 
     .map-image {
         position: fixed;
-        height: 30%;
+        top: 0;
+        height: 15em;
         opacity: 1;
-        transition: all .3s ease-in-out;
-        transition-delay: 1s;
+        // transition: all .3s ease-in-out;
+        // transition-delay: 1s;
 
         div:nth-child( 1 ) {
             
@@ -993,11 +1076,11 @@ body > .event-item {
         background: #DAD8D9;
         opacity: 1;
         position: fixed;
-        top: 30%;
-        height: 5%;
+        top: 15em;
+        height: 3em;
         // padding: 1em;
         transition: opacity .3s ease-in-out;
-        transition-delay: 1.5s;
+        transition-delay: 0.5s;
 
         h2 {
             
@@ -1014,11 +1097,11 @@ body > .event-item {
         background: #4B5668;
         opacity: 1;
         position: fixed;
-        top: 35%;
-        height: 65%;
+        top: 18em;
+        // height: 65%;
 
         transition: opacity .3s ease-in-out;
-        transition-delay: 2.2s;
+        transition-delay: 1.2s;
 
         color: #F7F7F7;
 

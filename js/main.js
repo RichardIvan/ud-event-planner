@@ -40,6 +40,9 @@ var newEventContainer = document.getElementsByClassName( 'new-event-container' )
 
 var eventOverlay = document.getElementById( 'event-overlay' );
 var eventOverlayCloseButton = document.querySelector( '.close-button' );
+
+
+
 eventOverlayCloseButton.addEventListener( 'click', function() {
 
 	eventOverlay.classList.add( 'move-away' );
@@ -232,6 +235,103 @@ for ( var i = 0; i < len; i++ ) {
 // 
 // 
 
+
+var animateItem = function( element ) {
+
+	element.style.transition = 'all .3s ease-in-out';
+	element.style.top = 0 + 'px';
+	// element.classList.add( 'step1', 'step2', 'step3' );
+	console.dir( element );
+
+	var bgImage = element.style.backgroundImage;
+
+	var top = element.offsetTop;
+	var left = element.offsetLeft;
+
+	element.style.position = 'relative';
+
+	var sum = -top + left;
+	element.style.top = sum + 'px';
+
+	console.dir( element );
+
+	// var text = element.querySelector( '.event-info' );
+	// var map = element.querySelector( '.map-image' );
+	// var border = element.querySelector( '.bottom-border' );
+
+	// map.classList.add( 'invisible' );
+	// text.classList.add( 'invisible' );
+	// border.classList.add( 'invisible' );
+
+
+	console.log( sum );
+
+
+	setTimeout( function() {
+
+
+		var el = {};
+		var img = {};
+		var elImg = {};
+
+		el.height = element.offsetHeight;
+		// width
+		el.width = element.offsetWidth;
+		///top position
+		el.topMargin = element.offsetTop;
+		// left position
+		el.leftMargin = element.offsetLeft;
+
+
+
+
+
+		var eventOverlay = document.getElementById( 'event-overlay' );
+		
+		console.log( eventOverlay.querySelector( 'img' ) );
+
+		console.dir( eventOverlay );
+		eventOverlay.children[0].style.backgroundImage = bgImage;
+
+
+		eventOverlay.classList.add( 'expand1' );
+
+		element.classList.add( 'expand' );
+
+		console.log( parseInt( element.style.top ) );
+
+
+		var sum = parseInt( element.style.top ) - element.offsetLeft;
+
+		console.log( sum );
+
+		setTimeout( function() {
+			element.style.top = sum + 'px';
+			// element.style['z-index'] = 1000;
+
+
+			// This bunch of code puts the element back it it's previous position plus it does reset the css in with JS
+
+			setTimeout( function() {
+				element.style.transition = '';
+				element.style.position = '';
+				element.style.top = '';
+				// map.classList.remove( 'invisible' );
+				// text.classList.remove( 'invisible' );
+				// border.classList.remove( 'invisible' );
+				
+
+				element.classList.remove( 'expand' );
+
+
+			}, 2000 )
+
+
+		}, 100 )
+
+	}, 600)
+
+}
 
 
 
@@ -2520,22 +2620,40 @@ var Event = function( info ) {
 	var lat = info['event-location-data'].lat;
 	var lng = info['event-location-data'].lng;
 
+	var centerLat = lat - .0002;
+	var centerLng = lng - .0009;
+
 	var clone = eventItem.cloneNode( true );
 
-	var mapImg = clone.querySelector( 'img' );
-	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=19&markers=color:red%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
-	mapImg.setAttribute( 'src', url );
+	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=360x180&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
+
+	clone.style.backgroundImage = "url(" + url + ")";
+
+	// var mapImg = clone.querySelector( 'img' );
+	// var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=19&markers=color:red%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
+	// mapImg.setAttribute( 'src', url );
+	
 	var h2 = clone.querySelector( 'h2' );
-	h2.innerText = info['event-name'];
+	h2.innerHTML = info['event-name'] + '<span></span>';
+	
 	var ul = clone.querySelector( 'ul' );
+	
 	var startTime = info['event-start-time'];
 	startTime = startTime.substring( 0, 2 ) + ':' + startTime.substring( 2, 4 );
+	
 	var endTime = info['event-end-time'];
 	endTime = endTime.substring( 0, 2 ) + ':' + endTime.substring( 2, 4 );
+	
 	var startDate = info['event-start-date'];
 	startDate = startDate.substring( 0, 2 ) + '.' + startDate.substring( 2, 4 ) + '.' + startDate.substring( 4, 6 );
 	ul.children[0].innerText = startTime + ' - ' + endTime + ' / ' + startDate;
 	ul.children[1].innerText = info['event-location-data'].name;
+	
+
+	clone.addEventListener( 'click', function() {
+		animateItem( clone );
+	} );
+
 	return clone;
 
 }
