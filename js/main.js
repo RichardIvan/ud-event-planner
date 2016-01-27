@@ -287,6 +287,18 @@ for ( var i = 0; i < len; i++ ) {
 
 var animateItem = function( element ) {
 
+	var original = document.getElementsByClassName( 'event-item' )[0];
+	console.log( original );
+	original.style.backgroundImage = element.style.backgroundImage;
+	original.style.transition = 'all .3s ease-in-out';
+	original.style.top = element.offsetTop + 'px';
+	original.style.display = 'flex';
+
+	element.style.top = 0 + 'px';
+	// original.style.leftMargin = el.leftMargin;
+	// original.style.display = 'block';
+
+
 	element.style.transition = 'all .3s ease-in-out';
 	element.style.top = 0 + 'px';
 	// element.classList.add( 'step1', 'step2', 'step3' );
@@ -301,6 +313,7 @@ var animateItem = function( element ) {
 
 	// var sum = -top + left;
 	element.style.top = -top + 'px';
+	original.style.top = 0 + 'px';
 
 	console.dir( element );
 
@@ -333,6 +346,10 @@ var animateItem = function( element ) {
 
 
 
+		console.log( el );
+		
+
+		console.log( original );
 
 
 		var eventOverlay = document.getElementById( 'event-overlay' );
@@ -2649,7 +2666,11 @@ var buildEvents = function( evts ) {
 		var evt = events[key];
 		// console.log( evt );
 		// console.log(  );
-		nearbyList.appendChild( new Event( evt ) );
+
+
+		setUpEventItem( evt )
+
+		
 	}
 
 
@@ -2660,7 +2681,7 @@ console.log( events );
 var eventItem = document.getElementsByClassName('event-item')[0];
 
 
-var Event = function( info ) {
+var setUpEventItem = function( info ) {
 
 	console.log( 'building event' );
 
@@ -2714,28 +2735,30 @@ var Event = function( info ) {
 	startDate = startDate.substring( 0, 2 ) + '.' + startDate.substring( 2, 4 ) + '.' + startDate.substring( 4, 6 );
 	ul.children[0].innerText = startTime + ' - ' + endTime + ' / ' + startDate;
 	ul.children[1].innerText = info['event-location-data'].name;
-	
 
 	clone.addEventListener( 'click', function() {
 		animateItem( clone );
 	} );
 
 
-
-
 	if ( latDiff < 0.1 && latDiff > -0.1 && lngDiff < 0.1 && lngDiff > -0.1 ) {
 
 		console.log( "EVENT IS NEARBY" );
+		nearbyList.appendChild( clone );
 
 	} else if ( latDiff < 0.3 && latDiff > -0.3 && lngDiff < 0.3 && lngDiff > -0.3 ) {
 
 		console.log( "EVENT IS CLOSEBY" );
+		closebyList.appendChild( clone );
 
-	} else console.log( "EVENT IS FARAWAY" );
+	} else {
+
+		console.log( "EVENT IS FARAWAY" );
+		farawayList.appendChild( clone );
+
+	}
 
 
-
-	return clone;
 
 }
 
