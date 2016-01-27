@@ -21,6 +21,55 @@ var style = window.getComputedStyle(body, null).getPropertyValue('font-size');
 var bodyHeight = body.clientHeight;
 var fontSize = parseFloat(style);
 
+//
+// USER DATA
+//
+
+var User = function () {
+	var location;
+
+	var setUserLocation = function (loc) {
+
+		// would we do this to have some extra layer of security, like saving and returning
+		// the data only if the user is authorised via oAuth or such?
+
+		location = loc;
+		console.log(location);
+		return location;
+	};
+
+	this.saveUserLocation = function (loc) {
+		return setUserLocation(loc);
+	};
+	this.handleLocationError = function (error) {
+		console.log(error);
+		return false;
+	};
+	this.getUserLoation = function () {
+		console.log("GETTING USER LOCATION");
+		if (location) {
+			console.log("HERE IS THE USER LOCATION");
+			console.log(location);
+			return location;
+		} else return false;
+	};
+	this.determineUserLoation = function () {
+		console.log(this);
+		if (navigator.geolocation) {
+			console.log(this);
+			navigator.geolocation.getCurrentPosition(this.saveUserLocation, this.handleLocationError);
+		} else {
+			alert("Geolocation is not supported by this browser");
+		}
+	};
+};
+
+var u = new User();
+
+if (!u.getUserLoation()) {
+	u.determineUserLoation();
+}
+
 var errorContainer = document.getElementById('error-container');
 // sign in button in navigation menu
 var signInNavOverlay = document.getElementById('sign-in');
@@ -208,12 +257,12 @@ var animateItem = function (element) {
 	var bgImage = element.style.backgroundImage;
 
 	var top = element.offsetTop;
-	var left = element.offsetLeft;
+	// var left = element.offsetLeft;
 
 	element.style.position = 'relative';
 
-	var sum = -top + left;
-	element.style.top = sum + 'px';
+	// var sum = -top + left;
+	element.style.top = -top + 'px';
 
 	console.dir(element);
 
@@ -225,7 +274,7 @@ var animateItem = function (element) {
 	// text.classList.add( 'invisible' );
 	// border.classList.add( 'invisible' );
 
-	console.log(sum);
+	// console.log( sum );
 
 	setTimeout(function () {
 
@@ -256,7 +305,7 @@ var animateItem = function (element) {
 
 		var sum = parseInt(element.style.top) - element.offsetLeft;
 
-		console.log(sum);
+		// console.log( sum );
 
 		setTimeout(function () {
 			element.style.top = sum + 'px';
@@ -2280,8 +2329,22 @@ var Event = function (info) {
 	var lat = info['event-location-data'].lat;
 	var lng = info['event-location-data'].lng;
 
+	console.log(lat - 49.819657);
+	console.log(lng - 18.0973114);
+
 	var centerLat = lat - .0002;
 	var centerLng = lng - .0009;
+
+	var l = u.getUserLoation();
+	var userLat = l.coords.latitude;
+	var userLng = l.coords.longitude;
+
+	console.log("DIFFERENCE BETWEEN USER AND THE EVENT LOCATION IS");
+	console.log(lat - userLat);
+	console.log(lng - userLng);
+
+	var latDiff = lat - userLat;
+	var lngDiff = lng - userLng;
 
 	var clone = eventItem.cloneNode(true);
 
@@ -2313,7 +2376,32 @@ var Event = function (info) {
 		animateItem(clone);
 	});
 
+	if (latDiff < 0.1 && latDiff > -0.1 && lngDiff < 0.1 && lngDiff > -0.1) {
+
+		console.log("EVENT IS NEARBY");
+	} else if (latDiff < 0.3 && latDiff > -0.3 && lngDiff < 0.3 && lngDiff > -0.3) {
+
+		console.log("EVENT IS CLOSEBY");
+	} else console.log("EVENT IS FARAWAY");
+
 	return clone;
+};
+
+var getLocationBeforeBuildingElements = function () {
+
+	var interval;
+
+	// if we don't have user location
+
+	interval = setInterval(function () {
+
+		console.log('RUNNING INTERVAL');
+		if (u.getUserLoation()) {
+
+			clearInterval(interval);
+			buildEvents(events);
+		}
+	}, 500);
 };
 
 var events;
@@ -2321,7 +2409,7 @@ var loadEvents = function () {
 	ref.child('events/public').once('value', function (snap) {
 		events = snap.val();
 		console.log(events);
-		buildEvents(events);
+		getLocationBeforeBuildingElements();
 	});
 };
 loadEvents();
