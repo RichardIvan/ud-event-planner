@@ -284,12 +284,13 @@ var animateItem = function (element) {
 	fillElementWithData(original, id);
 
 	// set the position of the original so it overlays the clicked element!
-	original.style.backgroundImage = element.style.backgroundImage;
-	original.style.transition = 'all .3s ease-in-out';
+	original.children[0].style.backgroundImage = element.children[0].style.backgroundImage;
+
 	// original.style.top = topRelativeToViewport + 'px';
 	original.style.transform = 'translateY(' + topRelativeToViewport + 'px )';
+
 	original.style.display = 'flex';
-	original.style['z-index'] = '1000';
+	original.style['z-index'] = '100';
 
 	// original.style.leftMargin = el.leftMargin;
 	// original.style.display = 'block';
@@ -301,14 +302,14 @@ var animateItem = function (element) {
 
 	console.dir(element);
 
-	var bgImage = element.style.backgroundImage;
+	// var bgImage = element.style.backgroundImage;
 
-	var top = element.offsetTop;
+	// var top = element.offsetTop;
 
 	// var left = viewportOffset.left;
 	// var left = element.offsetLeft;
 
-	element.style.position = 'relative';
+	// element.style.position = 'relative';
 
 	// var sum = -top + left;
 	// element.style.top = -topRelativeToViewport + 'px';
@@ -316,8 +317,12 @@ var animateItem = function (element) {
 
 	var pixelsToMove = -topRelativeToViewport;
 
-	original.style.transform = 'translateY(' + 0 + 'px )';
-	element.style.transform = 'translateY(' + pixelsToMove + 'px )';
+	setTimeout(function () {
+		original.style.transform = 'translateY(' + 0 + 'px)';
+		original.style.transition = 'all .3s ease-in-out';
+	}, 0);
+
+	element.style.transform = 'translateY(' + pixelsToMove + 'px)';
 
 	console.dir(element);
 
@@ -349,39 +354,47 @@ var animateItem = function (element) {
 
 		// console.log( original );
 
-		var eventOverlay = document.getElementById('event-overlay');
+		// var eventOverlay = document.getElementById( 'event-overlay' );
 
 		// console.log( eventOverlay.querySelector( 'img' ) );
 
 		// console.dir( eventOverlay );
-		eventOverlay.children[0].style.backgroundImage = bgImage;
+		// eventOverlay.children[0].style.backgroundImage = bgImage;
 
-		eventOverlay.classList.add('expand1');
+		// eventOverlay.classList.add( 'expand1' );
 
-		element.classList.add('expand');
+		// ?????
+		// element.classList.add( 'expand' );
+		// ?????
 
-		console.log(parseInt(element.style.top));
+		// console.log( parseInt( element.style.top ) );
 
-		var sum = parseInt(element.style.top) - element.offsetLeft;
+		// var sum = parseInt( element.style.top ) - element.offsetLeft;
 
 		// console.log( sum );
 
 		setTimeout(function () {
-			element.style.transform = 'translateY(' + 0 + 'px )';
+
+			// DO NOT TRANSITION BACK YET
+			//element.style.transform = 'translateY(' + 0 + 'px )';
+
 			// element.style['z-index'] = 1000;
 
 			// This bunch of code puts the element back it it's previous position plus it does reset the css in with JS
 
-			setTimeout(function () {
-				element.style.transition = '';
-				element.style.position = '';
-				element.style.top = '';
-				// map.classList.remove( 'invisible' );
-				// text.classList.remove( 'invisible' );
-				// border.classList.remove( 'invisible' );
+			// setTimeout( function() {
+			// 	element.style.transform = '';
+			// 	element.style.transition = '';
+			// 	element.style.position = '';
+			// 	element.style.top = '';
+			// 	// map.classList.remove( 'invisible' );
+			// 	// text.classList.remove( 'invisible' );
+			// 	// border.classList.remove( 'invisible' );
 
-				element.classList.remove('expand');
-			}, 2000);
+			// 	element.classList.remove( 'expand' );
+
+			// }, 2000 )
+
 		}, 100);
 	}, 600);
 };
@@ -2413,16 +2426,15 @@ var fillElementWithData = function (element, id) {
 	var centerLng = lng - .0009;
 
 	// element.style.display = 'flex';
-	var height = element.offsetHeight;
-	var width = element.offsetWidth;
+	var dimensions = getSingleEventDimensions();
+	var height = dimensions.height;
+	var width = dimensions.width;
 
 	console.log(height);
 	console.log(width);
 
-	if (height !== 0 || width !== 0) {
-		var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=' + width + 'x' + height + '&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk';
-		element.style.backgroundImage = "url(" + url + ")";
-	}
+	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=' + width + 'x' + height + '&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk';
+	element.children[0].style.backgroundImage = "url(" + url + ")";
 
 	// var mapImg = element.querySelector( 'img' );
 	// var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=19&markers=color:red%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
@@ -2540,7 +2552,7 @@ loadEvents();
 
 var resizeTimeout;
 
-var resetImagesOnElements = function (h, w) {
+var resetImagesOnElements = function () {
 
 	var elements = eventItems;
 
@@ -2552,8 +2564,9 @@ var resetImagesOnElements = function (h, w) {
 	clearTimeout(resizeTimeout);
 	resizeTimeout = setTimeout(function () {
 
-		var height = h;
-		var width = w;
+		var dimensions = getSingleEventDimensions();
+		var height = dimensions.height;
+		var width = dimensions.height;
 
 		Array.prototype.forEach.call(elements, function (el) {
 
@@ -2561,24 +2574,26 @@ var resetImagesOnElements = function (h, w) {
 
 			if (id !== null) {
 
-				var eventInfo = events[id];
+				fillElementWithData(el, id);
 
-				var lat = eventInfo['event-location-data'].lat;
-				var lng = eventInfo['event-location-data'].lng;
+				// 	var eventInfo = events[id];
 
-				var centerLat = lat - .0002;
-				var centerLng = lng - .0009;
+				// 	var lat = eventInfo['event-location-data'].lat;
+				// 	var lng = eventInfo['event-location-data'].lng;
 
-				// var clone = eventItem.cloneNode( true );
+				// 	var centerLat = lat - .0002;
+				// 	var centerLng = lng - .0009;
 
-				// clone.data = info;
+				// 	// var clone = eventItem.cloneNode( true );
 
-				var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=' + width + 'x' + height + '&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk';
-				// var url =
+				// 	// clone.data = info;
 
-				console.log(url);
+				// 	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=' + width + 'x' + height + '&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
+				// 	// var url =
 
-				el.style.backgroundImage = "url(" + url + ")";
+				// 	console.log( url );
+
+				// 	el.style.backgroundImage = "url(" + url + ")";
 			}
 		});
 	}, 500);
@@ -2602,21 +2617,30 @@ var resetImagesOnElements = function (h, w) {
 	// });
 };
 
+var originalElement = document.getElementsByClassName('event-item')[0];
 var getSingleEventDimensions = function () {
 
 	console.log("GETTING OFFSET HEIGHT");
 
-	var originalElement = document.getElementsByClassName('event-item')[0];
-
 	originalElement.style.display = 'flex';
+	originalElement.style.paddingBottom = '0px';
 
-	var height = originalElement.offsetHeight;
-	var width = originalElement.offsetWidth;
-	console.log(originalElement.offsetHeight);
-	console.log(originalElement.offsetWidth);
+	// var fontSize = parseInt( window.getComputedStyle(originalElement, null).getPropertyValue('font-size') );
+	// console.log( style );
+
+	// console.log( originalElement.children[0] );
+
+	// we're getting rid of the font size since that is what the padding is!
+	var height = originalElement.children[0].offsetHeight;
+	var width = originalElement.children[0].offsetWidth;
+	console.log(height);
+	console.log(width);
 	originalElement.style.display = '';
+	originalElement.style.paddingBottom = '';
 
-	resetImagesOnElements(height, width);
+	return { height: height, width: width };
+
+	// resetImagesOnElements( height, width );
 };
 
 //
@@ -2624,7 +2648,7 @@ var getSingleEventDimensions = function () {
 // UTILITY
 //
 //
-window.onresize = getSingleEventDimensions;
+window.onresize = resetImagesOnElements;
 /*! Hammer.JS - v2.0.6 - 2016-01-06
  * http://hammerjs.github.io/
  *

@@ -38,15 +38,6 @@ body {
     margin: 0;
 }
 
-body > .event-item {
-    display: none;
-}
-
-body > .event-item {
-    position: fixed;
-    z-index: 100;
-}
-
 body > .event-item.move-away {
     position: fixed;
     z-index: 100;
@@ -56,6 +47,9 @@ body > .event-item.move-away {
 }
 
 body > .event-item {
+
+    position: fixed;
+    z-index: 1;
 
     transform: translateX( 0% );
     top: 0;
@@ -73,9 +67,7 @@ body > .event-item {
     // border-radius: 10px;
     overflow: visible;
 
-    z-index: 1;
-
-    position: fixed;
+    
 
     // border-top: 1px solid;
     // border-bottom: 1px solid;
@@ -83,12 +75,13 @@ body > .event-item {
     // box-shadow: 1px 1px 10px black;
     .event-info {
         position: relative;
-        padding-top: 1em;
+        // padding-top: 1em;
         width: 100%;
         height: 15em;
     }
 
     h2 {
+        margin-top: 1.5em;
         margin-left: 1.5em;
         display: inline-block;
         position: relative;
@@ -106,7 +99,7 @@ body > .event-item {
 
     ul {
         position: absolute;
-        bottom: 3em;
+        bottom: 2em;
         padding-left: 3em;
 
         span {
@@ -609,6 +602,7 @@ body > .event-item {
     }
 
     h2 {
+        margin-top: 1.5em;
         margin-left: 1.5em;
         display: inline-block;
         position: relative;
@@ -626,7 +620,7 @@ body > .event-item {
 
     ul {
         position: absolute;
-        bottom: 3em;
+        bottom: 2em;
         padding-left: 3em;
 
         span {
