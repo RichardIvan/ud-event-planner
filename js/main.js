@@ -307,12 +307,78 @@ for ( var i = 0; i < len; i++ ) {
 // 
 
 
+var AnimationElement = function() {
+	var element;
+	this.set = function( el ) {
+		element = el;
+	}
+	this.get = function() {
+		return element;
+	}
+	this.pixelsToMove = 0;
+}
+
+var AE = new AnimationElement();
+
+var eventViewClose = document.getElementById( 'event-view-close' );
+eventViewClose.addEventListener( 'click', function( e ) {
+	
+
+	var original = document.getElementsByClassName( 'event-item' )[0];
+	console.log( original );
+
+	// we shoudl be adding classes here that will close the element quickly
+
+	original.classList.add( 'hide' );
+
+	// var header = original.children[1].classList.add( 'hide' );
+	// var content = original.children[2].classList.add( 'hide' );
+
+
+	// original.style.backgroundImage = element.style.backgroundImage;
+	// original.style.transition = 'all .3s ease-in-out';
+	// original.style.top = element.offsetTop + 'px';
+	// original.style.display = 'flex';
+	// original.style['z-index'] = '100';
+
+	// eventOverlay.classList.add( 'move-away' );
+
+	var hideEventOverLayContent = function() {
+		original.classList.remove( 'hide' );
+		original.children[1].classList.remove( 'visible' );
+		original.children[2].classList.remove( 'visible' );
+		eventViewClose.classList.remove( 'visible' );
+
+		original.style.transition = '';
+		original.style.transform = '';
+		original.style.display = '';
+		original.style['z-index'] = '';
+
+	}
+
+	// original.classList.add( 'move-away' );
+	// eventViewClose.classList.remove( 'visible' );
+	setTimeout( function() {
+		// eventOverlay.classList.remove( 'expand1' );
+		// eventOverlay.classList.remove( 'move-away' );
+		// eventViewClose.classList.remove( 'visible' );
+
+		original.style.transition = 'all .3s ease-in-out';
+		original.style.transform = 'translateY(' + AE.pixelsToMove + 'px)';
+		var animeEl = AE.get();
+		animeEl.style.transform = 'translateY(' + 0 + 'px)';
+		hideEventOverLayContent();
+	}, 900 );
+})
 
 var animateItem = function( element ) {
+
+	AE.set( element );
 
 	var showEventOverLayContent = function() {
 		original.children[1].classList.add( 'visible' );
 		original.children[2].classList.add( 'visible' );
+		eventViewClose.classList.add( 'visible' );
 	}
 
 	var original = document.getElementsByClassName( 'event-item' )[0];
@@ -321,6 +387,8 @@ var animateItem = function( element ) {
 
 	var viewportOffset = element.getBoundingClientRect();
 	var topRelativeToViewport = viewportOffset.top;
+
+	AE.pixelsToMove = topRelativeToViewport;
 
 	fillElementWithData( original, id );
 
@@ -384,84 +452,84 @@ var animateItem = function( element ) {
 	// console.log( sum );
 
 
-	setTimeout( function() {
+	// setTimeout( function() {
 
 
-		// var el = {};
-		// var img = {};
-		// var elImg = {};
+	// 	// var el = {};
+	// 	// var img = {};
+	// 	// var elImg = {};
 
-		// el.height = element.offsetHeight;
-		// // width
-		// el.width = element.offsetWidth;
-		// ///top position
-		// el.topMargin = element.offsetTop;
-		// // left position
-		// el.leftMargin = element.offsetLeft;
+	// 	// el.height = element.offsetHeight;
+	// 	// // width
+	// 	// el.width = element.offsetWidth;
+	// 	// ///top position
+	// 	// el.topMargin = element.offsetTop;
+	// 	// // left position
+	// 	// el.leftMargin = element.offsetLeft;
 
 
 
-		// console.log( el );
+	// 	// console.log( el );
 		
 
-		// console.log( original );
+	// 	// console.log( original );
 
 
-		// var eventOverlay = document.getElementById( 'event-overlay' );
+	// 	// var eventOverlay = document.getElementById( 'event-overlay' );
 		
-		// console.log( eventOverlay.querySelector( 'img' ) );
+	// 	// console.log( eventOverlay.querySelector( 'img' ) );
 
-		// console.dir( eventOverlay );
-		// eventOverlay.children[0].style.backgroundImage = bgImage;
-
-
-		// eventOverlay.classList.add( 'expand1' );
+	// 	// console.dir( eventOverlay );
+	// 	// eventOverlay.children[0].style.backgroundImage = bgImage;
 
 
-
-		// ?????
-		// element.classList.add( 'expand' );
-		// ?????
+	// 	// eventOverlay.classList.add( 'expand1' );
 
 
 
-		// console.log( parseInt( element.style.top ) );
+	// 	// ?????
+	// 	// element.classList.add( 'expand' );
+	// 	// ?????
 
 
-		// var sum = parseInt( element.style.top ) - element.offsetLeft;
 
-		// console.log( sum );
+	// 	// console.log( parseInt( element.style.top ) );
 
-		setTimeout( function() {
 
-			// DO NOT TRANSITION BACK YET
-			//element.style.transform = 'translateY(' + 0 + 'px )';
+	// 	// var sum = parseInt( element.style.top ) - element.offsetLeft;
+
+	// 	// console.log( sum );
+
+	// 	setTimeout( function() {
+
+	// 		// DO NOT TRANSITION BACK YET
+	// 		//element.style.transform = 'translateY(' + 0 + 'px )';
 			
 
-			// element.style['z-index'] = 1000;
+	// 		// element.style['z-index'] = 1000;
 
 
-			// This bunch of code puts the element back it it's previous position plus it does reset the css in with JS
+	// 		// This bunch of code puts the element back it it's previous position plus it does reset the css in with JS
 
-			// setTimeout( function() {
-			// 	element.style.transform = '';
-			// 	element.style.transition = '';
-			// 	element.style.position = '';
-			// 	element.style.top = '';
-			// 	// map.classList.remove( 'invisible' );
-			// 	// text.classList.remove( 'invisible' );
-			// 	// border.classList.remove( 'invisible' );
+	// 		// setTimeout( function() {
+	// 		// 	element.style.transform = '';
+	// 		// 	element.style.transition = '';
+	// 		// 	element.style.position = '';
+	// 		// 	element.style.top = '';
+	// 		// 	// map.classList.remove( 'invisible' );
+	// 		// 	// text.classList.remove( 'invisible' );
+	// 		// 	// border.classList.remove( 'invisible' );
 				
 
-			// 	element.classList.remove( 'expand' );
+	// 		// 	element.classList.remove( 'expand' );
 
 
-			// }, 2000 )
+	// 		// }, 2000 )
 
 
-		}, 100 )
+	// 	}, 100 )
 
-	}, 600)
+	// }, 600)
 
 }
 
@@ -661,48 +729,7 @@ var extractEventItem = function( elements ) {
 }
 
 var eventItems = document.getElementsByClassName( 'event-item' );
-// var len = eventItems.length;
-// for ( var i = 0; i < len; i++ ) {
-// 	// console.log( i );
-// 	// console.log( cancelButtons[i] );
 
-// 	eventItems[i].addEventListener( 'click', function( e ) {
-
-// 		// console.log( zenscroll );
-// 		// zenscroll.intoView( main );
-// 		nav.scrollIntoView();
-// 		extractEventItem( e.path );
-// 		// createAccount.classList.add( 'aside' );
-
-// 	})
-// }
-
-
-
-// cancelButtons.forEach( function() {
-// 	console.log( 'hello' );
-// })
-
-// cancelButtons.forEach( function( button ) {
-// 	button.addEventListener( 'click', function() {
-// 		console.log( 'hello button' );
-// 	})
-// })
-
-
-
-
-
-
-
-
-// now you have a proper float for the font size (yes, it can be a float, not just an integer)
-// el.style.fontSize = (fontSize + 1) + 'px';
-// console.log( fontSize );
-
-// alert( fabContainer  );
-// console.log( fabContainer );
-// alert( bodyHeight - ( fontSize * 8 ) );
 
 
 
@@ -753,22 +780,8 @@ var h = bodyHeight - ( fontSize * 8 );
 newAccountContainer.style.height = h;
 newAccountContainer.style.minHeight = h;
 
-faButton.addEventListener( 'click', function( e ) {
-
-	// IF the user is not signed in, show sign in/sign up page
-	// else opoen the new event pag
-
-	console.log( FireAuthData );
-
-	if ( !FireAuthData ) {
-
-
-		showSignIn();
-
-
-	} else {
-
-		swapButtons( false );
+var showNewEvent = function() {
+	swapButtons( false );
 
 		faButton.classList.add( 'expand-animation' );
 
@@ -799,6 +812,24 @@ faButton.addEventListener( 'click', function( e ) {
 			}, 300);
 
 		}, 200 );
+}
+
+faButton.addEventListener( 'click', function( e ) {
+
+	// IF the user is not signed in, show sign in/sign up page
+	// else opoen the new event pag
+
+	console.log( FireAuthData );
+
+	if ( !FireAuthData ) {
+
+
+		showSignIn();
+
+
+	} else {
+
+		
 	}
 
 	
