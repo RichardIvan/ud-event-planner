@@ -125,6 +125,50 @@ body > .event-item {
     }
 }
 
+#spinner.show {
+    z-index: 100;
+
+    @-webkit-keyframes rotating {
+        from{
+            -webkit-transform: rotate(0deg);
+        }
+        to{
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    i {
+        transform-origin: center;
+        animation: rotating .6s linear infinite;
+    }
+}
+
+#spinner {
+
+    
+    
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    margin: 0 auto;
+    height: 6em;
+    width: 6em;
+    z-index: 1;
+    background: grey;
+    border-radius: 5px;
+
+    i {
+        position: absolute;
+        top: 25%;
+        left: 25%;
+        /* height: 100%; */
+        /* width: 100%; */
+        font-size: 3em;
+        margin: 0 auto;
+        color: white;
+    }
+}
+
 #main {
     transform: scale( 0.9 );
     transition: transform .3s ease-in-out;

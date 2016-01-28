@@ -23,7 +23,18 @@ var bodyHeight = body.clientHeight;
 var fontSize = parseFloat(style);
 
 
+var Spinner = function() {
+	var spinner = document.getElementById( 'spinner' );
 
+	this.show = function() {
+		spinner.classList.add( 'show' );
+	};
+	this.hide = function() {
+		spinner.classList.remove( 'show' );
+	};
+}
+
+var spinner = new Spinner();
 
 
 
@@ -64,7 +75,7 @@ var User = function() {
 		console.log( this );
 		if ( navigator.geolocation ) {
 			console.log( this );
-			navigator.geolocation.getCurrentPosition( this.saveUserLocation, this.handleLocationError ); 
+			navigator.geolocation.getCurrentPosition( this.saveUserLocation, this.handleLocationError );
 		} else {
 			alert( "Geolocation is not supported by this browser" );
 		}
@@ -74,6 +85,8 @@ var User = function() {
 
 var u = new User();
 
+// normally I would probably have the location stored in c cache since the user probably doesn't move that much
+// within like 5 or 10 minutes so...
 if ( !u.getUserLoation() ) {
 	u.determineUserLoation();
 }
@@ -809,7 +822,6 @@ attachClickAndSelectFunctionToForm( forms );
 
 var showError = function( error ) {
 
-	
 	var p = errorContainer.querySelector('p');
 
 	var flashError = function( text ) {
@@ -1164,6 +1176,8 @@ var checkPass = function() {
 
 var submitNewAccount = function() {
 
+	spinner.show();
+
 	console.log( newAccountForm );
 	console.dir( newAccountForm );
 
@@ -1213,7 +1227,10 @@ var submitNewAccount = function() {
 							resetFields();
 							newAccountObject = {};
 
+							spinner.hide();
+
 							showError( 13 );
+
 
 						}
 
@@ -1578,6 +1595,9 @@ var signIn = function() {
 	var credentials = {};
 	credentials.email = signInForm.email.value;
 	credentials.password = signInForm.password.value;
+
+	spinner.show();
+
 	ref.authWithPassword( credentials, function(error, authData) {
 		if(error) {
 			console.log( error );
@@ -1591,10 +1611,13 @@ var signIn = function() {
 					break;
 			}
 			resetLoginFields();
+			spinner.hide();
 			// showError( 15 );
 		} else {
 			FireAuthData = authData;
 			console.log( authData );
+
+			spinner.hide();
 			hideSignIn();
 
 			// reset Sign in
@@ -2475,6 +2498,8 @@ var saveEventToDb = function( obj ) {
 
 	console.log( obj );
 
+	spinner.show();
+
 	// the private event has a property that is called access..
 	// and there is user id's being pushed to that endpoint .. this
 	// then has a rule within the security tab in firebase that
@@ -2500,8 +2525,12 @@ var saveEventToDb = function( obj ) {
 				ref.child( 'events/public' ).child( id ).update( { 'id': id }, function( error, data) {
 
 					if( error ) {
+						// show error
+
 						console.dir( error );
 					} else {
+
+						spinner.hide();
 						console.log( data );
 					}
 
@@ -2690,10 +2719,10 @@ var buildEvents = function( evts ) {
 
 		setUpEventItem( evt )
 
-		
 	}
 
 	getSingleEventDimensions();
+	spinner.hide();
 
 }
 
@@ -2715,9 +2744,17 @@ var fillElementWithData = function( element, id ) {
 	var centerLat = lat - .0002;
 	var centerLng = lng - .0009;
 
-	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=360x180&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
+	// element.style.display = 'flex';
+	var height = element.offsetHeight;
+	var width = element.offsetWidth;
 
-	element.style.backgroundImage = "url(" + url + ")";
+	console.log( height );
+	console.log( width );
+
+	if ( height !== 0 || width !== 0 ) {
+		var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=' + width + 'x' + height + '&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'	
+		element.style.backgroundImage = "url(" + url + ")";
+	}
 
 	// var mapImg = element.querySelector( 'img' );
 	// var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=19&markers=color:red%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
@@ -2839,6 +2876,9 @@ var getLocationBeforeBuildingElements = function() {
 
 var events;
 var loadEvents = function() {
+
+	spinner.show()
+
 	ref.child( 'events/public' ).once( 'value', function( snap ) {
 		events = snap.val();
 		console.log( events );
@@ -2935,4 +2975,14 @@ var getSingleEventDimensions = function() {
 
 }
 
+
+// 
+// 
+// UTILITY
+// 
+// 
 window.onresize = getSingleEventDimensions;
+
+
+
+
