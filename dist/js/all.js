@@ -259,31 +259,41 @@ for (var i = 0; i < len; i++) {
 var animateItem = function (element) {
 
 	var original = document.getElementsByClassName('event-item')[0];
-	console.log(original);
+
+	var id = element.getAttribute('data-id');
+
+	var viewportOffset = element.getBoundingClientRect();
+	var topRelativeToViewport = viewportOffset.top;
+
+	fillElementWithData(original, id);
+
+	// set the position of the original so it overlays the clicked element!
 	original.style.backgroundImage = element.style.backgroundImage;
 	original.style.transition = 'all .3s ease-in-out';
-	original.style.top = element.offsetTop + 'px';
+	original.style.top = topRelativeToViewport + 'px';
 	original.style.display = 'flex';
 	original.style['z-index'] = '1000';
 
-	element.style.top = 0 + 'px';
 	// original.style.leftMargin = el.leftMargin;
 	// original.style.display = 'block';
 
+	// first transition doesn't work so we are faking a movement and herefrom the future transitions are being animated
 	element.style.transition = 'all .3s ease-in-out';
 	element.style.top = 0 + 'px';
-	// element.classList.add( 'step1', 'step2', 'step3' );
+
 	console.dir(element);
 
 	var bgImage = element.style.backgroundImage;
 
 	var top = element.offsetTop;
+
+	// var left = viewportOffset.left;
 	// var left = element.offsetLeft;
 
 	element.style.position = 'relative';
 
 	// var sum = -top + left;
-	element.style.top = -top + 'px';
+	element.style.top = -topRelativeToViewport + 'px';
 	original.style.top = 0 + 'px';
 
 	console.dir(element);
@@ -2346,12 +2356,62 @@ var buildEvents = function (evts) {
 	getSingleEventDimensions();
 };
 
+// his shall be a class or object with an api that is get, height and get width fo the element
+// mapBacgroundImageSize
+
+var fillElementWithData = function (element, id) {
+
+	var info = events[id];
+
+	var lat = info['event-location-data'].lat;
+	var lng = info['event-location-data'].lng;
+
+	console.log(lat - 49.819657);
+	console.log(lng - 18.0973114);
+
+	var centerLat = lat - .0002;
+	var centerLng = lng - .0009;
+
+	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=360x180&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk';
+
+	element.style.backgroundImage = "url(" + url + ")";
+
+	// var mapImg = element.querySelector( 'img' );
+	// var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=19&markers=color:red%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
+	// mapImg.setAttribute( 'src', url );
+
+	var h2 = element.querySelector('h2');
+	h2.innerHTML = info['event-name'] + '<span></span>';
+
+	var ul = element.querySelector('ul');
+
+	var startTime = info['event-start-time'];
+	startTime = startTime.substring(0, 2) + ':' + startTime.substring(2, 4);
+
+	var endTime = info['event-end-time'];
+	endTime = endTime.substring(0, 2) + ':' + endTime.substring(2, 4);
+
+	var startDate = info['event-start-date'];
+	startDate = startDate.substring(0, 2) + '.' + startDate.substring(2, 4) + '.' + startDate.substring(4, 6);
+	ul.children[0].innerText = startTime + ' - ' + endTime + ' / ' + startDate;
+	ul.children[1].innerText = info['event-location-data'].name;
+
+	console.log('SETTING ID ON ELEMENT');
+	console.log(info['id']);
+
+	console.log(element);
+
+	element.setAttribute('data-id', info['id']);
+};
+
 console.log(events);
 var eventItem = document.getElementsByClassName('event-item')[0];
 
 var setUpEventItem = function (info) {
 
 	console.log('building event');
+
+	var id = info['id'];
 
 	console.log(info);
 	console.dir(info);
@@ -2377,38 +2437,7 @@ var setUpEventItem = function (info) {
 
 	var clone = eventItem.cloneNode(true);
 
-	clone.data = info;
-
-	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=360x180&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk';
-
-	clone.style.backgroundImage = "url(" + url + ")";
-
-	// var mapImg = clone.querySelector( 'img' );
-	// var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=19&markers=color:red%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
-	// mapImg.setAttribute( 'src', url );
-
-	var h2 = clone.querySelector('h2');
-	h2.innerHTML = info['event-name'] + '<span></span>';
-
-	var ul = clone.querySelector('ul');
-
-	var startTime = info['event-start-time'];
-	startTime = startTime.substring(0, 2) + ':' + startTime.substring(2, 4);
-
-	var endTime = info['event-end-time'];
-	endTime = endTime.substring(0, 2) + ':' + endTime.substring(2, 4);
-
-	var startDate = info['event-start-date'];
-	startDate = startDate.substring(0, 2) + '.' + startDate.substring(2, 4) + '.' + startDate.substring(4, 6);
-	ul.children[0].innerText = startTime + ' - ' + endTime + ' / ' + startDate;
-	ul.children[1].innerText = info['event-location-data'].name;
-
-	console.log('SETTING ID ON ELEMENT');
-	console.log(info['id']);
-
-	console.log(clone);
-
-	clone.setAttribute('data-id', info['id']);
+	fillElementWithData(clone, id);
 
 	console.log(clone);
 
