@@ -274,6 +274,11 @@ for (var i = 0; i < len; i++) {
 
 var animateItem = function (element) {
 
+	var showEventOverLayContent = function () {
+		original.children[1].classList.add('visible');
+		original.children[2].classList.add('visible');
+	};
+
 	var original = document.getElementsByClassName('event-item')[0];
 
 	var id = element.getAttribute('data-id');
@@ -298,6 +303,9 @@ var animateItem = function (element) {
 	// first transition doesn't work so we are faking a movement and herefrom the future transitions are being animated
 	element.style.transition = 'all .3s ease-in-out';
 	element.style.transform = 'translateY(' + 0 + 'px )';
+
+	showEventOverLayContent();
+
 	// element.style.top = 0 + 'px';
 
 	console.dir(element);
@@ -573,20 +581,21 @@ var extractEventItem = function (elements) {
 };
 
 var eventItems = document.getElementsByClassName('event-item');
-var len = eventItems.length;
-for (var i = 0; i < len; i++) {
-	// console.log( i );
-	// console.log( cancelButtons[i] );
+// var len = eventItems.length;
+// for ( var i = 0; i < len; i++ ) {
+// 	// console.log( i );
+// 	// console.log( cancelButtons[i] );
 
-	eventItems[i].addEventListener('click', function (e) {
+// 	eventItems[i].addEventListener( 'click', function( e ) {
 
-		// console.log( zenscroll );
-		// zenscroll.intoView( main );
-		nav.scrollIntoView();
-		extractEventItem(e.path);
-		// createAccount.classList.add( 'aside' );
-	});
-}
+// 		// console.log( zenscroll );
+// 		// zenscroll.intoView( main );
+// 		nav.scrollIntoView();
+// 		extractEventItem( e.path );
+// 		// createAccount.classList.add( 'aside' );
+
+// 	})
+// }
 
 // cancelButtons.forEach( function() {
 // 	console.log( 'hello' );
