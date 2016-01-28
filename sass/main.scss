@@ -58,6 +58,8 @@ body > .event-item.move-away {
 body > .event-item {
 
     transform: translateX( 0% );
+    top: 0;
+    left: 0;
 
     display: none;
     flex-wrap: wrap;

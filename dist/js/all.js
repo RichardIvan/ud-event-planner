@@ -286,7 +286,8 @@ var animateItem = function (element) {
 	// set the position of the original so it overlays the clicked element!
 	original.style.backgroundImage = element.style.backgroundImage;
 	original.style.transition = 'all .3s ease-in-out';
-	original.style.top = topRelativeToViewport + 'px';
+	// original.style.top = topRelativeToViewport + 'px';
+	original.style.transform = 'translateY(' + topRelativeToViewport + 'px )';
 	original.style.display = 'flex';
 	original.style['z-index'] = '1000';
 
@@ -295,7 +296,8 @@ var animateItem = function (element) {
 
 	// first transition doesn't work so we are faking a movement and herefrom the future transitions are being animated
 	element.style.transition = 'all .3s ease-in-out';
-	element.style.top = 0 + 'px';
+	element.style.transform = 'translateY(' + 0 + 'px )';
+	// element.style.top = 0 + 'px';
 
 	console.dir(element);
 
@@ -309,8 +311,13 @@ var animateItem = function (element) {
 	element.style.position = 'relative';
 
 	// var sum = -top + left;
-	element.style.top = -topRelativeToViewport + 'px';
-	original.style.top = 0 + 'px';
+	// element.style.top = -topRelativeToViewport + 'px';
+	// original.style.top = 0 + 'px';
+
+	var pixelsToMove = -topRelativeToViewport;
+
+	original.style.transform = 'translateY(' + 0 + 'px )';
+	element.style.transform = 'translateY(' + pixelsToMove + 'px )';
 
 	console.dir(element);
 
@@ -326,27 +333,27 @@ var animateItem = function (element) {
 
 	setTimeout(function () {
 
-		var el = {};
-		var img = {};
-		var elImg = {};
+		// var el = {};
+		// var img = {};
+		// var elImg = {};
 
-		el.height = element.offsetHeight;
-		// width
-		el.width = element.offsetWidth;
-		///top position
-		el.topMargin = element.offsetTop;
-		// left position
-		el.leftMargin = element.offsetLeft;
+		// el.height = element.offsetHeight;
+		// // width
+		// el.width = element.offsetWidth;
+		// ///top position
+		// el.topMargin = element.offsetTop;
+		// // left position
+		// el.leftMargin = element.offsetLeft;
 
-		console.log(el);
+		// console.log( el );
 
-		console.log(original);
+		// console.log( original );
 
 		var eventOverlay = document.getElementById('event-overlay');
 
-		console.log(eventOverlay.querySelector('img'));
+		// console.log( eventOverlay.querySelector( 'img' ) );
 
-		console.dir(eventOverlay);
+		// console.dir( eventOverlay );
 		eventOverlay.children[0].style.backgroundImage = bgImage;
 
 		eventOverlay.classList.add('expand1');
@@ -360,7 +367,7 @@ var animateItem = function (element) {
 		// console.log( sum );
 
 		setTimeout(function () {
-			element.style.top = sum + 'px';
+			element.style.transform = 'translateY(' + 0 + 'px )';
 			// element.style['z-index'] = 1000;
 
 			// This bunch of code puts the element back it it's previous position plus it does reset the css in with JS
