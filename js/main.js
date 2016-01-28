@@ -94,7 +94,16 @@ var eventOverlayCloseButton = document.querySelector( '.close-button' );
 
 eventOverlayCloseButton.addEventListener( 'click', function() {
 
+	var original = document.getElementsByClassName( 'event-item' )[0];
+	console.log( original );
+	// original.style.backgroundImage = element.style.backgroundImage;
+	// original.style.transition = 'all .3s ease-in-out';
+	// original.style.top = element.offsetTop + 'px';
+	// original.style.display = 'flex';
+	// original.style['z-index'] = '100';
+
 	eventOverlay.classList.add( 'move-away' );
+	original.classList.add( 'move-away' );
 	setTimeout( function() {
 		eventOverlay.classList.remove( 'expand1' );
 		eventOverlay.classList.remove( 'move-away' );
@@ -293,6 +302,7 @@ var animateItem = function( element ) {
 	original.style.transition = 'all .3s ease-in-out';
 	original.style.top = element.offsetTop + 'px';
 	original.style.display = 'flex';
+	original.style['z-index'] = '1000';
 
 	element.style.top = 0 + 'px';
 	// original.style.leftMargin = el.leftMargin;
@@ -2673,6 +2683,7 @@ var buildEvents = function( evts ) {
 		
 	}
 
+	getSingleEventDimensions();
 
 }
 
@@ -2712,6 +2723,8 @@ var setUpEventItem = function( info ) {
 
 	var clone = eventItem.cloneNode( true );
 
+	clone.data = info;
+
 	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=360x180&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
 
 	clone.style.backgroundImage = "url(" + url + ")";
@@ -2735,6 +2748,15 @@ var setUpEventItem = function( info ) {
 	startDate = startDate.substring( 0, 2 ) + '.' + startDate.substring( 2, 4 ) + '.' + startDate.substring( 4, 6 );
 	ul.children[0].innerText = startTime + ' - ' + endTime + ' / ' + startDate;
 	ul.children[1].innerText = info['event-location-data'].name;
+
+	console.log( 'SETTING ID ON ELEMENT' );
+	console.log( info['id'] );
+
+	console.log( clone );
+
+	clone.setAttribute( 'data-id', info['id'] );
+
+	console.log( clone );
 
 	clone.addEventListener( 'click', function() {
 		animateItem( clone );
@@ -2792,3 +2814,93 @@ var loadEvents = function() {
 	})
 }
 loadEvents();
+
+
+var resizeTimeout;
+
+var resetImagesOnElements = function( h, w ) {
+
+	var elements = eventItems;
+
+	console.log( elements );
+
+	// elements.forEach( function( el ) {
+	// 	console.log( el );
+	// });
+	clearTimeout( resizeTimeout );
+	resizeTimeout = setTimeout( function() {
+
+		var height = h;
+		var width = w;
+
+		Array.prototype.forEach.call(elements, function( el ){
+
+			var id = el.getAttribute( 'data-id' );
+
+			if ( id !== null ) {
+
+				var eventInfo = events[id];
+
+				var lat = eventInfo['event-location-data'].lat;
+				var lng = eventInfo['event-location-data'].lng;
+
+				var centerLat = lat - .0002;
+				var centerLng = lng - .0009;
+
+				// var clone = eventItem.cloneNode( true );
+
+				// clone.data = info;
+
+				var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=' + width + 'x' + height + '&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
+				// var url = 
+
+				console.log( url );
+
+				el.style.backgroundImage = "url(" + url + ")";
+			}
+	    	
+		});
+
+	}, 500 );
+
+	
+
+	// var e = elements.map( function( element ) {
+
+	// 	var lat = element.data['event-location-data'].lat;
+	// 	var lng = element.data['event-location-data'].lng;
+
+	// 	var centerLat = lat - .0002;
+	// 	var centerLng = lng - .0009;
+
+	// 	// var clone = eventItem.cloneNode( true );
+
+	// 	// clone.data = info;
+
+	// 	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=' + w + 'x' + h + '&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
+	// 	// var url = 
+	// 	element.backgroundImage = "url(" + url + ")";
+
+	// });
+
+}
+
+var getSingleEventDimensions = function() {
+
+	console.log( "GETTING OFFSET HEIGHT" );
+
+	var originalElement = document.getElementsByClassName( 'event-item')[0];
+
+	originalElement.style.display = 'flex';
+
+	var height = originalElement.offsetHeight;
+	var width = originalElement.offsetWidth
+	console.log( originalElement.offsetHeight );
+	console.log( originalElement.offsetWidth );
+	originalElement.style.display = '';
+
+	resetImagesOnElements( height, width );
+
+}
+
+window.onresize = getSingleEventDimensions;
