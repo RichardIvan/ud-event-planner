@@ -95,23 +95,24 @@ var newEventContainer = document.getElementsByClassName('new-event-container')[0
 var eventOverlay = document.getElementById('event-overlay');
 var eventOverlayCloseButton = document.querySelector('.close-button');
 
-eventOverlayCloseButton.addEventListener('click', function () {
+// eventOverlayCloseButton.addEventListener( 'click', function() {
 
-	var original = document.getElementsByClassName('event-item')[0];
-	console.log(original);
-	// original.style.backgroundImage = element.style.backgroundImage;
-	// original.style.transition = 'all .3s ease-in-out';
-	// original.style.top = element.offsetTop + 'px';
-	// original.style.display = 'flex';
-	// original.style['z-index'] = '100';
+// 	var original = document.getElementsByClassName( 'event-item' )[0];
+// 	console.log( original );
+// 	// original.style.backgroundImage = element.style.backgroundImage;
+// 	// original.style.transition = 'all .3s ease-in-out';
+// 	// original.style.top = element.offsetTop + 'px';
+// 	// original.style.display = 'flex';
+// 	// original.style['z-index'] = '100';
 
-	eventOverlay.classList.add('move-away');
-	original.classList.add('move-away');
-	setTimeout(function () {
-		eventOverlay.classList.remove('expand1');
-		eventOverlay.classList.remove('move-away');
-	}, 1000);
-});
+// 	eventOverlay.classList.add( 'move-away' );
+// 	original.classList.add( 'move-away' );
+// 	setTimeout( function() {
+// 		eventOverlay.classList.remove( 'expand1' );
+// 		eventOverlay.classList.remove( 'move-away' );
+// 	}, 1000 );
+
+// })
 
 //
 // NAV ITEMS

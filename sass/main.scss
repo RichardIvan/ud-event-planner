@@ -61,14 +61,15 @@ body > .event-item {
 
     display: none;
     flex-wrap: wrap;
+    flex-direction: column;
 
-    height: 15em;
+    height: 100%;
 
     // background: #D5D5D5;
     width: 100%;
     // margin: 1em auto 0 auto;
     // border-radius: 10px;
-    overflow: hidden;
+    overflow: visible;
 
     z-index: 1;
 
@@ -79,7 +80,10 @@ body > .event-item {
 
     // box-shadow: 1px 1px 10px black;
     .event-info {
-        margin-top: 1em;
+        position: relative;
+        padding-top: 1em;
+        width: 100%;
+        height: 15em;
     }
 
     h2 {
@@ -122,6 +126,27 @@ body > .event-item {
         margin-left: 0;
 
         
+    }
+
+    .header {
+        position: absolute;
+        top: 15em;
+        background: red;
+        width: 100%;
+        height: 3em;
+        overflow: hidden;
+
+        h2 {
+            height: 100%;
+        }
+    }
+
+    .content {
+        position: absolute;
+        top: 18em;
+        background: gold;
+        width: 100%;
+        height: 100%;
     }
 }
 
@@ -558,7 +583,7 @@ body > .event-item {
 
     .event-info {
         opacity: 1;
-        margin-top: 1em;
+        // margin-top: 1em;
         width: 100%;
         height: 100%;
         position: relative;
