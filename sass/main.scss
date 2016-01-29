@@ -66,15 +66,38 @@ body > .event-item.hide {
     }
 }
 
-body > .event-item.move-away {
+body > .event-item.move-away, body > .event-item.move-away.visible  {
     position: fixed;
-    z-index: 100;
+    z-index: 101;
 
     transition: transform 0.3s ease-in-out;
     transform: translateX( 100% ) !important;
 }
 
+body > .event-item.visibly {
+    display: flex;
+    z-index: 101;
+
+    opacity: 1;
+    transition: opacity 0.01s ease-in-out;
+}
+
+body > .event-item.visible {
+    display: flex;
+    z-index: 101;
+
+    opacity: 1;
+
+    transform: translateX( 0% ) !important;
+    transition: opacity 0.3s ease-in-out;
+    // transition: transform 0.3s ease-in-out;
+    transition-delay: .6s;
+}
+
+
 body > .event-item {
+
+    opacity: 1;
 
     position: fixed;
     z-index: 1;
@@ -1599,7 +1622,7 @@ body > .event-item {
 
 #event-view-close.visible {
     opacity: 1;
-    z-index: 100;
+    z-index: 102;
 
     transition: opacity .3s ease-in-out;
     transition-delay: 1.8s;
@@ -1614,4 +1637,29 @@ body > .event-item {
     color: #424242;
     opacity: 0;
     z-index: 1;
+}
+
+#effect.visible {
+
+    transition: all .5s ease-in-out;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    // height: 100%;
+    // width: 100%;
+
+}
+
+#effect {
+
+    position: fixed;
+    
+    top: 50%;
+    right: 50%;
+    bottom: 50%;
+    left: 50%;
+
+    background: white;
 }
