@@ -313,7 +313,7 @@ eventViewClose.addEventListener('click', function (e) {
 		// eventOverlay.classList.add( 'move-away' );
 
 		var hideEventOverLayContent = function () {
-			originalElement.classList.remove('hide');
+			originalElement.classList.remove('hide', 'seen');
 			originalElement.children[1].classList.remove('visible');
 			originalElement.children[2].classList.remove('visible');
 
@@ -354,7 +354,7 @@ eventViewClose.addEventListener('click', function (e) {
 
 			originalElement.classList.remove('move-away', 'visibly', 'visible');
 			originalElement.children[1].classList.remove('visible');
-			originalElement.children[2].classList.remove('visible');
+			originalElement.children[2].classList.remove('visibly', 'visible');
 
 			console.log(originalElement.classList);
 		}, 600);
@@ -364,6 +364,9 @@ eventViewClose.addEventListener('click', function (e) {
 var showEventOverLayContent = function () {
 	originalElement.children[1].classList.add('visible');
 	originalElement.children[2].classList.add('visible');
+	setTimeout(function () {
+		originalElement.children[2].classList.add('visibly');
+	}, 1500);
 	eventViewClose.classList.add('visible');
 };
 
@@ -389,7 +392,7 @@ var animateItem = function (element) {
 
 	AE.pixelsToMove = topRelativeToViewport;
 
-	fillElementWithData(originalElement, id);
+	fillElementWithData(originalElement, id, true);
 
 	// set the position of the originalElement so it overlays the clicked element!
 	// originalElement.children[0].style.backgroundImage = element.children[0].style.backgroundImage;
@@ -774,7 +777,10 @@ faButton.addEventListener('click', function (e) {
 	if (!FireAuthData) {
 
 		showSignIn();
-	} else {}
+	} else {
+
+		showNewEvent();
+	}
 });
 
 // var el = document.getElementById('foo');
@@ -1420,6 +1426,9 @@ var showNewAccount = function () {
 	h2.innerText = "New Account";
 
 	// this should be bundeled as a function...
+
+	// this should be checked before running if it actually is opened or not..?
+
 	navOverlay.classList.remove('opened');
 	fadedOverlay.classList.remove('opened');
 
@@ -2232,8 +2241,12 @@ var savePlaceData = function (p, n) {
 	var place = p,
 	    name = n;
 
+	console.dir(p);
+
 	newEventObject['event-location-data'] = {};
 	newEventObject['event-location-data'].name = name;
+
+	newEventObject['event-location-data'].address = place['formatted_address'];
 
 	newEventObject['event-location-data'].lat = place.geometry.location.lat();
 	newEventObject['event-location-data'].lng = place.geometry.location.lng();
@@ -2360,6 +2373,7 @@ var submitNewEvent = function () {
 			closeAccountAndEventOverlay();
 
 			newEventObject['privacy'] = privacy;
+			newEventObject['guest-count'] = 1;
 
 			Object.keys(newEventObject).map(function (key) {
 
@@ -2494,7 +2508,7 @@ var buildEvents = function (evts) {
 // his shall be a class or object with an api that is get, height and get width fo the element
 // mapBacgroundImageSize
 
-var fillElementWithData = function (element, id) {
+var fillElementWithData = function (element, id, original) {
 
 	var info = events[id];
 
@@ -2535,8 +2549,12 @@ var fillElementWithData = function (element, id) {
 
 	var startDate = info['event-start-date'];
 	startDate = startDate.substring(0, 2) + '.' + startDate.substring(2, 4) + '.' + startDate.substring(4, 6);
-	ul.children[0].innerText = startTime + ' - ' + endTime + ' / ' + startDate;
-	ul.children[1].innerText = info['event-location-data'].name;
+
+	var endDate = info['event-start-date'];
+	endDate = startDate.substring(0, 2) + '.' + endDate.substring(2, 4) + '.' + endDate.substring(4, 6);
+	ul.children[0].innerText = 'Start: ' + startTime + ' / ' + startDate;
+	ul.children[1].innerText = 'End: ' + endTime + ' / ' + endDate;
+	ul.children[2].innerText = 'Place: ' + info['event-location-data'].name;
 
 	console.log('SETTING ID ON ELEMENT');
 	console.log(info['id']);
@@ -2544,6 +2562,24 @@ var fillElementWithData = function (element, id) {
 	console.log(element);
 
 	element.setAttribute('data-id', info['id']);
+
+	if (original) {
+
+		var headerH2 = element.querySelector('.head');
+		headerH2.innerHTML = '<h2>' + info['event-name'] + '</h2>';
+		console.log(headerH2);
+		console.dir(headerH2);
+
+		var content = element.querySelector('.wrapper');
+
+		var addressField = content.children[0].children[1];
+		addressField.innerHTML = '<span>' + info['event-location-data'].address + '</span>';
+
+		var guestCountField = content.children[0].children[3];
+		guestCountField.innerHTML = '<span>' + info['guest-count'] + '</span>';
+		console.log(content);
+		console.dir(content);
+	}
 };
 
 console.log(events);
@@ -2645,7 +2681,7 @@ var loadSingleEvent = function () {
 
 	// have this little longer, basically till the animation of the original element doesnt finish
 	setTimeout(function () {
-		fillElementWithData(originalElement, hashID);
+		fillElementWithData(originalElement, hashID, true);
 		expandSingleEventOverlay();
 	}, 300);
 };
@@ -2682,8 +2718,12 @@ var loadEvents = function () {
 	getLocationBeforeBuildingElements();
 
 	ref.child('events/public').once('value', function (snap) {
-		events = snap.val();
-		console.log(events);
+		if (snap.val() !== null) {
+			events = snap.val();
+			console.log(events);
+		} else {
+			events = {};
+		}
 	});
 };
 loadEvents();
@@ -2786,6 +2826,15 @@ var getSingleEventDimensions = function () {
 //
 //
 window.onresize = resetImagesOnElements;
+
+var attendEvent = function () {
+
+	console.dir(hashID);
+
+	// update
+
+	console.dir('say hello');
+};
 /*! Hammer.JS - v2.0.6 - 2016-01-06
  * http://hammerjs.github.io/
  *

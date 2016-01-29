@@ -42,10 +42,10 @@ body > .event-item.hide {
 
     overflow: hidden;
     
-    .header.visible {
+    .head.visible {
         height: 0%;
-        transition: height 0.3s ease-in-out;
-        transition-delay: 0.3s;
+        transition: height .3s ease-in-out;
+        transition-delay: .2s;
 
         h2 {
             transition: opacity .3s ease-in-out;
@@ -58,7 +58,7 @@ body > .event-item.hide {
         height: 0%;
         transition: height .3s ease-in-out;
 
-        p {
+        .wrapper {
             transition: opacity .1s ease-in-out;
             // transition-delay: .6s;
             opacity: 0;
@@ -90,8 +90,8 @@ body > .event-item.visible {
 
     opacity: 0;
 
-    transform: translateX( 0% ) !important;
-    transition: opacity .3s ease-in-out;
+    // transform: translateX( 0% ) !important;
+    // transition: opacity .3s ease-in-out;
     // transition: transform 0.3s ease-in-out;
     // transition-delay: .6s;
 }
@@ -130,8 +130,6 @@ body > .event-item {
     // border-radius: 10px;
     overflow: hidden;
 
-    
-
     // border-top: 1px solid;
     // border-bottom: 1px solid;
 
@@ -149,6 +147,8 @@ body > .event-item {
         display: inline-block;
         position: relative;
         padding: 0.2em 0.5em;
+
+        text-transform: uppercase;
         span {
                 height: 100%;
                 width: 100%;
@@ -162,7 +162,7 @@ body > .event-item {
 
     ul {
         position: absolute;
-        bottom: 2em;
+        bottom: 0.3em;
         padding-left: 3em;
 
         span {
@@ -183,12 +183,12 @@ body > .event-item {
         margin-top: 0.5em;
         margin-left: 0;
 
-        
     }
 
-    .header.visible {
+    .head.visible {
         height: 3em;
-        
+        position: relative;
+        top: 0;
 
         h2 {
             transition: opacity .3s ease-in-out;
@@ -197,12 +197,12 @@ body > .event-item {
         }
     }
 
-    .header {
+    .head {
         transition: height .3s ease-in-out;
         transition-delay: .6s;
         position: absolute;
         top: 15em;
-        background: red;
+        background: #FBD03F;
         width: 100%;
         height: 0em;
         overflow: hidden;
@@ -219,13 +219,34 @@ body > .event-item {
         }
     }
 
+    .content.visibly.visible {
+        top: 0;
+        position: relative !important;
+        flex-grow: 1;
+        height: 0%;
+        overflow-y: scroll;
+        transition: height 0s ease-in-out;
+        transition-delay: 0s;
+        
+        .wrapper {
+            // height: 100%;
+            // position: relative;
+            opacity: 1;
+            // transition: opacity .3s ease-in-out;
+            // transition-delay: 1.5s;
+        }
+
+    }
+
+    
+
     .content.visible {
+        position: absolute;
         height: 100%;
-        // opacity: 1;
         transition: height .3s ease-in-out;
         transition-delay: 1.2s;
 
-        p {
+        .wrapper {
             opacity: 1;
             transition: opacity .3s ease-in-out;
             transition-delay: 1.5s;
@@ -233,19 +254,113 @@ body > .event-item {
     }
 
     .content {
-        position: absolute;
+
+        // position: absolute;
         top: 18em;
-        background: gold;
+        background: #525254;
         width: 100%;
         height: 0%;
         // opacity: 0;
 
-        p {
+        .wrapper {
+            position: absolute;
+            height: 100%;
+            right: 0;
+            left: 0;
+            display: flex;
             opacity: 0;
-            padding-left: 2em;
-            padding-top: 0.5em;
+            // height: 100% !important;
+            padding: 0;
+            margin: 0;
+            // padding-left: 2em;
+            // padding-top: 0.5em;
+
+            ul:first-child {
+                flex-grow: 1;
+                position: relative;
+                padding-top: 0.2em;
+                padding-left: 2em;
+                color: #F3F1EA;
+
+                overflow-y: scroll;
+                padding-bottom: 1em;
+            }
+
+            li span {
+                font-size: 0.8em;
+                left: 0;
+                background: none;
+                opacity: 1;
+                position: relative;
+                padding: 0;
+                // padding-top: 2em;
+                padding-left: 2em;
+                margin: 0;
+
+                text-transform: none;
+            }
+
+            li {
+                font-size: 1.5em;
+                text-transform: uppercase;
+                margin-top: 2em;
+            }
+
+            li:nth-child( 1 ) {
+                font-size: 1.5em;
+                text-transform: uppercase;
+                margin-top: 1em;
+            }
+
+            li:nth-child( 2 ), li:nth-child( 4 ) {
+                font-size: 1.5em;
+                text-transform: uppercase;
+                margin-top: 0.4em;
+                padding-top: 1em;
+            }
+
+            .buttons {
+                height: 2em;
+                margin-top: 2em;
+                position: absolute;
+                // margin-top: 100% !important;
+                // top: 100% !important;
+                bottom: 0;
+                left: 0;
+                right: 0;
+
+                .btns {
+                    display: flex;
+                    flex-direction: row;
+
+                    li {
+                        margin-top: 0em !important;
+                        padding-top: 1em;
+                        height: 2em;
+                        text-align: center;
+                        width: 50%;
+                    }
+
+                    li:nth-child( 2 ) {
+                        // padding-right: 1em;
+                        border-left: 1px solid #A7A6A4;
+                    }
+                }
+
+                ul {
+                    color: #A7A6A4;
+                    background: #F3F1EA;
+                    padding: 0 !important;
+                    margin-bottom: 0 !important;
+                    padding-left: 0 !important;
+                }
+
+            }
+
         }
     }
+
+
 }
 
 #spinner.show {
@@ -704,12 +819,19 @@ body > .event-item {
 
     }
 
+    .head, .wrapper {
+        display: none;
+    }
+
     h2 {
         margin-top: 1.5em;
         margin-left: 1.5em;
         display: inline-block;
         position: relative;
         padding: 0.2em 0.5em;
+
+        text-transform: uppercase;
+
         span {
                 height: 100%;
                 width: 100%;
@@ -723,7 +845,7 @@ body > .event-item {
 
     ul {
         position: absolute;
-        bottom: 2em;
+        bottom: 0.3em;
         padding-left: 3em;
 
         span {
@@ -744,7 +866,6 @@ body > .event-item {
         margin-top: 0.5em;
         margin-left: 0;
 
-        
     }
 }
 
@@ -1675,4 +1796,8 @@ body > .event-item {
 
     background: white;
 
+}
+
+*::-webkit-scrollbar { 
+    display: none; 
 }
