@@ -39,6 +39,8 @@ body {
 }
 
 body > .event-item.hide {
+
+    overflow: hidden;
     
     .header.visible {
         height: 0%;

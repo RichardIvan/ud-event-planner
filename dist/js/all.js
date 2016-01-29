@@ -139,6 +139,8 @@ var farawayButton = document.getElementsByClassName('faraway-button')[0];
 
 var viewportElements = [nearbyList, closebyList, farawayList];
 
+var originalElement = document.getElementsByClassName('event-item')[0];
+
 //
 //
 // OVERLAY
@@ -288,83 +290,107 @@ var AE = new AnimationElement();
 var eventViewClose = document.getElementById('event-view-close');
 eventViewClose.addEventListener('click', function (e) {
 
-	var original = document.getElementsByClassName('event-item')[0];
-	console.log(original);
+	var o = document.getElementById('effect');
+	console.log(originalElement);
 
-	// we shoudl be adding classes here that will close the element quickly
+	if (!o.classList.contains('visible')) {
+		// we shoudl be adding classes here that will close the element quickly
 
-	original.classList.add('hide');
+		originalElement.classList.add('hide');
 
-	// var header = original.children[1].classList.add( 'hide' );
-	// var content = original.children[2].classList.add( 'hide' );
+		// var header = originalElement.children[1].classList.add( 'hide' );
+		// var content = originalElement.children[2].classList.add( 'hide' );
 
-	// original.style.backgroundImage = element.style.backgroundImage;
-	// original.style.transition = 'all .3s ease-in-out';
-	// original.style.top = element.offsetTop + 'px';
-	// original.style.display = 'flex';
-	// original.style['z-index'] = '100';
+		// originalElement.style.backgroundImage = element.style.backgroundImage;
+		// originalElement.style.transition = 'all .3s ease-in-out';
+		// originalElement.style.top = element.offsetTop + 'px';
+		// originalElement.style.display = 'flex';
+		// originalElement.style['z-index'] = '100';
 
-	// eventOverlay.classList.add( 'move-away' );
+		// eventOverlay.classList.add( 'move-away' );
 
-	var hideEventOverLayContent = function () {
-		original.classList.remove('hide');
-		original.children[1].classList.remove('visible');
-		original.children[2].classList.remove('visible');
-		eventViewClose.classList.remove('visible');
+		var hideEventOverLayContent = function () {
+			originalElement.classList.remove('hide');
+			originalElement.children[1].classList.remove('visible');
+			originalElement.children[2].classList.remove('visible');
+			eventViewClose.classList.remove('visible');
 
-		original.style.transition = '';
-		original.style.transform = '';
-		original.style.display = '';
-		original.style['z-index'] = '';
-	};
+			originalElement.style.transition = '';
+			originalElement.style.transform = '';
+			originalElement.style.display = '';
+			originalElement.style['z-index'] = '';
+		};
 
-	// original.classList.add( 'move-away' );
-	// eventViewClose.classList.remove( 'visible' );
-	setTimeout(function () {
-		// eventOverlay.classList.remove( 'expand1' );
-		// eventOverlay.classList.remove( 'move-away' );
+		// originalElement.classList.add( 'move-away' );
 		// eventViewClose.classList.remove( 'visible' );
+		setTimeout(function () {
+			// eventOverlay.classList.remove( 'expand1' );
+			// eventOverlay.classList.remove( 'move-away' );
+			// eventViewClose.classList.remove( 'visible' );
 
-		original.style.transition = 'all .3s ease-in-out';
-		original.style.transform = 'translateY(' + AE.pixelsToMove + 'px)';
-		var animeEl = AE.get();
-		animeEl.style.transform = 'translateY(' + 0 + 'px)';
-		hideEventOverLayContent();
-	}, 900);
+			originalElement.style.transition = 'all .3s ease-in-out';
+			originalElement.style.transform = 'translateY(' + AE.pixelsToMove + 'px)';
+			var animeEl = AE.get();
+			animeEl.style.transform = 'translateY(' + 0 + 'px)';
+
+			setTimeout(function () {
+				hideEventOverLayContent();
+			}, 300);
+		}, 900);
+	} else {
+
+		eventViewClose.classList.remove('visible');
+		o.classList.remove('visible');
+		originalElement.classList.add('move-away');
+
+		setTimeout(function () {
+			originalElement.classList.remove('move-away', 'visible');
+			console.log(originalElement.classList);
+		}, 600);
+	}
 });
+
+var showEventOverLayContent = function () {
+	originalElement.children[1].classList.add('visible');
+	originalElement.children[2].classList.add('visible');
+	eventViewClose.classList.add('visible');
+};
 
 var animateItem = function (element) {
 
 	AE.set(element);
 
-	var showEventOverLayContent = function () {
-		original.children[1].classList.add('visible');
-		original.children[2].classList.add('visible');
-		eventViewClose.classList.add('visible');
-	};
-
-	var original = document.getElementsByClassName('event-item')[0];
-
 	var id = element.getAttribute('data-id');
+
+	console.log(location);
+	location.hash = "id=" + id;
+	console.log(location.hash);
+	var hash = location.hash;
+
+	var hashValues = hash.substr(1).split('=');
+	var idLocation = hashValues.indexOf('id') + 1;
+	var idFromUrl = hashValues[idLocation];
+
+	console.log(idFromUrl);
 
 	var viewportOffset = element.getBoundingClientRect();
 	var topRelativeToViewport = viewportOffset.top;
 
 	AE.pixelsToMove = topRelativeToViewport;
 
-	fillElementWithData(original, id);
+	fillElementWithData(originalElement, id);
 
-	// set the position of the original so it overlays the clicked element!
-	original.children[0].style.backgroundImage = element.children[0].style.backgroundImage;
+	// set the position of the originalElement so it overlays the clicked element!
+	// originalElement.children[0].style.backgroundImage = element.children[0].style.backgroundImage;
 
-	// original.style.top = topRelativeToViewport + 'px';
-	original.style.transform = 'translateY(' + topRelativeToViewport + 'px )';
+	// originalElement.style.top = topRelativeToViewport + 'px';
+	originalElement.style.transform = 'translateY(' + topRelativeToViewport + 'px )';
 
-	original.style.display = 'flex';
-	original.style['z-index'] = '100';
+	originalElement.style.display = 'flex';
+	originalElement.style['z-index'] = '100';
 
-	// original.style.leftMargin = el.leftMargin;
-	// original.style.display = 'block';
+	// originalElement.style.leftMargin = el.leftMargin;
+	// originalElement.style.display = 'block';
 
 	// first transition doesn't work so we are faking a movement and herefrom the future transitions are being animated
 	element.style.transition = 'all .3s ease-in-out';
@@ -374,7 +400,7 @@ var animateItem = function (element) {
 
 	// element.style.top = 0 + 'px';
 
-	console.dir(element);
+	console.dir(originalElement);
 
 	// var bgImage = element.style.backgroundImage;
 
@@ -387,13 +413,13 @@ var animateItem = function (element) {
 
 	// var sum = -top + left;
 	// element.style.top = -topRelativeToViewport + 'px';
-	// original.style.top = 0 + 'px';
+	// originalElement.style.top = 0 + 'px';
 
 	var pixelsToMove = -topRelativeToViewport;
 
 	setTimeout(function () {
-		original.style.transform = 'translateY(' + 0 + 'px)';
-		original.style.transition = 'all .3s ease-in-out';
+		originalElement.style.transform = 'translateY(' + 0 + 'px)';
+		originalElement.style.transition = 'all .3s ease-in-out';
 	}, 0);
 
 	element.style.transform = 'translateY(' + pixelsToMove + 'px)';
@@ -2564,6 +2590,54 @@ var setUpEventItem = function (info) {
 	}
 };
 
+var hashID;
+
+var locationHashContainsId = function () {
+	var hash = location.hash;
+
+	console.log(hash);
+
+	var hashValues = hash.substr(1).split('=');
+
+	console.log(hashValues);
+
+	var idLocation = hashValues.indexOf('id') + 1;
+
+	console.log(idLocation);
+
+	if (idLocation !== 0) {
+
+		var idFromUrl = hashValues[idLocation];
+		hashID = idFromUrl;
+
+		return true;
+	} else return false;
+};
+
+var expandSingleEventOverlay = function (id) {
+
+	setTimeout(function () {
+		showEventOverLayContent();
+	}, 600);
+
+	originalElement.classList.add('visible');
+};
+
+var loadSingleEvent = function () {
+
+	var o = document.getElementById('effect');
+	o.classList.add('visible');
+	/// create here a css class that is going to be hiding the element
+	// remember to remove the visible and hide classes at the end of the effect
+	// o.classList.add( 'hide' );
+
+	// have this little longer, basically till the animation of the original element doesnt finish
+	setTimeout(function () {
+		fillElementWithData(originalElement, hashID);
+		expandSingleEventOverlay();
+	}, 300);
+};
+
 var getLocationBeforeBuildingElements = function () {
 
 	var interval;
@@ -2573,10 +2647,14 @@ var getLocationBeforeBuildingElements = function () {
 	interval = setInterval(function () {
 
 		console.log('RUNNING INTERVAL');
-		if (u.getUserLoation()) {
+		if (u.getUserLoation() && events !== undefined) {
 
 			clearInterval(interval);
 			buildEvents(events);
+
+			if (locationHashContainsId()) {
+				loadSingleEvent();
+			}
 		}
 	}, 500);
 };
@@ -2585,6 +2663,7 @@ var events;
 var loadEvents = function () {
 
 	spinner.show();
+	getLocationBeforeBuildingElements();
 
 	ref.child('events/public').once('value', function (snap) {
 		events = snap.val();
@@ -2661,7 +2740,6 @@ var resetImagesOnElements = function () {
 	// });
 };
 
-var originalElement = document.getElementsByClassName('event-item')[0];
 var getSingleEventDimensions = function () {
 
 	console.log("GETTING OFFSET HEIGHT");
