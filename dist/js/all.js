@@ -299,6 +299,8 @@ eventViewClose.addEventListener('click', function (e) {
 	if (!o.classList.contains('visible')) {
 		// we shoudl be adding classes here that will close the element quickly
 
+		originalElement.children[2].style.transition = 'all .1s ease-in-out';
+		originalElement.children[2].style.opacity = '0';
 		originalElement.classList.add('hide');
 
 		// var header = originalElement.children[1].classList.add( 'hide' );
@@ -315,7 +317,7 @@ eventViewClose.addEventListener('click', function (e) {
 		var hideEventOverLayContent = function () {
 			originalElement.classList.remove('hide', 'seen');
 			originalElement.children[1].classList.remove('visible');
-			originalElement.children[2].classList.remove('visible');
+			originalElement.children[2].classList.remove('visibly', 'visible');
 
 			// originalElement.classList.remove( 'visibly' );
 			eventViewClose.classList.remove('visible');
@@ -324,6 +326,9 @@ eventViewClose.addEventListener('click', function (e) {
 			originalElement.style.transform = '';
 			originalElement.style.display = '';
 			originalElement.style['z-index'] = '';
+
+			originalElement.children[2].style.transition = '';
+			originalElement.children[2].style.opacity = '';
 		};
 
 		// originalElement.classList.add( 'move-away' );
@@ -2831,7 +2836,7 @@ var attendEvent = function () {
 
 	console.dir(hashID);
 
-	var guestCountEl = originalElement.querySelector('.guest-count');
+	var guestCountEl = originalElement.querySelector('.guest-count').children[0];
 	var currentGuestCount = parseInt(guestCountEl.innerText);
 	var updatedGuestCount = currentGuestCount + 1;
 
@@ -2842,7 +2847,10 @@ var attendEvent = function () {
 	// }
 
 	// set inner guest count
-	guestCountEl.children[0].innerText = updatedGuestCount;
+	guestCountEl.innerText = updatedGuestCount;
+	// update local guest count;
+	events[hashID]['guest-count'] = updatedGuestCount;
+
 	// update the view count
 	console.dir(originalElement.querySelector('.guest-count').children[0].innerText);
 
