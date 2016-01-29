@@ -291,6 +291,7 @@ var eventViewClose = document.getElementById('event-view-close');
 eventViewClose.addEventListener('click', function (e) {
 
 	var o = document.getElementById('effect');
+<<<<<<< HEAD
 	console.log(originalElement);
 
 	if (!o.classList.contains('visible')) {
@@ -321,6 +322,40 @@ eventViewClose.addEventListener('click', function (e) {
 			originalElement.style['z-index'] = '';
 		};
 
+=======
+	// var c = document.getElementById( 'event-view-close' );
+
+	if (!o.classList.contains('visible')) {
+
+		// we shoudl be adding classes here that will close the element quickly
+
+		originalElement.classList.add('hide');
+
+		// var header = original.children[1].classList.add( 'hide' );
+		// var content = original.children[2].classList.add( 'hide' );
+
+		// original.style.backgroundImage = element.style.backgroundImage;
+		// original.style.transition = 'all .3s ease-in-out';
+		// original.style.top = element.offsetTop + 'px';
+		// original.style.display = 'flex';
+		// original.style['z-index'] = '100';
+
+		// eventOverlay.classList.add( 'move-away' );
+
+		var hideEventOverLayContent = function () {
+			originalElement.classList.remove('hide');
+			originalElement.children[1].classList.remove('visible');
+			originalElement.children[2].classList.remove('visible');
+			originalElement.classList.remove('visibly');
+			eventViewClose.classList.remove('visible');
+
+			originalElement.style.transition = '';
+			originalElement.style.transform = '';
+			originalElement.style.display = '';
+			originalElement.style['z-index'] = '';
+		};
+
+>>>>>>> master
 		// originalElement.classList.add( 'move-away' );
 		// eventViewClose.classList.remove( 'visible' );
 		setTimeout(function () {
@@ -328,6 +363,7 @@ eventViewClose.addEventListener('click', function (e) {
 			// eventOverlay.classList.remove( 'move-away' );
 			// eventViewClose.classList.remove( 'visible' );
 
+<<<<<<< HEAD
 			originalElement.style.transition = 'all .3s ease-in-out';
 			originalElement.style.transform = 'translateY(' + AE.pixelsToMove + 'px)';
 			var animeEl = AE.get();
@@ -336,6 +372,16 @@ eventViewClose.addEventListener('click', function (e) {
 			setTimeout(function () {
 				hideEventOverLayContent();
 			}, 300);
+=======
+			setTimeout(function () {
+				originalElement.style.transition = 'all .3s ease-in-out';
+				originalElement.style.transform = 'translateY(' + AE.pixelsToMove + 'px)';
+			}, 0);
+
+			var animeEl = AE.get();
+			animeEl.style.transform = 'translateY(' + 0 + 'px)';
+			hideEventOverLayContent();
+>>>>>>> master
 		}, 900);
 	} else {
 
@@ -360,7 +406,22 @@ var animateItem = function (element) {
 
 	AE.set(element);
 
+<<<<<<< HEAD
 	var id = element.getAttribute('data-id');
+
+	console.log(location);
+	location.hash = "id=" + id;
+	console.log(location.hash);
+	var hash = location.hash;
+=======
+	// var originalElement = document.getElementsByClassName( 'event-item' )[0];
+>>>>>>> master
+
+	var hashValues = hash.substr(1).split('=');
+	var idLocation = hashValues.indexOf('id') + 1;
+	var idFromUrl = hashValues[idLocation];
+
+	console.log(idFromUrl);
 
 	console.log(location);
 	location.hash = "id=" + id;
@@ -384,8 +445,14 @@ var animateItem = function (element) {
 	// originalElement.children[0].style.backgroundImage = element.children[0].style.backgroundImage;
 
 	// originalElement.style.top = topRelativeToViewport + 'px';
+<<<<<<< HEAD
 	originalElement.style.transform = 'translateY(' + topRelativeToViewport + 'px )';
 
+=======
+	originalElement.style.transform = 'translateY(' + topRelativeToViewport + 'px ) !important';
+
+	originalElement.classList.add('visibly');
+>>>>>>> master
 	originalElement.style.display = 'flex';
 	originalElement.style['z-index'] = '100';
 
@@ -393,14 +460,19 @@ var animateItem = function (element) {
 	// originalElement.style.display = 'block';
 
 	// first transition doesn't work so we are faking a movement and herefrom the future transitions are being animated
-	element.style.transition = 'all .3s ease-in-out';
+	element.style.transition = 'transform .3s ease-in-out';
 	element.style.transform = 'translateY(' + 0 + 'px )';
 
 	showEventOverLayContent();
 
 	// element.style.top = 0 + 'px';
 
+<<<<<<< HEAD
 	console.dir(originalElement);
+=======
+	console.log(originalElement);
+	console.dir(element);
+>>>>>>> master
 
 	// var bgImage = element.style.backgroundImage;
 
@@ -419,7 +491,11 @@ var animateItem = function (element) {
 
 	setTimeout(function () {
 		originalElement.style.transform = 'translateY(' + 0 + 'px)';
+<<<<<<< HEAD
 		originalElement.style.transition = 'all .3s ease-in-out';
+=======
+		originalElement.style.transition = 'transform .3s ease-in-out';
+>>>>>>> master
 	}, 0);
 
 	element.style.transform = 'translateY(' + pixelsToMove + 'px)';
@@ -2668,7 +2744,6 @@ var loadEvents = function () {
 	ref.child('events/public').once('value', function (snap) {
 		events = snap.val();
 		console.log(events);
-		getLocationBeforeBuildingElements();
 	});
 };
 loadEvents();

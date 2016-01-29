@@ -66,7 +66,8 @@ body > .event-item.hide {
     }
 }
 
-body > .event-item.move-away, body > .event-item.move-away.visible  {
+body > .event-item.move-away, body > .event-item.move-away.visible {
+
     position: fixed;
     z-index: 101;
 
@@ -93,7 +94,6 @@ body > .event-item.visible {
     // transition: transform 0.3s ease-in-out;
     transition-delay: .6s;
 }
-
 
 body > .event-item {
 
@@ -1662,4 +1662,5 @@ body > .event-item {
     left: 50%;
 
     background: white;
+
 }

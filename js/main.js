@@ -154,7 +154,7 @@ var farawayButton = document.getElementsByClassName( 'faraway-button' )[0];
 
 var viewportElements = [ nearbyList, closebyList, farawayList ];
 
-var originalElement = document.getElementsByClassName('event-item')[0];
+var originalElement = document.getElementsByClassName( 'event-item' )[0];
 
 // 
 // 
@@ -322,9 +322,12 @@ var AE = new AnimationElement();
 
 var eventViewClose = document.getElementById( 'event-view-close' );
 eventViewClose.addEventListener( 'click', function( e ) {
-	
+
 	var o = document.getElementById( 'effect' );
+
 	console.log( originalElement );
+
+	// var c = document.getElementById( 'event-view-close' );
 
 	if ( !o.classList.contains( 'visible' ) ) {
 		// we shoudl be adding classes here that will close the element quickly
@@ -334,7 +337,6 @@ eventViewClose.addEventListener( 'click', function( e ) {
 		// var header = originalElement.children[1].classList.add( 'hide' );
 		// var content = originalElement.children[2].classList.add( 'hide' );
 
-
 		// originalElement.style.backgroundImage = element.style.backgroundImage;
 		// originalElement.style.transition = 'all .3s ease-in-out';
 		// originalElement.style.top = element.offsetTop + 'px';
@@ -343,12 +345,12 @@ eventViewClose.addEventListener( 'click', function( e ) {
 
 		// eventOverlay.classList.add( 'move-away' );
 
-		
-
 		var hideEventOverLayContent = function() {
 			originalElement.classList.remove( 'hide' );
 			originalElement.children[1].classList.remove( 'visible' );
 			originalElement.children[2].classList.remove( 'visible' );
+
+			// originalElement.classList.remove( 'visibly' );
 			eventViewClose.classList.remove( 'visible' );
 
 			originalElement.style.transition = '';
@@ -373,8 +375,9 @@ eventViewClose.addEventListener( 'click', function( e ) {
 			setTimeout( function() {
 				hideEventOverLayContent();
 			}, 300 );
-			
+
 		}, 900 );
+
 	} else {
 
 		eventViewClose.classList.remove( 'visible' );
@@ -388,9 +391,7 @@ eventViewClose.addEventListener( 'click', function( e ) {
 
 	}
 
-	
 })
-
 
 var showEventOverLayContent = function() {
 	originalElement.children[1].classList.add( 'visible' );
@@ -402,10 +403,7 @@ var animateItem = function( element ) {
 
 	AE.set( element );
 
-	
-
 	var id = element.getAttribute( 'data-id' );
-
 
 	console.log( location );
 	location.hash = "id=" + id;
@@ -418,8 +416,6 @@ var animateItem = function( element ) {
 
 	console.log( idFromUrl );
 
-
-
 	var viewportOffset = element.getBoundingClientRect();
 	var topRelativeToViewport = viewportOffset.top;
 
@@ -429,10 +425,14 @@ var animateItem = function( element ) {
 
 	// set the position of the originalElement so it overlays the clicked element!
 	// originalElement.children[0].style.backgroundImage = element.children[0].style.backgroundImage;
-	
+
 	// originalElement.style.top = topRelativeToViewport + 'px';
+
+	// originalElement.style.transform = 'translateY(' + topRelativeToViewport + 'px ) !important';
 	originalElement.style.transform = 'translateY(' + topRelativeToViewport + 'px )';
 
+
+	// originalElement.classList.add( 'visibly' );
 	originalElement.style.display = 'flex';
 	originalElement.style['z-index'] = '100';
 
@@ -440,14 +440,12 @@ var animateItem = function( element ) {
 	// originalElement.style.display = 'block';
 
 	// first transition doesn't work so we are faking a movement and herefrom the future transitions are being animated
-	element.style.transition = 'all .3s ease-in-out';
+	element.style.transition = 'transform .3s ease-in-out';
 	element.style.transform = 'translateY(' + 0 + 'px )';
 
 	showEventOverLayContent();
 
 	// element.style.top = 0 + 'px';
-
-	console.dir( originalElement );
 
 	// var bgImage = element.style.backgroundImage;
 
@@ -2979,30 +2977,29 @@ var locationHashContainsId = function() {
 
 var expandSingleEventOverlay = function( id ) {
 
-       setTimeout( function() {
-               showEventOverLayContent();
-       }, 600 );
+   setTimeout( function() {
+           showEventOverLayContent();
+   }, 600 );
 
-       originalElement.classList.add( 'visible' );
+   originalElement.classList.add( 'visible' );
 
 }
 
 var loadSingleEvent = function() {
 
-       var o = document.getElementById( 'effect' );
-       o.classList.add( 'visible' );
-       /// create here a css class that is going to be hiding the element
-       // remember to remove the visible and hide classes at the end of the effect
-       // o.classList.add( 'hide' );
+   var o = document.getElementById( 'effect' );
+   o.classList.add( 'visible' );
+   /// create here a css class that is going to be hiding the element
+   // remember to remove the visible and hide classes at the end of the effect
+   // o.classList.add( 'hide' );
 
-       // have this little longer, basically till the animation of the original element doesnt finish
-       setTimeout( function() {
-               fillElementWithData( originalElement, hashID );
-               expandSingleEventOverlay();
-       }, 300 );
+   // have this little longer, basically till the animation of the original element doesnt finish
+   setTimeout( function() {
+           fillElementWithData( originalElement, hashID );
+           expandSingleEventOverlay();
+   }, 300 );
 
 }
-
 
 var getLocationBeforeBuildingElements = function() {
 
@@ -3019,9 +3016,9 @@ var getLocationBeforeBuildingElements = function() {
 			buildEvents( events );
 
 			if ( locationHashContainsId() ) {
+
 				loadSingleEvent();
 			}
-
 
 		}
 
@@ -3039,7 +3036,6 @@ var loadEvents = function() {
 	ref.child( 'events/public' ).once( 'value', function( snap ) {
 		events = snap.val();
 		console.log( events );
-		getLocationBeforeBuildingElements();
 	})
 }
 loadEvents();
