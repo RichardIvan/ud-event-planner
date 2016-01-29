@@ -2831,7 +2831,22 @@ var attendEvent = function () {
 
 	console.dir(hashID);
 
-	// update
+	var guestCountEl = originalElement.querySelector('.guest-count');
+	var currentGuestCount = parseInt(guestCountEl.innerText);
+	var updatedGuestCount = currentGuestCount + 1;
+
+	// if this ID is not in the list of guests on the element, update the guest count
+
+	// if ( firebase guests, my id is not there ) {
+
+	// }
+
+	// set inner guest count
+	guestCountEl.children[0].innerText = updatedGuestCount;
+	// update the view count
+	console.dir(originalElement.querySelector('.guest-count').children[0].innerText);
+
+	// update the firebase reference
 
 	console.dir('say hello');
 };
