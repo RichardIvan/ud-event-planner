@@ -385,7 +385,13 @@ eventViewClose.addEventListener( 'click', function( e ) {
 		originalElement.classList.add( 'move-away' );
 
 		setTimeout( function() {
-			originalElement.classList.remove( 'move-away', 'visible' );
+
+			console.log( originalElement.classList );
+
+			originalElement.classList.remove( 'move-away', 'visibly', 'visible' );
+			originalElement.children[1].classList.remove( 'visible' );
+			originalElement.children[2].classList.remove( 'visible' );
+
 			console.log( originalElement.classList );
 		}, 600 );
 
@@ -432,7 +438,7 @@ var animateItem = function( element ) {
 	originalElement.style.transform = 'translateY(' + topRelativeToViewport + 'px )';
 
 
-	// originalElement.classList.add( 'visibly' );
+	originalElement.classList.add( 'seen' );
 	originalElement.style.display = 'flex';
 	originalElement.style['z-index'] = '100';
 
@@ -2981,7 +2987,7 @@ var expandSingleEventOverlay = function( id ) {
            showEventOverLayContent();
    }, 600 );
 
-   originalElement.classList.add( 'visible' );
+   originalElement.classList.add( 'visibly', 'visible' );
 
 }
 
@@ -3005,20 +3011,24 @@ var getLocationBeforeBuildingElements = function() {
 
 	var interval;
 
+	var singleViewLoaded = false;
 	// if we don't have user location
 
 	interval = setInterval( function() {
 
 		console.log( 'RUNNING INTERVAL' );
+
+		if ( events !== undefined && locationHashContainsId() && !singleViewLoaded ) {
+
+			loadSingleEvent();
+			singleViewLoaded = true;
+
+		}
+
 		if ( u.getUserLoation() && events !== undefined ) {
 
 			clearInterval( interval );
 			buildEvents( events );
-
-			if ( locationHashContainsId() ) {
-
-				loadSingleEvent();
-			}
 
 		}
 

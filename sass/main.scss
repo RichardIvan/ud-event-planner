@@ -66,7 +66,7 @@ body > .event-item.hide {
     }
 }
 
-body > .event-item.move-away, body > .event-item.move-away.visible {
+body > .event-item.move-away, body > .event-item.move-away.visibly.visible {
 
     position: fixed;
     z-index: 101;
@@ -75,29 +75,41 @@ body > .event-item.move-away, body > .event-item.move-away.visible {
     transform: translateX( 100% ) !important;
 }
 
-body > .event-item.visibly {
-    display: flex;
-    z-index: 101;
+body > .event-item.visibly.visible {
+    // display: flex;
+    // z-index: 101;
 
     opacity: 1;
-    transition: opacity 0.01s ease-in-out;
+    transition: opacity .3s ease-in-out;
+    transition-delay: .6s;
 }
 
 body > .event-item.visible {
     display: flex;
     z-index: 101;
 
-    opacity: 1;
+    opacity: 0;
 
     transform: translateX( 0% ) !important;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity .3s ease-in-out;
     // transition: transform 0.3s ease-in-out;
-    transition-delay: .6s;
+    // transition-delay: .6s;
+}
+
+body > .event-item.seen {
+    
+    display: flex;
+    opacity: 1;
+
+    // transform: translateX( 0% ) !important;
+    // transition: opacity .3s ease-in-out;
+    // transition: transform 0.3s ease-in-out;
+    // transition-delay: .6s;
 }
 
 body > .event-item {
 
-    opacity: 1;
+    opacity: 0;
 
     position: fixed;
     z-index: 1;
