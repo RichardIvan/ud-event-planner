@@ -949,6 +949,10 @@ var showError = function (error) {
 			console.log('Event Cannot Start Before Today');
 			flashError('Event Cannot Start Before Today');
 			break;
+		case 28:
+			console.log('You are already attending this event');
+			flashError('You are already attending this event');
+			break;
 	}
 };
 
@@ -2379,6 +2383,8 @@ var submitNewEvent = function () {
 
 			newEventObject['privacy'] = privacy;
 			newEventObject['guest-count'] = 1;
+			newEventObject['guests'] = [];
+			newEventObject['guests'].push(ref.getAuth().uid);
 
 			Object.keys(newEventObject).map(function (key) {
 
@@ -2834,22 +2840,74 @@ window.onresize = resetImagesOnElements;
 
 var attendEvent = function () {
 
-	console.dir(hashID);
+	if (ref.getAuth()) {
 
-	var guestCountEl = originalElement.querySelector('.guest-count').children[0];
-	var currentGuestCount = parseInt(guestCountEl.innerText);
-	var updatedGuestCount = currentGuestCount + 1;
+		console.dir(hashID);
 
-	// if this ID is not in the list of guests on the element, update the guest count
+		var guestCountEl = originalElement.querySelector('.guest-count').children[0];
 
-	// if ( firebase guests, my id is not there ) {
+		// if this ID is not in the list of guests on the element, update the guest count
 
+		// if ( firebase guests, my id is not there ) {
+
+		// }
+
+		// set inner guest count
+
+		// update local guest count;
+		var id = originalElement.getAttribute('data-id');
+
+		console.dir(id);
+		console.dir(events[id].privacy);
+
+		console.dir(ref.getAuth());
+
+		if (events[id]['guests'].indexOf(ref.getAuth().uid) === -1) {
+
+			var currentGuestCount = parseInt(guestCountEl.innerText);
+			var updatedGuestCount = currentGuestCount + 1;
+			guestCountEl.innerText = updatedGuestCount;
+			events[id]['guest-count'] = updatedGuestCount;
+
+			if (!events[id].privacy) {
+
+				console.dir(events[id]['guests'].indexOf(ref.getAuth().uid));
+
+				var arr = events[id]['guests'].push(ref.getAuth().uid);
+
+				console.dir(arr);
+
+				var obj = {};
+				obj['guest-count'] = gAr.length;
+				obj['guests'] = arr;
+				ref.child('events/public').child(id).update(obj, function (error) {
+					if (error) {
+						console.log('error');
+						console.log(error);
+					} else {
+
+						console.log('DONE!');
+					}
+				});
+			} else {
+
+				// use the unlisted event..
+
+			}
+		} else {
+
+				// show error saying that the user is already attending!
+
+				showError(28);
+			}
+	} else {
+
+		showSignIn();
+	}
+
+	// if ( !events[id].privacy ) {
+	// 	ref.child( 'events/public' ).child( id ).update( { 'guest-count': updatedGuestCount } );
 	// }
-
-	// set inner guest count
-	guestCountEl.innerText = updatedGuestCount;
-	// update local guest count;
-	events[hashID]['guest-count'] = updatedGuestCount;
 
 	// update the view count
 	console.dir(originalElement.querySelector('.guest-count').children[0].innerText);
@@ -2857,6 +2915,15 @@ var attendEvent = function () {
 	// update the firebase reference
 
 	console.dir('say hello');
+};
+
+var emailGuests = function () {
+
+	var id = originalElement.getAttribute('data-id');
+	var name = events[id]['event-name'];
+	var url = location.href;
+
+	window.open("mailto:xyz@abc.com?subject=Checkout This Event!&body=Hey, don't be shy and joing us at this '" + name + "' event! ---> " + url);
 };
 /*! Hammer.JS - v2.0.6 - 2016-01-06
  * http://hammerjs.github.io/

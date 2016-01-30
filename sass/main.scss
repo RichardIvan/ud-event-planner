@@ -148,6 +148,8 @@ body > .event-item {
         position: relative;
         padding: 0.2em 0.5em;
 
+        // z-index: 1;
+
         text-transform: uppercase;
         span {
                 height: 100%;
@@ -156,7 +158,7 @@ body > .event-item {
                 position: absolute;
                 left: 0;
                 top: 0;
-                opacity: 0.2;
+                opacity: 0.3;
         }
     }
 
@@ -164,6 +166,7 @@ body > .event-item {
         position: absolute;
         bottom: 0.3em;
         padding-left: 3em;
+
 
         span {
 
@@ -173,7 +176,7 @@ body > .event-item {
             width: 100%;
             left: 2em;
             background: black;
-            opacity: 0.2;
+            opacity: 0.3;
             padding-bottom: 4em;
         }
     }
@@ -320,7 +323,7 @@ body > .event-item {
             }
 
             .buttons {
-                height: 2em;
+                // height: 2em;
                 margin-top: 2em;
                 position: absolute;
                 // margin-top: 100% !important;
@@ -364,7 +367,7 @@ body > .event-item {
 }
 
 #spinner.show {
-    z-index: 100;
+    z-index: 130;
 
     @-webkit-keyframes rotating {
         from{
@@ -431,14 +434,14 @@ body > .event-item {
 
 #error-container.visible {
     transform: translateY(0em);
-    z-index: 100;
+    z-index: 120;
 }
 
 #error-container {
     height: 5em !important;
     background: #3B3B3B;
     color: #FEBD01;
-    z-index: 100;
+    z-index: 120;
     position: fixed;
     top: 0;
     width: 100% !important;
@@ -917,7 +920,7 @@ body > .event-item {
 }
 
 #overlay.visible {
-    z-index: 50 !important;
+    z-index: 130 !important;
     // transform: translateX( 0% );
     // transform: translateX( 0% );
     transition: opacity .5s ease-in-out;
@@ -1148,7 +1151,7 @@ body > .event-item {
 }
 
 #nav-overlay {
-    z-index: 30;
+    z-index: 120;
     position: absolute;
     top: 0;
     right: 0;
@@ -1222,7 +1225,7 @@ body > .event-item {
 }
 
 #faded-overlay.opened {
-    z-index: 30;
+    z-index: 109;
     opacity: 0.4;
 }
 
@@ -1612,7 +1615,7 @@ body > .event-item {
 }
 
 #sign-in-overlay.visible {
-    z-index: 30;
+    z-index: 110;
     opacity: 1;
 
     transition: opacity 0.3s ease-in-out;
