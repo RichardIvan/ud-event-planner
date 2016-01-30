@@ -2395,6 +2395,9 @@ var submitNewEvent = function () {
 
 			saveEventToDb(newEventObject);
 			resetFields();
+
+			appendNewEvent(newEventObject['id']);
+
 			isBeingSubmitted = false;
 		} else isBeingSubmitted = false;
 	}

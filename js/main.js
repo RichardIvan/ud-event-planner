@@ -51,7 +51,9 @@ var User = function() {
 		// would we do this to have some extra layer of security, like saving and returning
 		// the data only if the user is authorised via oAuth or such?
 
-		location = loc;
+		location = {};
+		location.lat = loc.coords.latitude;
+		location.lng = loc.coords.longitude;
 		console.log( location );
 		return location;
 	}
@@ -2616,6 +2618,26 @@ var togglePrivacy = function() {
 
 }
 
+var getDistanceListContainer = function( id ) {
+
+	var lat = events[id]['event-location-data'].lat;
+	var lng = events[id]['event-location-data'].lng;
+
+	var uLat = u.getUserLoation().lat;
+	var uLng = u.getUserLoation().lng;
+
+};
+
+var appendNewEvent = function( id ) {
+
+	var clone = originalElement.cloneNode( true );
+
+	fillElementWithData( clone, id );
+
+	var containingElement = getDistanceListContainer( id );
+
+};
+
 var eventObject = {};
 var saveEventToDb = function( obj ) {
 
@@ -2665,6 +2687,9 @@ var saveEventToDb = function( obj ) {
 				showError( 24 );
 				newEventObject = new Object();
 
+				events[id] = obj;
+				appendNewEvent( id );
+
 				// update the saved item with ID..
 
 				// update the user.events with the event id
@@ -2692,6 +2717,10 @@ var allTimesAreValid = function() {
 }
 
 
+
+
+
+
 var isBeingSubmitted = false;
 var submitNewEvent = function() {
 
@@ -2716,6 +2745,9 @@ var submitNewEvent = function() {
 
 			saveEventToDb( newEventObject );
 			resetFields();
+
+
+
 			isBeingSubmitted = false;
 
 		} else isBeingSubmitted = false;
@@ -2957,8 +2989,8 @@ var setUpEventItem = function( info ) {
 
 
 	var l = u.getUserLoation();
-	var userLat = l.coords.latitude;
-	var userLng = l.coords.longitude;
+	var userLat = u.getUserLoation().lat;
+	var userLng = u.getUserLoation().lng;
 
 	console.log( "DIFFERENCE BETWEEN USER AND THE EVENT LOCATION IS");
 	console.log( lat - userLat );
