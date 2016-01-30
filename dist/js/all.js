@@ -46,7 +46,9 @@ var User = function () {
 		// would we do this to have some extra layer of security, like saving and returning
 		// the data only if the user is authorised via oAuth or such?
 
-		location = loc;
+		location = {};
+		location.lat = loc.coords.latitude;
+		location.lng = loc.coords.longitude;
 		console.log(location);
 		return location;
 	};
@@ -2303,6 +2305,43 @@ var togglePrivacy = function () {
 	console.dir(button);
 };
 
+var getDistanceListContainer = function (id) {
+
+	var lat = events[id]['event-location-data'].lat;
+	var lng = events[id]['event-location-data'].lng;
+
+	var uLat = u.getUserLoation().lat;
+	var uLng = u.getUserLoation().lng;
+
+	var latDiff = lat - uLat;
+	var lngDiff = lng - uLng;
+
+	if (latDiff < 0.1 && latDiff > -0.1 && lngDiff < 0.1 && lngDiff > -0.1) {
+
+		console.log("EVENT IS NEARBY");
+		return nearbyList;
+	} else if (latDiff < 0.3 && latDiff > -0.3 && lngDiff < 0.3 && lngDiff > -0.3) {
+
+		console.log("EVENT IS CLOSEBY");
+		return closebyList;
+	} else {
+
+		console.log("EVENT IS FARAWAY");
+		return farawayList;
+	}
+};
+
+var appendNewEvent = function (id) {
+
+	var clone = originalElement.cloneNode(true);
+
+	fillElementWithData(clone, id);
+
+	var containingElement = getDistanceListContainer(id);
+
+	containingElement.appendChild(clone);
+};
+
 var eventObject = {};
 var saveEventToDb = function (obj) {
 
@@ -2350,6 +2389,9 @@ var saveEventToDb = function (obj) {
 				showError(24);
 				newEventObject = new Object();
 
+				events[id] = obj;
+				appendNewEvent(id);
+
 				// update the saved item with ID..
 
 				// update the user.events with the event id
@@ -2395,8 +2437,6 @@ var submitNewEvent = function () {
 
 			saveEventToDb(newEventObject);
 			resetFields();
-
-			appendNewEvent(newEventObject['id']);
 
 			isBeingSubmitted = false;
 		} else isBeingSubmitted = false;
@@ -2593,6 +2633,10 @@ var fillElementWithData = function (element, id, original) {
 		guestCountField.innerHTML = '<span>' + info['guest-count'] + '</span>';
 		console.log(content);
 		console.dir(content);
+	} else {
+		element.addEventListener('click', function () {
+			animateItem(element);
+		});
 	}
 };
 
@@ -2617,8 +2661,8 @@ var setUpEventItem = function (info) {
 	var centerLng = lng - .0009;
 
 	var l = u.getUserLoation();
-	var userLat = l.coords.latitude;
-	var userLng = l.coords.longitude;
+	var userLat = u.getUserLoation().lat;
+	var userLng = u.getUserLoation().lng;
 
 	console.log("DIFFERENCE BETWEEN USER AND THE EVENT LOCATION IS");
 	console.log(lat - userLat);
@@ -2632,10 +2676,6 @@ var setUpEventItem = function (info) {
 	fillElementWithData(clone, id);
 
 	console.log(clone);
-
-	clone.addEventListener('click', function () {
-		animateItem(clone);
-	});
 
 	if (latDiff < 0.1 && latDiff > -0.1 && lngDiff < 0.1 && lngDiff > -0.1) {
 
@@ -2759,10 +2799,6 @@ var appendSearchResults = function (i) {
 
 				var clone = originalElement.cloneNode(true);
 				fillElementWithData(clone, id);
-				clone.addEventListener('click', function () {
-					animateItem(clone);
-				});
-				clone.classList.add('');
 				searchResults.appendChild(clone);
 				displayedResults.push(id);
 

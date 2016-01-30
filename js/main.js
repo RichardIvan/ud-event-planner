@@ -2626,6 +2626,26 @@ var getDistanceListContainer = function( id ) {
 	var uLat = u.getUserLoation().lat;
 	var uLng = u.getUserLoation().lng;
 
+	var latDiff = lat - uLat;
+	var lngDiff = lng - uLng;
+
+	if ( latDiff < 0.1 && latDiff > -0.1 && lngDiff < 0.1 && lngDiff > -0.1 ) {
+
+		console.log( "EVENT IS NEARBY" );
+		return nearbyList
+
+	} else if ( latDiff < 0.3 && latDiff > -0.3 && lngDiff < 0.3 && lngDiff > -0.3 ) {
+
+		console.log( "EVENT IS CLOSEBY" );
+		return closebyList
+
+	} else {
+
+		console.log( "EVENT IS FARAWAY" );
+		return farawayList;
+
+	}
+
 };
 
 var appendNewEvent = function( id ) {
@@ -2636,6 +2656,7 @@ var appendNewEvent = function( id ) {
 
 	var containingElement = getDistanceListContainer( id );
 
+	containingElement.appendChild( clone );
 };
 
 var eventObject = {};
@@ -2961,6 +2982,10 @@ var fillElementWithData = function( element, id, original ) {
 		console.log( content );
 		console.dir( content );
 
+	} else {
+		element.addEventListener( 'click', function() {
+			animateItem( element );
+		} );
 	}
 
 }
@@ -3006,10 +3031,6 @@ var setUpEventItem = function( info ) {
 	fillElementWithData( clone, id );
 
 	console.log( clone );
-
-	clone.addEventListener( 'click', function() {
-		animateItem( clone );
-	} );
 
 
 	if ( latDiff < 0.1 && latDiff > -0.1 && lngDiff < 0.1 && lngDiff > -0.1 ) {
@@ -3149,10 +3170,6 @@ var appendSearchResults = function( i ) {
 
 				var clone = originalElement.cloneNode( true );
 				fillElementWithData( clone, id );
-				clone.addEventListener( 'click', function() {
-					animateItem( clone );
-				})
-				clone.classList.add( '' );
 				searchResults.appendChild( clone );
 				displayedResults.push( id );
 
