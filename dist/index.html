@@ -81,7 +81,7 @@
 
         <!-- might not need search form id -->
           <form id="search-form" action="#" onsubmit="event.preventDefault(); onSearch()">
-            <input id="search-input" placeholder="Search Events" type="search">
+            <input id="search-input" placeholder="Search Events" type="search" onkeyup="search()">
           </form>
           </div>
         <div>
@@ -100,6 +100,10 @@
       </section>
 
       <section id="distance-lists">
+
+        <div id="search-results">
+          
+        </div>
 
         <section id="nearby-list">
 
