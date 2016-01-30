@@ -589,6 +589,8 @@ body > .event-item {
     height: 4em;
     width: 100% !important;
 
+    overflow: hidden;
+
     position: relative;
     // top: 0;
     // right: 0;
@@ -1963,9 +1965,36 @@ body > .event-item {
     display: none; 
 }
 
+#search-notification.visible {
+    transform: translateY( 0% );
+}
+
+#search-notification {
+    position: absolute;
+    width: 100%;
+    background: white;
+    z-index: 140;
+    text-align: center;
+    transform: translateY( -100% );
+    transition: transform .1s ease-in-out;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
 #search-results {
     z-index: 100;
     width: 100%;
     position: absolute;
     margin-top: 8em;
+
+    background: white;
+}
+
+#clear-search {
+
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    font-size: 2em;
+
 }

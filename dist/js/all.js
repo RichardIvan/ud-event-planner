@@ -2740,10 +2740,13 @@ var prepareForSearch = function () {
 
 var displayedResults = [];
 var searchResults = document.getElementById('search-results');
+var searchNotification = document.getElementById('search-notification');
 var appendSearchResults = function (i) {
 
 	if (i.length !== 0) {
 		console.log(i);
+
+		searchNotification.classList.add('visible');
 
 		i.map(function (index) {
 
@@ -2756,6 +2759,7 @@ var appendSearchResults = function (i) {
 				clone.addEventListener('click', function () {
 					animateItem(clone);
 				});
+				clone.classList.add('');
 				searchResults.appendChild(clone);
 				displayedResults.push(id);
 
@@ -2767,10 +2771,20 @@ var appendSearchResults = function (i) {
 	} else {
 
 			if (displayedResults.length !== 0) {
-				searchResults.innerHTML = '';
-				displayedResults = [];
+				clearSearchResults(true);
 			}
 		}
+};
+
+var clearSearchResults = function (whatever) {
+
+	searchResults.innerHTML = '';
+	displayedResults = [];
+	searchNotification.classList.remove('visible');
+
+	if (!whatever) {
+		saerchInput.value = '';
+	}
 };
 
 var searchInput = document.getElementById('search-input');
