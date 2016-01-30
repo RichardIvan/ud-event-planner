@@ -417,6 +417,11 @@ var showEventOverLayContent = function() {
 
 var animateItem = function( element ) {
 
+	faButton.style.zIndex = 200;
+	setTimeout( function() {
+		faButton.style.zIndex = "";
+	}, 300 );
+
 	AE.set( element );
 
 	var id = element.getAttribute( 'data-id' );
@@ -2909,10 +2914,30 @@ var buildEvents = function( evts ) {
 // his shall be a class or object with an api that is get, height and get width fo the element
 // mapBacgroundImageSize
 
+var isCurrentUserAttendingEvent = function( id ) {
+
+	var uid = ref.getAuth().uid;
+	var guestIDs = events[id]['guests'];
+
+	if ( guestIDs.indexOf( uid ) !== -1 ) {
+		return true;
+	} else return false;
+
+}
 
 var fillElementWithData = function( element, id, original ) {
 
+	console.log( 'RUNNIT FILL ELEMENTS WITH DATA!!!' );
+	console.log( 'RUNNIT FILL ELEMENTS WITH DATA!!!' );
+	console.log( 'RUNNIT FILL ELEMENTS WITH DATA!!!' );
+	console.log( 'RUNNIT FILL ELEMENTS WITH DATA!!!' );
+	console.log( 'RUNNIT FILL ELEMENTS WITH DATA!!!' );
+	console.log( 'RUNNIT FILL ELEMENTS WITH DATA!!!' );
+
+	console.log( events[id] );
 	var info = events[id];
+	console.log( events[id] );
+	console.log( info );
 
 	var lat = info['event-location-data'].lat;
 	var lng = info['event-location-data'].lng;
@@ -2981,6 +3006,12 @@ var fillElementWithData = function( element, id, original ) {
 		guestCountField.innerHTML = '<span>' + info['guest-count'] + '</span>';
 		console.log( content );
 		console.dir( content );
+
+		var attendingButton = content.children[1].children[0].children[0];
+
+		if ( isCurrentUserAttendingEvent( id ) ) {
+			attendingButton.innerText = 'Attending!';
+		} else attendingButton.innerText = 'Attending?';
 
 	} else {
 		element.addEventListener( 'click', function() {
