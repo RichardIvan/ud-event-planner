@@ -2707,12 +2707,10 @@ var saveEventToDb = function( obj ) {
 
 				})
 
-				console.log( id );
-				console.dir( id );
-
 				showError( 24 );
 				newEventObject = new Object();
 
+				obj['id'] = id;
 				events[id] = obj;
 				appendNewEvent( id );
 
