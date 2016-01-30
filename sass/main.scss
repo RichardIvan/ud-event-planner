@@ -141,6 +141,10 @@ body > .event-item {
         height: 15em;
     }
 
+    .share-icon {
+        display: none;
+    }
+
     h2 {
         margin-top: 1.5em;
         margin-left: 1.5em;
@@ -692,6 +696,7 @@ body > .event-item {
     // transition: all 5s ease-in-out;
     overflow: hidden;
     // transform: translateX(0%);
+
     .event-item.expand {
 
         z-index: 60000 !important;
@@ -849,6 +854,13 @@ body > .event-item {
         margin-top: 0.5em;
         margin-left: 0;
 
+    }
+
+    .share-icon {
+        position: absolute;
+        right: 1em;
+        bottom: 1em;
+        font-size: 1.5em;
     }
 }
 
@@ -1996,5 +2008,14 @@ body > .event-item {
     top: 0.5em;
     right: 0.5em;
     font-size: 2em;
+
+}
+
+#overlay.visible > #my-account.visible {
+
+    position: absolute;
+    background: gold;
+    height: 100%;
+    width: 100%;
 
 }

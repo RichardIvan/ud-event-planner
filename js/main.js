@@ -237,16 +237,12 @@ hamburgerIcon.addEventListener( 'click', function() {
 
 
 
-
-var FireAuthData = ref.getAuth();
-if ( FireAuthData ) {
-	console.log( FireAuthData );
-	console.log( FireAuthData.uid );
+if ( ref.getAuth() ) {
 	signInNavOverlay.children[0].lastChild.data = "My Account";
 	signInNavOverlay.setAttribute( 'onclick', 'showMyAccount()' );
 
 	// reauthenticate 
-	ref.authWithCustomToken( FireAuthData.token, function( error, data) {
+	ref.authWithCustomToken( ref.getAuth().token, function( error, data) {
 		if ( !error ) {
 			console.log( 'horay' );
 		}
@@ -254,7 +250,7 @@ if ( FireAuthData ) {
 
 	var interval = 60000 * 60 * 23;
 	setInterval( function() {
-		ref.authWithCustomToken( FireAuthData.token, function( error, data) {
+		ref.authWithCustomToken( ref.getAuth().token, function( error, data) {
 			if ( !error ) {
 				console.log( 'horay' );
 			}
@@ -324,6 +320,8 @@ var AE = new AnimationElement();
 
 var eventViewClose = document.getElementById( 'event-view-close' );
 eventViewClose.addEventListener( 'click', function( e ) {
+
+	location.hash = '';
 
 	var o = document.getElementById( 'effect' );
 
@@ -873,9 +871,8 @@ faButton.addEventListener( 'click', function( e ) {
 	// IF the user is not signed in, show sign in/sign up page
 	// else opoen the new event pag
 
-	console.log( FireAuthData );
 
-	if ( !FireAuthData ) {
+	if ( !ref.getAuth() ) {
 
 
 		showSignIn();
@@ -1740,8 +1737,6 @@ var signIn = function() {
 			spinner.hide();
 			// showError( 15 );
 		} else {
-			FireAuthData = authData;
-			console.log( authData );
 
 			spinner.hide();
 			hideSignIn();
@@ -1754,7 +1749,7 @@ var signIn = function() {
 			showError( 14 );
 			var interval = 60000 * 60 * 23;
 			setInterval( function() {
-				signInWithToken( authData );
+				signInWithToken( ref.getAuth().token );
 			}, interval );
 		}
 	});
@@ -1781,8 +1776,6 @@ var selectSignInButton = function() {
 var signOut = function() {
 	closeNav();
 	ref.unauth();
-
-	FireAuthData = null;
 
 	signInNavOverlay.children[0].lastChild.data = "Sign In";
 	signInNavOverlay.setAttribute( 'onclick', 'showSignIn()' );
@@ -3015,6 +3008,14 @@ var fillElementWithData = function( element, id, original ) {
 		element.addEventListener( 'click', function() {
 			animateItem( element );
 		} );
+
+		var shareIcon = element.querySelector( '.share-icon' );
+		shareIcon.addEventListener( 'click', function() {
+			shareViaEmail( id );
+		})
+
+		console.log( 'PRINTING ELEMENT' );
+		console.dir( element );
 	}
 
 }
@@ -3479,6 +3480,16 @@ var attendEvent = function() {
 	// update the firebase reference
 
 	console.dir( 'say hello' );
+
+}
+
+var shareViaEmail = function( ID ) {
+
+	var id = ID;
+	var name = events[ID]['event-name'];
+	var url = location.href + '#id=' + id;
+
+	window.open("mailto:xyz@abc.com?subject=Checkout This Event!&body=Hey, don't be shy and joing us at this '" + name + "' event! ---> " + url );
 
 }
 
