@@ -1930,7 +1930,7 @@ body > .event-item {
 
 #event-view-close.visible {
     opacity: 1;
-    z-index: 102;
+    z-index: 130;
 
     transition: opacity .3s ease-in-out;
     transition-delay: 1.8s;
@@ -1963,7 +1963,7 @@ body > .event-item {
 #effect {
 
     position: fixed;
-    
+
     top: 50%;
     right: 50%;
     bottom: 50%;
@@ -2018,4 +2018,78 @@ body > .event-item {
     height: 100%;
     width: 100%;
 
+}
+
+#my-account.visible {
+    display: flex;
+}
+
+#my-account {
+    display: none;
+    flex-direction: column;
+
+    .profile-image {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        height: 30%;
+        background: #C5C5C5;
+        // background-image: url("http://www2.robertharding.com/preview/RM/RH/HORIZONTAL/1113-43691.jpg");
+        // background-size: cover;
+    }
+
+    .profile-image > div {
+        flex-grow: 1;
+    }
+    .profile-image > div:nth-child( 2 ) {
+        flex-grow: 0;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .content {
+        height: 70%;
+        background: #424242;
+        display: flex;
+       
+        h2 {
+            color: white;
+        }
+
+        .wrapper {
+            width: 90%;
+            margin: 0 auto;
+
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+    
+        .change-pass-container, .containers-holder {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .change-pass-container > div, .containers-holder > div {
+            flex-grow: 1;
+        }
+        .change-pass-container > div:nth-child( 2 ) {
+            // flex-grow: 0;
+            margin: 0 auto;
+            width: 100%;
+
+            // p {
+            //     padding: 2em;
+            //     background: gold;
+            //     border-radius: 40px;
+            // }
+        }
+
+        .containers-holder > div:nth-child( 2 ) {
+            flex-grow: 0;
+            // display: block;
+            // margin: 0 auto;
+        }
+    }
 }
