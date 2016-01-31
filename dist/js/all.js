@@ -327,7 +327,10 @@ eventViewClose.addEventListener('click', function (e) {
 			originalElement.style.transition = 'all .3s ease-in-out';
 			originalElement.style.transform = 'translateY(' + AE.pixelsToMove + 'px)';
 			var animeEl = AE.get();
-			animeEl.style.transform = 'translateY(' + 0 + 'px)';
+
+			if (animeEl) {
+				animeEl.style.transform = 'translateY(' + 0 + 'px)';
+			}
 
 			setTimeout(function () {
 				hideEventOverLayContent();
@@ -1132,7 +1135,9 @@ var submitNewAccount = function () {
 					delete newAccountObject['email'];
 					delete newAccountObject['pass'];
 
-					ref.child('users').child(uid).child('info').set(newAccountObject, function (error, data) {
+					var objectToSave = { info: newAccountObject, events: ['true'] };
+
+					ref.child('users').child(uid).set(objectToSave, function (error, data) {
 
 						if (error) {
 							console.log('error');
@@ -1411,8 +1416,15 @@ var buildListItem = function (eventData) {
 	var info = eventData;
 
 	var li = document.createElement('li');
-	li.innerText = info.name;
-	li.addEventListener('click', animateItem(info.id));
+	li.innerText = info['event-name'];
+	li.addEventListener('click', function () {
+		hashID = info.id;
+		location.hash = '#id=' + hashID;
+		loadSingleEvent();
+	});
+
+	console.log(li);
+
 	return li;
 };
 
@@ -1430,6 +1442,9 @@ var attachEventToList = function (ID) {
 		ref.child('events/unlisted').child(id).once('value', function (snap) {
 
 			if (snap.val()) {
+
+				console.log(snap.val());
+
 				events[snap.val().id] = snap.val();
 				userEvents.appendChild(buildListItem(snap.val()));
 			}
@@ -1437,26 +1452,36 @@ var attachEventToList = function (ID) {
 	}
 };
 
+var myEventsLoaded = false;
 var showMyAccount = function () {
 
 	closeNav();
 
 	overlay.classList.add('visible');
 	myAccountSection.classList.add('visible');
+	eventViewClose.classList.add('visible');
+	eventViewClose.setAttribute('onclick', 'hideMyAccount()');
 
-	ref.child('users').child(ref.getAuth().uid).once('value', function (snap) {
-		console.log(snap.val());
+	if (!myEventsLoaded) {
 
-		eventViewClose.classList.add('visible');
-		eventViewClose.setAttribute('onclick', 'hideMyAccount()');
+		ref.child('users').child(ref.getAuth().uid).once('value', function (snap) {
+			console.log(snap.val());
 
-		myAccountSection.querySelector('h2').innerText = snap.val().info.name;
+			var userEvents = snap.val().events;
 
-		snap.val().events.map(function (item) {
+			myAccountSection.querySelector('h2').innerText = snap.val().info.name;
 
-			attachEventToList(item);
+			userEvents.map(function (item) {
+
+				if (item !== 'true') {
+					console.log(item);
+					attachEventToList(item);
+				}
+			});
+
+			myEventsLoaded = true;
 		});
-	});
+	}
 };
 
 //
@@ -2255,6 +2280,21 @@ var appendNewEvent = function (id) {
 	containingElement.appendChild(clone);
 };
 
+var assignEventToUser = function (uid, id) {
+
+	ref.child('users').child(uid).once('value', function (snap) {
+
+		if (snap.val()) {
+			var events = snap.val().events;
+
+			if (events.indexOf(id) === -1) {
+				events.push(id);
+				ref.child('users').child(uid).update({ 'events': events });
+			}
+		}
+	});
+};
+
 var eventObject = {};
 var saveEventToDb = function (obj) {
 
@@ -2298,6 +2338,9 @@ var saveEventToDb = function (obj) {
 
 				obj['id'] = id;
 				events[id] = obj;
+
+				assignEventToUser(ref.getAuth().uid, id);
+
 				appendNewEvent(id);
 
 				// update the saved item with ID..
@@ -2332,6 +2375,9 @@ var saveEventToDb = function (obj) {
 
 					obj['id'] = id;
 					events[id] = obj;
+
+					assignEventToUser(ref.getAuth().uid, id);
+
 					appendNewEvent(id);
 
 					// update the saved item with ID..
@@ -2633,7 +2679,7 @@ var locationHashContainsId = function () {
 	} else return false;
 };
 
-var expandSingleEventOverlay = function (id) {
+var expandSingleEventOverlay = function () {
 
 	setTimeout(function () {
 		showEventOverLayContent();

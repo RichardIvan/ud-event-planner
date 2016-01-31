@@ -69,7 +69,7 @@ body > .event-item.hide {
 body > .event-item.move-away, body > .event-item.move-away.visibly.visible {
 
     position: fixed;
-    z-index: 101;
+    z-index: 141;
 
     transition: transform 0.3s ease-in-out;
     transform: translateX( 100% ) !important;
@@ -77,7 +77,7 @@ body > .event-item.move-away, body > .event-item.move-away.visibly.visible {
 
 body > .event-item.visibly.visible {
     // display: flex;
-    // z-index: 101;
+    z-index: 141;
 
     opacity: 1;
     transition: opacity .3s ease-in-out;
@@ -1930,7 +1930,7 @@ body > .event-item {
 
 #event-view-close.visible {
     opacity: 1;
-    z-index: 130;
+    z-index: 141;
 
     transition: opacity .3s ease-in-out;
     transition-delay: 1.8s;
@@ -1954,7 +1954,7 @@ body > .event-item {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 100;
+    z-index: 140;
     // height: 100%;
     // width: 100%;
 
@@ -2047,14 +2047,20 @@ body > .event-item {
         margin: 0 auto;
     }
 
+    ul {
+        list-style: none;
+
+        li {
+            padding: 0.8em 0;
+        }
+    }
+
     .content {
         height: 70%;
         background: #424242;
         display: flex;
        
-        h2 {
-            color: white;
-        }
+        color: white;
 
         .wrapper {
             width: 90%;
