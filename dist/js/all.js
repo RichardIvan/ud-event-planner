@@ -14,6 +14,82 @@ var App = function () {
 	// 	var el = document.getElementById( id );
 	// }
 
+	var EventManager = function () {
+
+		var elements = {};
+
+		this.registerElement = function (id) {
+
+			if (!elements[id]) {
+				var e = document.getElementById(id);
+				var obj = {};
+				obj.element = e;
+				obj.clickListeners = [];
+
+				elements[id] = obj;
+				return obj;
+			}
+		};
+
+		this.aClick = function (id, callback) {
+
+			var el;
+
+			if (!elements[id]) {
+				this.registerElement(id);
+			}
+
+			el = elements[id];
+
+			console.log(el);
+
+			if (el.clickListeners) {
+				el.clickListeners.map(function (cb) {
+					el.element.removeEventListener('click', cb);
+				});
+			}
+
+			el.element.addEventListener('click', callback);
+			el.clickListeners.push(callback);
+		};
+
+		this.rClick = function (id, callback) {
+
+			var el;
+
+			if (elements[id]) {
+
+				el = elements[id];
+			} else {
+				el = registerElement(id);
+			}
+
+			el.element.removeEventListener('click', callback);
+		};
+
+		this.open = function (element) {
+
+			element.classList.add('opened');
+		};
+
+		this.close = function (element) {
+
+			element.classList.remove('opened');
+		};
+
+		this.show = function (element) {
+
+			element.classList.add('visible');
+		};
+
+		this.hide = function (element) {
+
+			element.classList.remove('visible');
+		};
+	};
+
+	var EM = new EventManager();
+
 	var FloatingActionButton = function () {
 		var button = document.getElementById('fa');
 		button.addEventListener('click', function (e) {
@@ -44,7 +120,6 @@ var App = function () {
 			button.style.zIndex = "";
 		};
 	};
-
 	var FAB = new FloatingActionButton();
 
 	var Main = function () {
@@ -59,16 +134,31 @@ var App = function () {
 			el.classList.remove('visible');
 		};
 	};
-
 	var mainSection = new Main();
+
+	var myAccount = function () {
+
+		var el = document.getElementById('my-account');
+
+		this.hide = function () {
+			el.classList.remove('visible');
+		};
+
+		this.show = function () {
+			el.classList.add('visible');
+		};
+
+		this.getElement = function () {
+			return el;
+		};
+	};
+	var myAccountSection = new myAccount();
 
 	// var overlay = document.getElementById( 'overlay' );
 	var body = document.getElementsByTagName('body')[0];
 	var style = window.getComputedStyle(body, null).getPropertyValue('font-size');
 	var bodyHeight = body.clientHeight;
 	var fontSize = parseFloat(style);
-
-	var myAccountSection = document.getElementById('my-account');
 
 	var Spinner = function () {
 		var spinner = document.getElementById('spinner');
@@ -139,25 +229,6 @@ var App = function () {
 
 	var eventOverlay = document.getElementById('event-overlay');
 	var eventOverlayCloseButton = document.querySelector('.close-button');
-
-	// eventOverlayCloseButton.addEventListener( 'click', function() {
-
-	// 	var original = document.getElementsByClassName( 'event-item' )[0];
-	// 	console.log( original );
-	// 	// original.style.backgroundImage = element.style.backgroundImage;
-	// 	// original.style.transition = 'all .3s ease-in-out';
-	// 	// original.style.top = element.offsetTop + 'px';
-	// 	// original.style.display = 'flex';
-	// 	// original.style['z-index'] = '100';
-
-	// 	eventOverlay.classList.add( 'move-away' );
-	// 	original.classList.add( 'move-away' );
-	// 	setTimeout( function() {
-	// 		eventOverlay.classList.remove( 'expand1' );
-	// 		eventOverlay.classList.remove( 'move-away' );
-	// 	}, 1000 );
-
-	// })
 
 	//
 	// NAV ITEMS
@@ -250,31 +321,19 @@ var App = function () {
 	//
 	//
 
-	if (ref.getAuth()) {
-		signInNavOverlay.children[0].lastChild.data = "My Account";
-		signInNavOverlay.setAttribute('onclick', 'app.showMyAccount()');
-
-		// reauthenticate
-		ref.authWithCustomToken(ref.getAuth().token, function (error, data) {
-			if (!error) {
-				console.log('AUTHENTICATED');
-			}
-		});
-
-		var interval = 60000 * 60 * 23;
-		setInterval(function () {
-			ref.authWithCustomToken(ref.getAuth().token, function (error, data) {
-				if (!error) {
-					console.log('horay');
-				}
-			});
-		}, interval);
-	}
-
 	var closeAccountAndEventOverlay = function () {
 
-		createAccount.querySelector('.submit-button').setAttribute('onclick', 'submitNewAccount()');
-		createAccount.querySelector('.next-button').setAttribute('onclick', 'focusNextElement()');
+		// submitButton.removeEventListener( 'click', submitNewEvent );
+		// nextButton.removeEventListener( 'click', focusNextElementInNewEvent );
+
+		EM.aClick('submit-button', submitNewAccount);
+		EM.aClick('next-button', focusNextElement);
+
+		// submitButton.addEventListener( 'click', submitNewAccount );
+		// nextButton.addEventListener( 'click', focusNextElement );
+
+		// createAccount.querySelector( '.submit-button' ).setAttribute( 'onclick', 'submitNewAccount()' );
+		// createAccount.querySelector( '.next-button' ).setAttribute( 'onclick', 'focusNextElement()' );
 
 		createAccount.classList.add('aside');
 
@@ -342,17 +401,6 @@ var App = function () {
 			originalElement.children[2].style.opacity = '0';
 			originalElement.classList.add('hide');
 
-			// var header = originalElement.children[1].classList.add( 'hide' );
-			// var content = originalElement.children[2].classList.add( 'hide' );
-
-			// originalElement.style.backgroundImage = element.style.backgroundImage;
-			// originalElement.style.transition = 'all .3s ease-in-out';
-			// originalElement.style.top = element.offsetTop + 'px';
-			// originalElement.style.display = 'flex';
-			// originalElement.style['z-index'] = '100';
-
-			// eventOverlay.classList.add( 'move-away' );
-
 			var hideEventOverLayContent = function () {
 				originalElement.classList.remove('hide', 'seen');
 				originalElement.children[1].classList.remove('visible');
@@ -370,12 +418,7 @@ var App = function () {
 				originalElement.children[2].style.opacity = '';
 			};
 
-			// originalElement.classList.add( 'move-away' );
-			// eventViewClose.classList.remove( 'visible' );
 			setTimeout(function () {
-				// eventOverlay.classList.remove( 'expand1' );
-				// eventOverlay.classList.remove( 'move-away' );
-				// eventViewClose.classList.remove( 'visible' );
 
 				originalElement.style.transition = 'all .3s ease-in-out';
 				originalElement.style.transform = 'translateY(' + AE.pixelsToMove + 'px)';
@@ -459,21 +502,6 @@ var App = function () {
 
 		showEventOverLayContent();
 
-		// element.style.top = 0 + 'px';
-
-		// var bgImage = element.style.backgroundImage;
-
-		// var top = element.offsetTop;
-
-		// var left = viewportOffset.left;
-		// var left = element.offsetLeft;
-
-		// element.style.position = 'relative';
-
-		// var sum = -top + left;
-		// element.style.top = -topRelativeToViewport + 'px';
-		// originalElement.style.top = 0 + 'px';
-
 		var pixelsToMove = -topRelativeToViewport;
 
 		setTimeout(function () {
@@ -482,66 +510,6 @@ var App = function () {
 		}, 0);
 
 		element.style.transform = 'translateY(' + pixelsToMove + 'px)';
-
-		// var text = element.querySelector( '.event-info' );
-		// var map = element.querySelector( '.map-image' );
-		// var border = element.querySelector( '.bottom-border' );
-
-		// map.classList.add( 'invisible' );
-		// text.classList.add( 'invisible' );
-		// border.classList.add( 'invisible' );
-
-		// setTimeout( function() {
-
-		// 	// var el = {};
-		// 	// var img = {};
-		// 	// var elImg = {};
-
-		// 	// el.height = element.offsetHeight;
-		// 	// // width
-		// 	// el.width = element.offsetWidth;
-		// 	// ///top position
-		// 	// el.topMargin = element.offsetTop;
-		// 	// // left position
-		// 	// el.leftMargin = element.offsetLeft;
-
-		// 	// var eventOverlay = document.getElementById( 'event-overlay' );
-
-		// 	// eventOverlay.children[0].style.backgroundImage = bgImage;
-
-		// 	// eventOverlay.classList.add( 'expand1' );
-
-		// 	// ?????
-		// 	// element.classList.add( 'expand' );
-		// 	// ?????
-
-		// 	// var sum = parseInt( element.style.top ) - element.offsetLeft;
-
-		// 	setTimeout( function() {
-
-		// 		// DO NOT TRANSITION BACK YET
-		// 		//element.style.transform = 'translateY(' + 0 + 'px )';
-
-		// 		// element.style['z-index'] = 1000;
-
-		// 		// This bunch of code puts the element back it it's previous position plus it does reset the css in with JS
-
-		// 		// setTimeout( function() {
-		// 		// 	element.style.transform = '';
-		// 		// 	element.style.transition = '';
-		// 		// 	element.style.position = '';
-		// 		// 	element.style.top = '';
-		// 		// 	// map.classList.remove( 'invisible' );
-		// 		// 	// text.classList.remove( 'invisible' );
-		// 		// 	// border.classList.remove( 'invisible' );
-
-		// 		// 	element.classList.remove( 'expand' );
-
-		// 		// }, 2000 )
-
-		// 	}, 100 )
-
-		// }, 600)
 	};
 
 	var extractEventItem = function (elements) {
@@ -605,23 +573,10 @@ var App = function () {
 					// left position
 					el.leftMargin = element.offsetLeft;
 
-					// image.height = map.offsetHeight;
-					// // width
-					// image.width = map.offsetWidth;
-					// ///top position
-					// image.topMargin = map.offsetTop;
-					// // left position
-					// image.leftMargin = map.offsetLeft;
-
-					// element.classList.add( 'invisible' );
-
 					var eventOverlay = document.getElementById('event-overlay');
 					eventOverlay.classList.add('expand1');
 					// eventOverlay.classList.add(  );
 					element.classList.add('expand');
-
-					// var sum = sum - left;
-					// console.log( sum );
 
 					var sum = parseInt(element.style.top) - element.offsetLeft;
 
@@ -638,74 +593,8 @@ var App = function () {
 							element.classList.remove('expand');
 						}, 2000);
 					}, 100);
-
-					// eventOverlay.style.transition = 'all 10s ease-in-out';
-
-					// eventOverlay.style.position = 'fixed';
-
-					// eventOverlay.style.transition = 'all 10s ease-in-out';
-
-					// eventOverlay.style.top = el.topMargin + 'px';
-					// eventOverlay.style.left = el.leftMargin + 'px';
-					// eventOverlay.style.top = 0;
-					// eventOverlay.style.left = 0;
-					// eventOverlay.style.width = el.width + 'px';
-					// eventOverlay.style.height = el.height + 'px';
-					// eventOverlay.style.width = '100%';
-					// eventOverlay.style.height = '100%';
-					// eventOverlay.style.margin = 0;
-					// eventOverlay.style['z-index'] = 100;
-					// eventOverlay.style['border-radius'] = 0;
-
-					// var elImage = element.querySelector( 'img' );
-					// // elImg.height = elImage.offsetHeight;
-					// // elImg.width = elImage.offsetWidth;
-					// elImg.topMargin = elImage.offsetTop + left;
-					// elImg.leftMargin = elImage.offsetLeft + left + 1;
-
-					// var image = eventOverlay.querySelector( 'img' );
-
-					// image.style.transition = 'all .3s ease-in-out';
-
-					// image.classList.add( 'visible' );
-					// image.style.position = 'fixed';
-					// image.style['margin-top'] = 0;
-					// image.style.top = eventOverlay.style.top;
-					// image.style.left = eventOverlay.style.left;
-					// image.style.width = eventOverlay.style.width;
-					// image.style.height = eventOverlay.style.height;
-					// image.style['z-index'] = eventOverlay.style['z-index'];
-
-					// set properties that will be transitioned
-
-					// img.height = image.offsetHeight;
-					// img.width = image.offsetWidth;
-					// img.topMargin = image.offsetTop + left;
-					// img.leftMargin = image.offsetLeft + left + 1;
-
-					// image.style.position = 'fixed';
-					// // image.style.height = elImg.height + 'px';
-					// // image.style.width = elImg.width + 'px';
-					// image.style.top = elImg.topMargin + 'px';
-					// image.style.left = elImg.leftMargin + 'px';
-					// image.style['margin-top'] = '0em';
-					// image.style['z-index'] = 100;
-
-					// // this might need to be moved up top
-
-					// // image.style.position = 'fixed';
-					// image.style.top = img.topMargin + 'px';
-					// image.style.left = img.leftMargin + 'px';
-					// image.style.width = img.width + 'px';
-					// image.style.height = img.height + 'px';
-					// image.style['z-index'] = 100;
-
-					// image.classList.add( 'visible' );
 				}, 600);
 
-				// increase the z-index of map circle
-
-				// element.style.left = left + 'px';
 				break;
 			}
 		}
@@ -764,20 +653,23 @@ var App = function () {
 		FAB.expand();
 
 		createAccount.querySelector('h2').innerText = "Create Event";
-		createAccount.querySelector('.next-button').setAttribute('onclick', 'focusNextElementInNewEvent()');
-		createAccount.querySelector('.submit-button').setAttribute('onclick', 'submitNewEvent()');
+
+		EM.aClick('submit-button', submitNewEvent);
+		EM.aClick('next-button', focusNextElementInNewEvent);
 
 		overlay.classList.add('visible');
-		// newAccountContainer.classList.add( 'visible' );
-		// newEventContainer.classList.add( 'visible' );
 		newEventContainer.classList.add('visibly');
 
-		newAccountHeader.classList.add('visible');
-		newAccountFooter.classList.add('visible');
+		EM.show(newAccountHeader);
+		EM.show(newAccountFooter);
+
+		// newAccountHeader.classList.add( 'visible' );
+		// newAccountFooter.classList.add( 'visible' );
 
 		setTimeout(function () {
 
-			newEventContainer.classList.add('visible');
+			EM.show(newEventContainer);
+			// newEventContainer.classList.add( 'visible' );
 
 			setTimeout(function () {
 				FAB.shrink();
@@ -786,12 +678,6 @@ var App = function () {
 		}, 200);
 	};
 
-	// var el = document.getElementById('foo');
-
-	// document.getElementById( 'fa' ).on( 'click', function( e ) {
-	// 	alert('msg');
-	// });
-
 	var searchForm = document.getElementById('search-form');
 	var saerchInput = document.getElementById('search-input');
 
@@ -799,6 +685,8 @@ var App = function () {
 		// searchForm.blur();
 		saerchInput.blur();
 	};
+
+	searchForm.addEventListener('submit', onSearch);
 
 	// select input value on click within the new Account Form
 	// this needs to be refactored and should be accepting any form
@@ -821,9 +709,8 @@ var App = function () {
 
 	attachClickAndSelectFunctionToForm(forms);
 
+	var p = errorContainer.querySelector('p');
 	var showError = function (error) {
-
-		var p = errorContainer.querySelector('p');
 
 		var flashError = function (text) {
 			// set inner text
@@ -999,10 +886,6 @@ var App = function () {
 		// resetFields.classList.add( 'end' );
 	});
 
-	var setFocus = function (el) {
-		console.log(el);
-	};
-
 	var focusNextElement = function (element) {
 
 		checkIfFormReadyForSubmit(true);
@@ -1112,9 +995,6 @@ var App = function () {
 	};
 
 	var checkPass = function () {
-
-		// var passWord = passField.value;
-		// var retypePass = rePassField.value;
 
 		var inputValid = false;
 
@@ -1412,19 +1292,26 @@ var App = function () {
 
 		// this should be checked before running if it actually is opened or not..?
 
-		navOverlay.classList.remove('opened');
-		fadedOverlay.classList.remove('opened');
+		EM.close(navOverlay);
+		EM.close(fadedOverlay);
+
+		// navOverlay.classList.remove( 'opened' );
+		// fadedOverlay.classList.remove( 'opened' );
 
 		// overlay left
 		overlay.classList.add('from-left', 'visible');
 		setTimeout(function () {
 			overlay.classList.add('from-left-to-middle');
 			newAccountContainer.classList.add('visibly');
-			newAccountHeader.classList.add('visible');
-			newAccountFooter.classList.add('visible');
+
+			EM.show(newAccountHeader);
+			EM.show(newAccountFooter);
+			// newAccountHeader.classList.add( 'visible' );
+			// newAccountFooter.classList.add( 'visible' );
 
 			setTimeout(function () {
-				newAccountContainer.classList.add('visible');
+				EM.show(newAccountContainer);
+				// newAccountContainer.classList.add( 'visible' );
 			}, 200);
 
 			setTimeout(function () {
@@ -1433,19 +1320,23 @@ var App = function () {
 		}, 100);
 	};
 
-	var signInToSignUpTransition = function () {
+	var signUpButton = document.getElementById('sign-up-button');
+	signUpButton.addEventListener('click', function () {
 		hideSignIn();
 		setTimeout(function () {
 			showNewAccount();
 		}, 300);
-	};
+	});
 
 	var hideMyAccount = function () {
 
-		overlay.classList.remove('visible');
-		myAccountSection.classList.remove('visible');
+		EM.hide(overlay);
+		// overlay.classList.remove( 'visible' );
+		myAccountSection.hide();
+		// myAccountSection.classList.remove( 'visible' );
 
-		eventViewClose.classList.remove('visible');
+		EM.hide(eventViewClose);
+		// eventViewClose.classList.remove( 'visible' );
 		eventViewClose.removeAttribute('onclick', '');
 	};
 
@@ -1497,10 +1388,14 @@ var App = function () {
 
 		closeNav();
 
-		overlay.classList.add('visible');
-		myAccountSection.classList.add('visible');
-		eventViewClose.classList.add('visible');
-		eventViewClose.setAttribute('onclick', 'app.hideMyAccount()');
+		EM.show(overlay);
+		// overlay.classList.add( 'visible' );
+		myAccountSection.show();
+
+		EM.show(eventViewClose);
+		// eventViewClose.classList.add( 'visible' );
+		eventViewClose.addEventListener('click', hideMyAccount);
+		// eventViewClose.setAttribute( 'onclick', 'app.hideMyAccount()');
 
 		if (!myEventsLoaded) {
 
@@ -1509,7 +1404,7 @@ var App = function () {
 
 				var userEvents = snap.val().events;
 
-				myAccountSection.querySelector('h2').innerText = snap.val().info.name;
+				myAccountSection.getElement().querySelector('h2').innerText = snap.val().info.name;
 
 				userEvents.map(function (item) {
 
@@ -1537,19 +1432,26 @@ var App = function () {
 	//
 
 	var hideSignIn = function () {
-		fadedOverlay.setAttribute('onclick', '');
+
+		fadedOverlay.removeEventListener('click', hideSignIn);
+		// fadedOverlay.setAttribute( 'onclick', '' );
 		fadedOverlay.classList.remove('opened');
 		signInOverLay.classList.remove('visible');
 		console.dir('sign in hide');
 	};
 
 	var showSignIn = function () {
+
+		console.log("HELLO");
+
 		closeNav();
-		fadedOverlay.setAttribute('onclick', 'hideSignIn()');
+		fadedOverlay.addEventListener('click', hideSignIn);
 		setTimeout(function () {
-			fadedOverlay.classList.add('opened');
+			EM.open(fadedOverlay);
+			// fadedOverlay.classList.add( 'opened' );
 		}, 300);
-		signInOverLay.classList.add('visible');
+		EM.show(signInOverLay);
+		// signInOverLay.classList.add( 'visible' );
 		signInForm.email.focus();
 		console.dir('sign in show');
 	};
@@ -1573,13 +1475,14 @@ var App = function () {
 	var changeSignInButtonToMyAccount = function () {
 		signInNavOverlay.children[0].lastChild.data = "My Account";
 		// console.log( showMyAccount )
-		signInNavOverlay.setAttribute('onclick', 'app.showMyAccount()');
+		signInNavOverlay.removeEventListener('click', showSignIn);
+		signInNavOverlay.addEventListener('click', showMyAccount);
 	};
 
 	var signIn = function () {
 
 		// set the sign in button disabled
-		h2.setAttribute('onclick', '');
+		h2.removeEventListener('click', signIn);
 		h2.classList.remove('button');
 
 		var credentials = {};
@@ -1625,10 +1528,10 @@ var App = function () {
 		if (signInForm.email.value !== '') {
 			if (signInForm.password.value.length >= 6) {
 				h2.classList.add('button');
-				h2.setAttribute('onclick', 'signIn()');
+				h2.addEventListener('click', signIn);
 			} else {
 				h2.classList.remove('button');
-				h2.setAttribute('onclick', '');
+				h2.removeEventListener('click', signIn);
 			}
 		}
 	};
@@ -1637,12 +1540,20 @@ var App = function () {
 		h2.focus();
 	};
 
+	var passWordElement = document.getElementById('password');
+	passWordElement.addEventListener('keyup', loginLen);
+	passWordElement.addEventListener('blur', selectSignInButton);
+
+	// signInNavOverlay.addEventListener( 'click', showSignIn );
+
 	var signOut = function () {
 		closeNav();
 		ref.unauth();
 
 		signInNavOverlay.children[0].lastChild.data = "Sign In";
-		signInNavOverlay.setAttribute('onclick', 'showSignIn()');
+		signInNavOverlay.removeEventListener('click', showMyAccount);
+		signInNavOverlay.addEventListener('click', showSignIn);
+		// signInNavOverlay.setAttribute( 'onclick', 'showSignIn()' );
 		setTimeout(function () {
 			showError(16);
 		}, 300);
@@ -1650,9 +1561,10 @@ var App = function () {
 
 	this.signOut = signOut;
 
-	var dismissError = function () {
+	var dismissError = document.getElementById('dismiss-error');
+	dismissError.addEventListener('click', function () {
 		errorContainer.classList.remove('visible');
-	};
+	});
 
 	var resetLoginFields = function () {
 		var len = signInForm.length;
@@ -2579,7 +2491,7 @@ var App = function () {
 			setUpEventItem(evt);
 		}
 
-		getSingleEventDimensions();
+		// getSingleEventDimensions();
 		spinner.hide();
 	};
 
@@ -2735,10 +2647,11 @@ var App = function () {
 		originalElement.classList.add('visibly', 'visible');
 	};
 
+	var o = document.getElementById('effect');
 	var loadSingleEvent = function () {
 
-		var o = document.getElementById('effect');
-		o.classList.add('visible');
+		EM.show(o);
+		// o.classList.add( 'visible' );
 		/// create here a css class that is going to be hiding the element
 		// remember to remove the visible and hide classes at the end of the effect
 		// o.classList.add( 'hide' );
@@ -2794,7 +2707,8 @@ var App = function () {
 
 		if (i.length !== 0) {
 
-			searchNotification.classList.add('visible');
+			EM.show(searchNotification);
+			// searchNotification.classList.add( 'visible' );
 
 			i.map(function (index) {
 
@@ -2828,6 +2742,11 @@ var App = function () {
 			saerchInput.value = '';
 		}
 	};
+	var clearSearch = document.getElementById('clear-search');
+
+	clearSearch.addEventListener('click', function () {
+		clearSearchResults();
+	});
 
 	var searchInput = document.getElementById('search-input');
 	var search = function () {
@@ -2846,6 +2765,8 @@ var App = function () {
 
 		appendSearchResults(indexes);
 	};
+
+	searchInput.addEventListener('keyup', search);
 
 	var loadEvents = function () {
 
@@ -2879,6 +2800,8 @@ var App = function () {
 			var dimensions = getSingleEventDimensions();
 			var height = dimensions.height;
 			var width = dimensions.height;
+
+			if (width > 480) {}
 
 			Array.prototype.forEach.call(elements, function (el) {
 
@@ -2987,7 +2910,7 @@ var App = function () {
 					var arr = events[id]['guests'].push(ref.getAuth().uid);
 
 					var obj = {};
-					obj['guest-count'] = gAr.length;
+					obj['guest-count'] = arr.length;
 					obj['guests'] = arr;
 					ref.child('events/public').child(id).update(obj, function (error) {
 						if (error) {
@@ -3023,6 +2946,8 @@ var App = function () {
 
 		// update the firebase reference
 	};
+	var attendEventElement = document.getElementById('attend-event');
+	attendEventElement.addEventListener('click', attendEvent);
 
 	var shareViaEmail = function (ID) {
 
@@ -3041,6 +2966,33 @@ var App = function () {
 
 		window.open("mailto:xyz@abc.com?subject=Checkout This Event!&body=Hey, don't be shy and joing us at this '" + name + "' event! ---> " + url);
 	};
+
+	var emailGuestsElement = document.getElementById('email-guests');
+	emailGuestsElement.addEventListener('click', emailGuests);
+
+	if (ref.getAuth()) {
+		signInNavOverlay.children[0].lastChild.data = "My Account";
+		signInNavOverlay.addEventListener('click', showMyAccount);
+		// signInNavOverlay.setAttribute( 'onclick', 'app.showMyAccount()' );
+
+		// reauthenticate
+		ref.authWithCustomToken(ref.getAuth().token, function (error, data) {
+			if (!error) {
+				console.log('AUTHENTICATED');
+			}
+		});
+
+		var interval = 60000 * 60 * 23;
+		setInterval(function () {
+			ref.authWithCustomToken(ref.getAuth().token, function (error, data) {
+				if (!error) {
+					console.log('horay');
+				}
+			});
+		}, interval);
+	} else {
+		signInNavOverlay.addEventListener('click', showSignIn);
+	}
 };
 
 var app = new App();

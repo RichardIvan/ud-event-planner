@@ -50,8 +50,8 @@
             </ul>
             <div class="buttons">
               <ul class="btns">
-                <li onclick="attendEvent()">I'm attending!</li>
-                <li onclick="emailGuests()">Share Event</li>
+                <li id="attend-event">I'm attending!</li>
+                <li id="email-guests">Share Event</li>
               </ul>
             </div>
 
@@ -84,8 +84,8 @@
         <div>
 
         <!-- might not need search form id -->
-          <form id="search-form" action="#" onsubmit="event.preventDefault(); onSearch()">
-            <input id="search-input" placeholder="Search Events" type="search" onkeyup="search()">
+          <form id="search-form" action="#" onsubmit="event.preventDefault()">
+            <input id="search-input" placeholder="Search Events" type="search">
           </form>
           </div>
         <div>
@@ -98,7 +98,7 @@
       <section id="distance-nav">
         <div id="search-notification">
           <h2>Search Results</h2>
-          <i id="clear-search" onclick="clearSearchResults()" class="fa fa-times"></i>
+          <i id="clear-search" class="fa fa-times"></i>
         </div>
         <ul>
           <li class="nearby-button"><a href="#nearby">Nearby</a><div class="buttons-separator"></div><div class="buttons-separator"></div></li>
@@ -142,7 +142,7 @@
 
     <div id="error-container">
         <div><p>Error</p></div>
-        <div onclick="dismissError()"><a href="#">Dismiss</a></div>
+        <div id="dismiss-error"><a href="#">Dismiss</a></div>
       </div>
 
     <section id="overlay">
@@ -239,8 +239,8 @@
         <div class="footer">
           <div class="cancel-button"><a href="#"><p>Cancel</p></a><div class="buttons-separator"></div></div>
           <div>
-            <div class="next-button" onclick="focusNextElement()"><a href="#"><p>Next</p></a></div>
-            <div class="submit-button" onclick="submitNewAccount()"><a href="#"><p>Confirm</p></a></div>
+            <div id="next-button"><a href="#"><p>Next</p></a></div>
+            <div id="submit-button" onclick="submitNewAccount()"><a href="#"><p>Confirm</p></a></div>
           </div>
 
         </div>
@@ -310,7 +310,7 @@
           <label for="email" >Email</label>
           <input id="email" type="email">
           <label for="password">Password</label>
-          <input id="password" type="password" onkeyup="loginLen()" onblur="selectSignInButton()">
+          <input id="password" type="password">
         </form>
         <a id="sign-up-button" href="#">Sign Up</a>
       </div>
@@ -327,7 +327,7 @@
         </div>
         <div class="menu-items">
           <ul>
-            <li id="sign-in" onclick="showSignIn()"><a href="#"><i class="fa fa-user"></i>Sign In</a></li>
+            <li id="sign-in"><a href="#"><i class="fa fa-user"></i>Sign In</a></li>
             <li id="sign-out" onclick="app.signOut()"><a href="#"><i class="fa fa-sign-out"></i>Logout</a></li>
           </ul>
         </div>
