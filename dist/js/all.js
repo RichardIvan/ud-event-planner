@@ -10,6 +10,10 @@ var App = function () {
 
 	var ref = new Firebase('https://event-creator.firebaseio.com/');
 
+	// var Element = function( id ) {
+	// 	var el = document.getElementById( id );
+	// }
+
 	var FloatingActionButton = function () {
 		var button = document.getElementById('fa');
 		button.addEventListener('click', function (e) {
@@ -43,8 +47,22 @@ var App = function () {
 
 	var FAB = new FloatingActionButton();
 
-	var main = document.getElementById('main');
-	var overlay = document.getElementById('overlay');
+	var Main = function () {
+
+		var el = document.getElementById('main');
+
+		this.show = function () {
+			el.classList.add('visible');
+		};
+
+		this.hide = function () {
+			el.classList.remove('visible');
+		};
+	};
+
+	var mainSection = new Main();
+
+	// var overlay = document.getElementById( 'overlay' );
 	var body = document.getElementsByTagName('body')[0];
 	var style = window.getComputedStyle(body, null).getPropertyValue('font-size');
 	var bodyHeight = body.clientHeight;
@@ -234,7 +252,7 @@ var App = function () {
 
 	if (ref.getAuth()) {
 		signInNavOverlay.children[0].lastChild.data = "My Account";
-		signInNavOverlay.setAttribute('onclick', 'showMyAccount()');
+		signInNavOverlay.setAttribute('onclick', 'app.showMyAccount()');
 
 		// reauthenticate
 		ref.authWithCustomToken(ref.getAuth().token, function (error, data) {
@@ -259,7 +277,8 @@ var App = function () {
 		createAccount.querySelector('.next-button').setAttribute('onclick', 'focusNextElement()');
 
 		createAccount.classList.add('aside');
-		main.classList.add('visible');
+
+		mainSection.show();
 
 		setTimeout(function () {
 			// remove all the classes
@@ -762,8 +781,7 @@ var App = function () {
 
 			setTimeout(function () {
 				FAB.shrink();
-				// faButton.classList.remove( 'expanded' );
-				main.classList.remove('visible');
+				mainSection.hide();
 			}, 300);
 		}, 200);
 	};
@@ -1410,7 +1428,7 @@ var App = function () {
 			}, 200);
 
 			setTimeout(function () {
-				main.classList.remove('visible');
+				mainSection.hide();
 			}, 300);
 		}, 100);
 	};
@@ -1472,6 +1490,8 @@ var App = function () {
 		}
 	};
 
+	this.hideMyAccount = hideMyAccount;
+
 	var myEventsLoaded = false;
 	var showMyAccount = function () {
 
@@ -1480,7 +1500,7 @@ var App = function () {
 		overlay.classList.add('visible');
 		myAccountSection.classList.add('visible');
 		eventViewClose.classList.add('visible');
-		eventViewClose.setAttribute('onclick', 'hideMyAccount()');
+		eventViewClose.setAttribute('onclick', 'app.hideMyAccount()');
 
 		if (!myEventsLoaded) {
 
@@ -1546,9 +1566,14 @@ var App = function () {
 		});
 	};
 
+	console.log(showMyAccount);
+	this.showMyAccount = showMyAccount;
+	console.log(this.showMyAccount);
+
 	var changeSignInButtonToMyAccount = function () {
 		signInNavOverlay.children[0].lastChild.data = "My Account";
-		signInNavOverlay.setAttribute('onclick', 'showMyAccount()');
+		// console.log( showMyAccount )
+		signInNavOverlay.setAttribute('onclick', 'app.showMyAccount()');
 	};
 
 	var signIn = function () {
@@ -1622,6 +1647,8 @@ var App = function () {
 			showError(16);
 		}, 300);
 	};
+
+	this.signOut = signOut;
 
 	var dismissError = function () {
 		errorContainer.classList.remove('visible');

@@ -312,7 +312,7 @@
           <label for="password">Password</label>
           <input id="password" type="password" onkeyup="loginLen()" onblur="selectSignInButton()">
         </form>
-        <a onclick="signInToSignUpTransition()" href="#">Sign Up</a>
+        <a id="sign-up-button" href="#">Sign Up</a>
       </div>
       <div onclick="hideSignIn()">
 
@@ -328,7 +328,7 @@
         <div class="menu-items">
           <ul>
             <li id="sign-in" onclick="showSignIn()"><a href="#"><i class="fa fa-user"></i>Sign In</a></li>
-            <li id="sign-out" onclick="signOut()"><a href="#"><i class="fa fa-sign-out"></i>Logout</a></li>
+            <li id="sign-out" onclick="app.signOut()"><a href="#"><i class="fa fa-sign-out"></i>Logout</a></li>
           </ul>
         </div>
         <div class="filler">
