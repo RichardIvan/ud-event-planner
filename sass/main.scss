@@ -39,7 +39,7 @@ body {
 }
 
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 425px) {
 
 
     body > .event-item.hide {
@@ -2103,5 +2103,152 @@ body {
             }
         }
     }
+
+}
+
+    
+@media screen and (min-width: 426px) {
+        
+    body > * {
+        display: none;
+    }
+
+    html, body {
+        display: block;
+    }
+
+    body {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        // display: block;
+        position: relative;
+    }
+
+    #main {
+        display: none;
+    }
+
+    html > body > #map {
+        display: block !important;
+        position: relative;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        height: 100%;
+        width: 100%;
+        // bottom: 0;
+    }
+
+    #info.opened {
+
+        width: 25em;
+        height: 14em;
+        transition: all .3s ease-in-out;
+
+        .event-item {
+            display: block;
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+
+        .expand-button {
+            height: 1em;
+        }
+
+    }
+
+    #info {
+        position: fixed;
+        height: 3em;
+        width: 3em;
+        display: block;
+        top: 2em;
+        right: 2em;
+        background: red;
+
+        overflow: hidden;
+
+        .container {
+            z-index: 10;
+
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 1em;
+            left: 0;
+
+        }
+
+
+        .event-item {
+            display: none;
+        }
+
+        .event-info, .item {
+            height: 100%;
+            width: 100%;
+        }
+    
+        .event-info {
+            background-image: none;
+            background: grey;
+
+            h2 {
+                padding-top: 1em;
+                padding-left: 1em;
+            }
+
+            ul {
+                position: absolute;
+                bottom: .8em;
+                left: 1em;
+
+                list-style: none;
+                padding-left: 0;
+            }
+
+            .share-icon {
+                position: absolute;
+
+                bottom: 1em;
+                right: 1em;
+            }
+
+            #attend-event {
+                position: absolute;
+                top: 1em;
+                right: 1em;
+            }
+        }
+
+        .expand-button {
+            z-index: 10;
+
+            position: absolute;
+            display: block;
+            height: 0em;
+            bottom: 0;
+            width: 100%;
+
+            text-align: center;
+
+            background: white;
+
+        }
+
+        h2 {
+            margin: 0;
+        }
+    }
+
+    // #map > * {
+    //     display: block;
+    // }
 
 }

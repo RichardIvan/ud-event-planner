@@ -578,106 +578,106 @@ var App = function() {
 
 
 
-	var extractEventItem = function( elements ) {
-		var elements = elements;
-		var len = elements.length;
+	// var extractEventItem = function( elements ) {
+	// 	var elements = elements;
+	// 	var len = elements.length;
 
-		for ( var i = 0; i < len; i++ ) {
-			var element = elements[i];
-			var classList = element.classList;
-			if ( classList.contains('event-item') ) {
-				element.style.transition = 'all .3s ease-in-out';
-				element.style.top = 0 + 'px';
-				// element.classList.add( 'step1', 'step2', 'step3' );
-				console.dir( element );
-				var top = element.offsetTop;
-				var left = element.offsetLeft;
+	// 	for ( var i = 0; i < len; i++ ) {
+	// 		var element = elements[i];
+	// 		var classList = element.classList;
+	// 		if ( classList.contains('event-item') ) {
+	// 			element.style.transition = 'all .3s ease-in-out';
+	// 			element.style.top = 0 + 'px';
+	// 			// element.classList.add( 'step1', 'step2', 'step3' );
+	// 			console.dir( element );
+	// 			var top = element.offsetTop;
+	// 			var left = element.offsetLeft;
 
-				element.style.position = 'relative';
+	// 			element.style.position = 'relative';
 
-				var sum = -top + left;
-				element.style.top = sum + 'px';
+	// 			var sum = -top + left;
+	// 			element.style.top = sum + 'px';
 
-				console.dir( element );
+	// 			console.dir( element );
 
-				var text = element.querySelector( '.event-info' );
-				var map = element.querySelector( '.map-image' );
-				var border = element.querySelector( '.bottom-border' );
+	// 			var text = element.querySelector( '.event-info' );
+	// 			var map = element.querySelector( '.map-image' );
+	// 			var border = element.querySelector( '.bottom-border' );
 
-				map.classList.add( 'invisible' );
-				text.classList.add( 'invisible' );
-				border.classList.add( 'invisible' );
-
-
-
-
-				//next step is to expand width,
-				// this can be doen with class
-
-				// then we need to increase the height by 'left'
-				// and decrease top by 'left'
-
-				// var map = element.querySelector( '.map-image' );
-				// map.classList.add( 'center' );
-
-				// capture the width of the window
-				//capture the width of the element
-				// substract these values
-				// divide the remainder by two ... that is the margin top and left
-				// for the event-overlay
-
-				// capture height
-
-
-				setTimeout( function() {
-
-
-					var el = {};
-					var img = {};
-					var elImg = {};
-
-					el.height = element.offsetHeight;
-					// width
-					el.width = element.offsetWidth;
-					///top position
-					el.topMargin = element.offsetTop;
-					// left position
-					el.leftMargin = element.offsetLeft;
-
-
-					var eventOverlay = document.getElementById( 'event-overlay' );
-					eventOverlay.classList.add( 'expand1' );
-					// eventOverlay.classList.add(  );
-					element.classList.add( 'expand' );
+	// 			map.classList.add( 'invisible' );
+	// 			text.classList.add( 'invisible' );
+	// 			border.classList.add( 'invisible' );
 
 
 
-					var sum = parseInt( element.style.top ) - element.offsetLeft;
+
+	// 			//next step is to expand width,
+	// 			// this can be doen with class
+
+	// 			// then we need to increase the height by 'left'
+	// 			// and decrease top by 'left'
+
+	// 			// var map = element.querySelector( '.map-image' );
+	// 			// map.classList.add( 'center' );
+
+	// 			// capture the width of the window
+	// 			//capture the width of the element
+	// 			// substract these values
+	// 			// divide the remainder by two ... that is the margin top and left
+	// 			// for the event-overlay
+
+	// 			// capture height
 
 
-					setTimeout( function() {
-						element.style.top = sum + 'px';
-						// eventOverlay.classList.add( 'expand2' );
-						// element.classList.add( 'expand' );
-						setTimeout( function() {
-							element.style.position = '';
-							element.style.top = '';
-							map.classList.remove( 'invisible' );
-							text.classList.remove( 'invisible' );
-							border.classList.remove( 'invisible' );
-							element.classList.remove( 'expand' );
-						}, 2000 )
-					}, 100 )
+	// 			setTimeout( function() {
 
 
-				}, 600)
+	// 				var el = {};
+	// 				var img = {};
+	// 				var elImg = {};
 
-				break;
-			}
-		}
+	// 				el.height = element.offsetHeight;
+	// 				// width
+	// 				el.width = element.offsetWidth;
+	// 				///top position
+	// 				el.topMargin = element.offsetTop;
+	// 				// left position
+	// 				el.leftMargin = element.offsetLeft;
 
 
-	}
+	// 				var eventOverlay = document.getElementById( 'event-overlay' );
+	// 				eventOverlay.classList.add( 'expand1' );
+	// 				// eventOverlay.classList.add(  );
+	// 				element.classList.add( 'expand' );
+
+
+
+	// 				var sum = parseInt( element.style.top ) - element.offsetLeft;
+
+
+	// 				setTimeout( function() {
+	// 					element.style.top = sum + 'px';
+	// 					// eventOverlay.classList.add( 'expand2' );
+	// 					// element.classList.add( 'expand' );
+	// 					setTimeout( function() {
+	// 						element.style.position = '';
+	// 						element.style.top = '';
+	// 						map.classList.remove( 'invisible' );
+	// 						text.classList.remove( 'invisible' );
+	// 						border.classList.remove( 'invisible' );
+	// 						element.classList.remove( 'expand' );
+	// 					}, 2000 )
+	// 				}, 100 )
+
+
+	// 			}, 600)
+
+	// 			break;
+	// 		}
+	// 	}
+
+
+	// }
 
 	var eventItems = document.getElementsByClassName( 'event-item' );
 
@@ -737,7 +737,8 @@ var App = function() {
 		EM.aClick( 'submit-button', submitNewEvent );
 		EM.aClick( 'next-button', focusNextElementInNewEvent );
 
-		overlay.classList.add( 'visible' );
+		EM.show( overlay );
+		// overlay.classList.add( 'visible' );
 		newEventContainer.classList.add( 'visibly' );
 
 		EM.show( newAccountHeader );
@@ -797,9 +798,11 @@ var App = function() {
 		var flashError = function( text ) {
 			// set inner text
 			p.innerText = text;
-			errorContainer.classList.add( 'visible' );
+			EM.show( errorContainer );
+			// errorContainer.classList.add( 'visible' );
 			setTimeout( function() {
-				errorContainer.classList.remove( 'visible' );
+				EM.hide( errorContainer );
+				// errorContainer.classList.remove( 'visible' );
 			}, 3000 );
 		}
 
@@ -1606,7 +1609,8 @@ var App = function() {
 		fadedOverlay.removeEventListener( 'click', hideSignIn );
 		// fadedOverlay.setAttribute( 'onclick', '' );
 		fadedOverlay.classList.remove( 'opened' );
-		signInOverLay.classList.remove( 'visible' );
+		EM.show( signInOverLay );
+		// signInOverLay.classList.remove( 'visible' );
 		console.dir( 'sign in hide');
 	}
 
@@ -1736,7 +1740,8 @@ var App = function() {
 
 	var dismissError = document.getElementById( 'dismiss-error' );
 	dismissError.addEventListener( 'click', function() {
-		errorContainer.classList.remove( 'visible' );
+		EM.hide( errorContainer );
+		// errorContainer.classList.remove( 'visible' );
 	})
 
 	var resetLoginFields = function() {
@@ -2830,7 +2835,7 @@ var App = function() {
 
 		}
 
-		// getSingleEventDimensions();
+		getSingleEventDimensions();
 		spinner.hide();
 
 	}
@@ -3159,13 +3164,197 @@ var App = function() {
 			} else {
 				events = {};
 			}
-			
+
 		})
 	}
 	loadEvents();
 
+	var Info = function() {
+		var infoElement = document.getElementById( 'info' );
+
+		this.show = function() {
+			infoElement.classList.add( 'opened' );
+		}
+	}
+	var info = new Info();
+
+	var GoogleMap = function() {
+
+		var self = this;
+		this.map;
+
+		this.load = function() {
+			
+			if ( !this.map ) {
+				console.log( 'LOADING GOOGLE MAP!' );
+
+
+				this.map = new google.maps.Map(document.getElementById('map'), {
+					center: {lat: u.getUserLoation().lat, lng: u.getUserLoation().lng },
+					zoom: 8
+				});
+
+				console.log( events );
+
+				var keys = Object.keys( events );
+
+				keys.map( function( key ) {
+
+					var latLng = {}
+					latLng.lat = events[key]['event-location-data'].lat;
+					latLng.lng = events[key]['event-location-data'].lng;
+					var marker = new google.maps.Marker({
+						position: latLng,
+						map: self.map,
+						animation: google.maps.Animation.DROP
+					});
+					marker.addListener( 'click', function() {
+						self.map.setCenter( latLng );
+						info.show( key );
+						console.log( key );
+					})
+
+					// console.log( marker );
+
+					// markers.push( marker );
+				})
+
+				Array.prototype.map.call( events, function( evt ) {
+					console.log( evt );
+				});
+
+				// events.map( function( evt ) {
+				// 	console.log( evt );
+				// })
+
+			}
+
+		}
+
+		// this.centerMap = function( latLng ) {
+		// 	this.map
+		// }
+
+	}
+
+	var M = new GoogleMap();
+
+	var mappy;
+	var markers = [];
+	var loadGoogleMap = function() {
+
+		
+
+		// function initMap() {
+
+		// }
+
+		// var url = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk&callback=initMap";
+		// var script = document.createElement( 'script' );
+		// script.type = 'text/javascript';
+		// script.setAttribute( 'async', '' );
+		// script.setAttribute( 'defer', '' );
+		// script.src = url;
+		// body.appendChild( script );
+
+	}
+
+	var EventsManager = function() {
+		this.getEventLocation = function( id ) {
+			var obj = {};
+			obj.lat = events[id]['event-location-data'].lat;
+			obj.lng = events[id]['event-location-data'].lng;
+			return obj;
+		}
+	}
+
+	var EVT = new EventsManager();
+
+	var LargeEventsContainer = function() {
+		var container = document.getElementById( 'info' );
+		var ElementToAppendTo = container.children[0];
+		EM.aClick( 'info', function() {
+
+			container.classList.add( 'opened' );
+
+		})
+
+		var loaded = false;
+
+		this.load = function() {
+
+			if ( !loaded ) {
+				loaded = true;
+
+				var eventElements = document.getElementsByClassName( 'event-item' );
+
+				Array.prototype.map.call( eventElements, function( element, index ) {
+
+					if ( index !== 0 ) {
+						// console.log( index );
+						// console.log( element );
+						// console.log( element.style );
+						// console.log( element.style.backgroundImage );
+						// element.style.backgroundImage = '';
+
+						var clone = element.cloneNode( true );
+						// clone.style.backgroundImage = '';
+						// console.log( element.style.backgroundImage );
+						clone.children[0].setAttribute( 'style', '' );
+						// // EM.aClick( )
+						// element.removeEventListener( 'click', function() {
+						// 	animateItem( element );
+						// });
+						clone.addEventListener( 'click', function() {
+
+							var id = clone.getAttribute( 'data-id' )
+
+							M.map.setCenter( EVT.getEventLocation( id ) );
+						})
+
+						ElementToAppendTo.appendChild( clone );
+					}
+
+				})
+
+			}
+
+		}
+
+	}
+	var EC = new LargeEventsContainer();
+
+	var body = document.getElementsByTagName( 'body' )[0];
+	var processResize = function() {
+
+		clearTimeout( resizeTimeout );
+		resizeTimeout = setTimeout( function() {
+
+			var width = body.offsetWidth;
+
+			// console.log( dimensions );
+
+			// var body = document.getElementsByTagName( 'body' )[0];
+			// console.log( body );
+
+			if ( width >= 426 ) {
+
+				console.log( 'TIME TO LOAD GOOGLE MAP!' );
+				M.load();
+				EC.load();
+
+			} else {
+
+				resetImagesOnElements()
+
+			}
+
+		}, 500 );
+
+	}
 
 	var resizeTimeout;
+
 
 	var resetImagesOnElements = function() {
 
@@ -3174,70 +3363,24 @@ var App = function() {
 		// elements.forEach( function( el ) {
 		// 	console.log( el );
 		// });
-		clearTimeout( resizeTimeout );
-		resizeTimeout = setTimeout( function() {
-
-			var dimensions = getSingleEventDimensions();
-			var height = dimensions.height;
-			var width = dimensions.height;
-
-			if ( width > 480 ) {
-
-				
-				
-			}
-
-			Array.prototype.forEach.call(elements, function( el ){
-
-				var id = el.getAttribute( 'data-id' );
-
-				if ( id !== null ) {
-
-					fillElementWithData( el, id );
-
-				// 	var eventInfo = events[id];
-
-				// 	var lat = eventInfo['event-location-data'].lat;
-				// 	var lng = eventInfo['event-location-data'].lng;
-
-				// 	var centerLat = lat - .0002;
-				// 	var centerLng = lng - .0009;
-
-				// 	// var clone = eventItem.cloneNode( true );
-
-				// 	// clone.data = info;
-
-				// 	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=' + width + 'x' + height + '&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
-				// 	// var url = 
-
-				// 	console.log( url );
-
-				// 	el.style.backgroundImage = "url(" + url + ")";
-				}
-		    	
-			});
-
-		}, 500 );
-
 		
 
-		// var e = elements.map( function( element ) {
+		// var dimensions = getSingleEventDimensions();
+		// var height = dimensions.height;
+		// var width = dimensions.height;
 
-		// 	var lat = element.data['event-location-data'].lat;
-		// 	var lng = element.data['event-location-data'].lng;
 
-		// 	var centerLat = lat - .0002;
-		// 	var centerLng = lng - .0009;
+		Array.prototype.forEach.call(elements, function( el ){
 
-		// 	// var clone = eventItem.cloneNode( true );
+			var id = el.getAttribute( 'data-id' );
 
-		// 	// clone.data = info;
+			if ( id !== null ) {
 
-		// 	var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + centerLat + ',' + centerLng + '&zoom=17&markers=color:red%7C' + lat + ',' + lng + '&size=' + w + 'x' + h + '&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
-		// 	// var url = 
-		// 	element.backgroundImage = "url(" + url + ")";
+				fillElementWithData( el, id );
 
-		// });
+			}
+
+		});
 
 	}
 
@@ -3270,7 +3413,7 @@ var App = function() {
 	// UTILITY
 	// 
 	// 
-	window.onresize = resetImagesOnElements;
+	window.onresize = processResize;
 
 
 	var attendEvent = function() {
