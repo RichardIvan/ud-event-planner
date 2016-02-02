@@ -2156,9 +2156,6 @@ body {
 
         .event-item {
             display: block;
-            position: relative;
-            height: 100%;
-            width: 100%;
         }
 
         .expand-button, .close-button {
@@ -2200,6 +2197,8 @@ body {
 
         .event-item {
             display: none;
+            position: relative;
+            height: 13em;
         }
 
         .event-info, .item {
