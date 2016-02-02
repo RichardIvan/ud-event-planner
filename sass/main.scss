@@ -2157,8 +2157,8 @@ body {
             width: 100%;
         }
 
-        .expand-button {
-            height: 1em;
+        .expand-button, .close-button {
+            display: block;
         }
 
     }
@@ -2227,16 +2227,28 @@ body {
             }
         }
 
-        .expand-button {
-            z-index: 10;
-
+        .close-button, .expand-button {
+            
             position: absolute;
-            display: block;
-            height: 0em;
-            bottom: 0;
-            width: 100%;
+            z-index: 10;
+            display: none;
 
             text-align: center;
+
+        }
+
+        .close-button {
+            top: 0.5em;
+            right: 0.5em;
+            font-size: 2em;
+            // width: 100%;
+        }
+
+        .expand-button {
+
+            height: 1em;
+            bottom: 0;
+            width: 100%;
 
             background: white;
 
