@@ -2890,9 +2890,14 @@ var App = function () {
 	var LargeEventsContainer = function () {
 		var container = document.getElementById('info');
 		var ElementToAppendTo = container.children[0];
-		EM.aClick('info', function () {
-
+		var openButton = container.children[3];
+		console.log(openButton);
+		var closeButton = container.children[1];
+		openButton.addEventListener('click', function () {
 			container.classList.add('opened');
+		});
+		closeButton.addEventListener('click', function () {
+			container.classList.remove('opened');
 		});
 
 		var loaded = false;

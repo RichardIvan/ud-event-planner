@@ -2148,7 +2148,11 @@ body {
 
         width: 25em;
         height: 14em;
-        transition: all .3s ease-in-out;
+        
+
+        .container {
+            display: block;
+        }
 
         .event-item {
             display: block;
@@ -2159,6 +2163,10 @@ body {
 
         .expand-button, .close-button {
             display: block;
+        }
+
+        .open-button {
+            display: none;
         }
 
     }
@@ -2174,9 +2182,13 @@ body {
 
         overflow: hidden;
 
+        transition: all .3s ease-in-out;
+
         .container {
             z-index: 10;
-
+    
+            display: none;
+    
             position: absolute;
             top: 0;
             right: 0;
@@ -2252,6 +2264,14 @@ body {
 
             background: white;
 
+        }
+
+        .open-button {
+            z-index: 10;
+            text-align: center;
+            height: 100%;
+            font-size: 1.5em;
+            padding-top: 0.5em;
         }
 
         h2 {
