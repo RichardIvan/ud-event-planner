@@ -2144,6 +2144,20 @@ body {
         // bottom: 0;
     }
 
+    #info.opened.expand {
+        height: 42em;
+        transition: height .3s ease-in-out;
+    
+        .container {
+            overflow-y: scroll;
+        }
+        
+        .expand-button > i {
+            transform: rotate( 180deg );
+            transition: transform .3s ease-in-out;
+        }
+    }
+
     #info.opened {
 
         width: 25em;
@@ -2275,6 +2289,10 @@ body {
 
         h2 {
             margin: 0;
+        }
+
+        .head, .content {
+            display: none;
         }
     }
 

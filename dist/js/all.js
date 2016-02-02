@@ -2498,7 +2498,21 @@ var App = function () {
 			setUpEventItem(evt);
 		}
 
-		getSingleEventDimensions();
+		var width = body.offsetWidth;
+
+		// console.log( dimensions );
+
+		// var body = document.getElementsByTagName( 'body' )[0];
+		// console.log( body );
+
+		if (width >= 426) {
+
+			console.log('TIME TO LOAD GOOGLE MAP!');
+			M.load();
+			EC.load();
+		}
+
+		// getSingleEventDimensions();
 		spinner.hide();
 	};
 
@@ -2515,7 +2529,7 @@ var App = function () {
 		} else return false;
 	};
 
-	var fillElementWithData = function (element, id, original) {
+	var fillElementWithData = function (element, id, original, dontAttachEventListeners) {
 
 		var info = events[id];
 
@@ -2578,15 +2592,21 @@ var App = function () {
 				attendingButton.innerText = 'Attending!';
 			} else attendingButton.innerText = 'Attending?';
 		} else {
-			element.addEventListener('click', function () {
-				animateItem(element);
-			});
 
-			var shareIcon = element.querySelector('.share-icon');
-			shareIcon.addEventListener('click', function () {
-				shareViaEmail(id);
-			});
+			if (!dontAttachEventListeners) {
+
+				element.addEventListener('click', function () {
+					animateItem(element);
+				});
+
+				var shareIcon = element.querySelector('.share-icon');
+				shareIcon.addEventListener('click', function () {
+					shareViaEmail(id);
+				});
+			}
 		}
+
+		return element;
 	};
 
 	var eventItem = document.getElementsByClassName('event-item')[0];
@@ -2832,7 +2852,7 @@ var App = function () {
 					});
 					marker.addListener('click', function () {
 						self.map.setCenter(latLng);
-						info.show(key);
+						EC.moveInfoToView(key);
 						console.log(key);
 					});
 
@@ -2888,16 +2908,35 @@ var App = function () {
 	var EVT = new EventsManager();
 
 	var LargeEventsContainer = function () {
+
+		var self = this;
+
 		var container = document.getElementById('info');
 		var ElementToAppendTo = container.children[0];
-		var openButton = container.children[3];
-		console.log(openButton);
+
+		var percentsToMove = '';
+
 		var closeButton = container.children[1];
+		var expandButton = container.children[2];
+		var openButton = container.children[3];
+
+		var eventElements = [];
+
+		var eventKeys;
+
 		openButton.addEventListener('click', function () {
 			container.classList.add('opened');
 		});
 		closeButton.addEventListener('click', function () {
 			container.classList.remove('opened');
+		});
+		expandButton.addEventListener('click', function () {
+			container.classList.toggle('expand');
+			if (container.classList.contains('expand') && ElementToAppendTo.style.transform !== '') {
+				ElementToAppendTo.style.transform = '';
+			} else {
+				ElementToAppendTo.style.transform = percentsToMove;
+			}
 		});
 
 		var loaded = false;
@@ -2907,36 +2946,43 @@ var App = function () {
 			if (!loaded) {
 				loaded = true;
 
-				var eventElements = document.getElementsByClassName('event-item');
+				console.log(events);
+				eventKeys = Object.keys(events);
 
-				Array.prototype.map.call(eventElements, function (element, index) {
+				Array.prototype.map.call(eventKeys, function (id, index) {
 
-					if (index !== 0) {
-						// console.log( index );
-						// console.log( element );
-						// console.log( element.style );
-						// console.log( element.style.backgroundImage );
-						// element.style.backgroundImage = '';
+					// console.log( evt );
 
-						var clone = element.cloneNode(true);
-						// clone.style.backgroundImage = '';
-						// console.log( element.style.backgroundImage );
-						clone.children[0].setAttribute('style', '');
-						// // EM.aClick( )
-						// element.removeEventListener( 'click', function() {
-						// 	animateItem( element );
-						// });
-						clone.addEventListener('click', function () {
+					var clone = originalElement.cloneNode(true);
+					clone = fillElementWithData(clone, id, false, true);
 
-							var id = clone.getAttribute('data-id');
+					clone.children[0].setAttribute('style', '');
 
-							M.map.setCenter(EVT.getEventLocation(id));
-						});
+					clone.addEventListener('click', function () {
 
-						ElementToAppendTo.appendChild(clone);
-					}
+						self.moveInfoToView(id);
+					});
+
+					ElementToAppendTo.appendChild(clone);
+
+					eventElements.push(clone);
 				});
 			}
+		};
+
+		this.moveInfoToView = function (eventID) {
+			var index = eventKeys.indexOf(eventID);
+
+			console.log(index);
+
+			percentsToMove = 'translateY(' + '-' + index * 100 + '%)';
+			ElementToAppendTo.style.transform = percentsToMove;
+
+			console.log(ElementToAppendTo);
+			console.log(ElementToAppendTo.style);
+
+			console.log(ElementToAppendTo.style.transform);
+			// eventElements[ index ].scrollIntoView();
 		};
 	};
 	var EC = new LargeEventsContainer();
