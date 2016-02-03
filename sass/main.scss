@@ -375,7 +375,7 @@ body {
     }
 
     #spinner.show {
-        z-index: 130;
+        z-index: 160;
 
         @-webkit-keyframes rotating {
             from{
@@ -1075,6 +1075,10 @@ body {
             margin: 0 auto;
             text-align: center;
         }
+    }
+
+    #fa .icon i:nth-child( 2 ) {
+        display: none;
     }
 
     #fa.expand-animation {
@@ -1791,7 +1795,7 @@ body {
     }
 
     #sign-in-overlay.visible {
-        z-index: 110;
+        z-index: 150;
         opacity: 1;
 
         transition: opacity 0.3s ease-in-out;
@@ -2024,6 +2028,10 @@ body {
 
     }
 
+    #overlay i {
+        display: none;
+    }
+
     #my-account.visible {
         display: flex;
     }
@@ -2104,6 +2112,12 @@ body {
         }
     }
 
+    #info {
+        display: none;
+    }
+
+    
+
 }
 
     
@@ -2131,9 +2145,16 @@ body {
         display: none;
     }
 
+    html > body > #map.aside {
+        transform: translateX( 320px ) !important;
+        
+    }
+
     html > body > #map {
+        transform: translateX( 0px ) !important;
+        transition: transform 0.3s ease-in-out;
         display: block !important;
-        position: relative;
+        position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
@@ -2142,6 +2163,16 @@ body {
         height: 100%;
         width: 100%;
         // bottom: 0;
+    }
+
+    .info-container {
+        display: block;
+        position: fixed;
+        height: 10em;
+        width: 3em;
+        background: blue;
+        top: 2em;
+        right: 2em;
     }
 
     #info.opened.expand {
@@ -2183,15 +2214,17 @@ body {
     }
 
     #info {
-        position: fixed;
+        position: absolute;
         height: 3em;
         width: 3em;
         display: block;
-        top: 2em;
-        right: 2em;
+        top: 0em;
+        right: 0em;
         background: red;
 
         overflow: hidden;
+
+        z-index: 10;
 
         transition: all .3s ease-in-out;
 
@@ -2296,8 +2329,102 @@ body {
         }
     }
 
+    // #fa {
+    //     position: absolute;
+    //     right: 2em;
+    //     top: 5.5em;
+    //     z-index: 9;
+    //     position: fixed;
+    //     height: 3em;
+    //     width: 3em;
+    //     display: block;
+    //     background: red;
+    //     text-align: center;
+        
+
+    //     i {
+    //         padding-top: 0.5em;
+    //         font-size: 1.5em;
+    //     }
+    // }
+
+    // #fa > .icon > i:nth-child( 1 ) {
+    //     display:none;
+    // }
+
+    // #overlay {
+    //     position: absolute;
+    //     right: 2em;
+    //     top: 9em;
+    //     z-index: 9;
+    //     position: fixed;
+    //     height: 3em;
+    //     width: 3em;
+    //     display: block;
+    //     background: red;
+    //     text-align: center;
+        
+    //     section {
+    //         display: none;
+    //     }
+
+    //     i {
+    //         padding-top: 0.5em;
+    //         font-size: 1.5em;
+    //     }
+
+    // }
+
+    // #overlay > i:nth-child( 2 ) {
+    //     display:none;
+    // }
+
+    #side-container.visible {
+        transform: translateX( 0px );
+        
+    }
+
+    #side-container {
+        display: block;
+        height: 100%;
+        width: 320px;
+    
+        background: red;
+        z-index: 15;
+
+        transform: translateX( -320px );
+        transition: transform 0.3s ease-in-out;
+    }
+
     // #map > * {
     //     display: block;
     // }
+
+    .open-new-account-button, .open-new-event-button {
+        display: block;
+        position: relative;
+        z-index: 25;
+        height: 1.5em;
+        width: 100%;
+        margin-top: 0.4em;
+        top: 2em;
+
+        font-size: 1.5em;
+        text-align: center;
+        padding-top: 0.4em;
+    }
+
+    .open-new-account-button {
+
+        background: gold;
+
+    }
+
+    .open-new-event-button {
+        background: purple;
+    }
+
+    .side-container #overlay {
+    }
 
 }

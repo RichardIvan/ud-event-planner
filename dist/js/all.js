@@ -154,7 +154,7 @@ var App = function () {
 	};
 	var myAccountSection = new myAccount();
 
-	// var overlay = document.getElementById( 'overlay' );
+	var overlay = document.getElementById('overlay');
 	var body = document.getElementsByTagName('body')[0];
 	var style = window.getComputedStyle(body, null).getPropertyValue('font-size');
 	var bodyHeight = body.clientHeight;
@@ -1441,7 +1441,7 @@ var App = function () {
 		fadedOverlay.removeEventListener('click', hideSignIn);
 		// fadedOverlay.setAttribute( 'onclick', '' );
 		fadedOverlay.classList.remove('opened');
-		EM.show(signInOverLay);
+		EM.hide(signInOverLay);
 		// signInOverLay.classList.remove( 'visible' );
 		console.dir('sign in hide');
 	};
@@ -2509,7 +2509,7 @@ var App = function () {
 
 			console.log('TIME TO LOAD GOOGLE MAP!');
 			M.load();
-			EC.load();
+			XL.load();
 		}
 
 		// getSingleEventDimensions();
@@ -2521,7 +2521,12 @@ var App = function () {
 
 	var isCurrentUserAttendingEvent = function (id) {
 
+		if (ref.getAuth() === null) {
+			return false;
+		}
+
 		var uid = ref.getAuth().uid;
+
 		var guestIDs = events[id]['guests'];
 
 		if (guestIDs.indexOf(uid) !== -1) {
@@ -2852,7 +2857,7 @@ var App = function () {
 					});
 					marker.addListener('click', function () {
 						self.map.setCenter(latLng);
-						EC.moveInfoToView(key);
+						XL.moveInfoToView(key);
 						console.log(key);
 					});
 
@@ -2907,9 +2912,12 @@ var App = function () {
 
 	var EVT = new EventsManager();
 
-	var LargeEventsContainer = function () {
+	var XLview = function () {
 
 		var self = this;
+
+		var overlayContainer = document.getElementById('overlay');
+		var sideContainer = document.getElementById('side-container');
 
 		var container = document.getElementById('info');
 		var ElementToAppendTo = container.children[0];
@@ -2921,6 +2929,9 @@ var App = function () {
 		var openButton = container.children[3];
 
 		var eventElements = [];
+
+		var sideContainer = document.getElementById('side-container');
+		var mapContainer = document.getElementById('map');
 
 		var eventKeys;
 
@@ -2946,7 +2957,6 @@ var App = function () {
 			if (!loaded) {
 				loaded = true;
 
-				console.log(events);
 				eventKeys = Object.keys(events);
 
 				Array.prototype.map.call(eventKeys, function (id, index) {
@@ -2967,7 +2977,28 @@ var App = function () {
 
 					eventElements.push(clone);
 				});
+
+				// copy #overlay to #side-container
+				sideContainer.appendChild(overlayContainer.cloneNode(true));
+
+				// remove the original overlay element from dom
+				// so there is no id collisions...
+
+				body.removeChild(overlay);
+
+				// reassign IDs
+
+				// wire eventListeners
+				var accButton = document.getElementsByClassName('open-new-account-button')[0];
+				var evtButton = document.getElementsByClassName('open-new-event-button')[0];
+
+				accButton.addEventListener('click', self.openMyAccount);
+				evtButton.addEventListener('click', self.createNewEvent);
 			}
+		};
+
+		this.unload = function () {
+			console.log('please remove and reattach overlay elements to dom, thank you');
 		};
 
 		this.moveInfoToView = function (eventID) {
@@ -2984,8 +3015,24 @@ var App = function () {
 			console.log(ElementToAppendTo.style.transform);
 			// eventElements[ index ].scrollIntoView();
 		};
+
+		var openSideContainer = function () {
+
+			sideContainer.classList.toggle('visible');
+			mapContainer.classList.toggle('aside');
+		};
+
+		this.openMyAccount = function () {
+
+			openSideContainer();
+		};
+
+		this.createNewEvent = function () {
+
+			openSideContainer();
+		};
 	};
-	var EC = new LargeEventsContainer();
+	var XL = new XLview();
 
 	var body = document.getElementsByTagName('body')[0];
 	var processResize = function () {
@@ -3004,7 +3051,7 @@ var App = function () {
 
 				console.log('TIME TO LOAD GOOGLE MAP!');
 				M.load();
-				EC.load();
+				XL.load();
 			} else {
 
 				resetImagesOnElements();
