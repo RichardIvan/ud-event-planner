@@ -212,13 +212,13 @@
             <div class="inputs">
               <div></div>
               <form id="new-account-form" action="" onsubmit="finalCheck" autocomplete="on">
-                <input id="name" placeholder="Name" type="text" required onblur="nameCheck()">
-                <input id="email" placeholder="Email" type="text" required onblur="emailCheck()">
-                <input id="pass" placeholder="Password" onblur="checkPass()" type="password" required>
-                <input id="retype-pass" placeholder="Re-Type Password" onblur="checkPass()" type="password" required>
-                <input id="birthday" placeholder="Birthday - DD/MM/YYYY" type="datetime" required onblur="checkDOB()">
-                <input id="employer" placeholder="Employer" type="text" autocomplete="on" onblur="processEmployer()">
-                <input id="jobtitle" placeholder="Job Title" type="text" onblur="processJobTitle()">
+                <input id="name" placeholder="Name" type="text" required>
+                <input id="email" placeholder="Email" type="text" required >
+                <input id="pass" placeholder="Password" type="password" required>
+                <input id="retype-pass" placeholder="Re-Type Password" type="password" required>
+                <input id="birthday" placeholder="Birthday - DD/MM/YYYY" type="datetime" required>
+                <input id="employer" placeholder="Employer" type="text" autocomplete="on">
+                <input id="jobtitle" placeholder="Job Title">
               </form>
               <div></div>
             </div>
@@ -244,7 +244,7 @@
               <div></div>
               <form id="new-event-form" action="" onsubmit="finalCheck()" autocomplete="on">
                 <input id="event-name" placeholder="Event Name" type="text">
-                <input list="types" id="event-type" placeholder="Event Type" type="text" onblur="processEventType()">
+                <input list="types" id="event-type" placeholder="Event Type" type="text">
                 <datalist id="types">
                   <option value="Birthday">
                   <option value="House Party">
@@ -254,15 +254,15 @@
                   <option value="Anniversary">
                   <option value="Halloween">
                 </datalist>
-                <input id="host" placeholder="Event Host" type="text" onblur="processEventHost()">
-                <input id="event-start-date" placeholder="Event date - DD/MM/YY" type="text" onblur="processEventStartDate()">
-                <input id="event-start-time" placeholder="Start time - HH:MM" type="text" onblur="processEventStartTime()">
-                <input id="event-end-date" placeholder="Event End Date - DD/MM/YY" type="text" onblur="processEventEndDate()">
-                <input id="event-end-time" placeholder="End time - HH:MM" type="text" onblur="processEventEndTime()">
+                <input id="host" placeholder="Event Host" type="text">
+                <input id="event-start-date" placeholder="Event date - DD/MM/YY" type="text">
+                <input id="event-start-time" placeholder="Start time - HH:MM" type="text">
+                <input id="event-end-date" placeholder="Event End Date - DD/MM/YY" type="text">
+                <input id="event-end-time" placeholder="End time - HH:MM" type="text">
                 <input id="google-event-location" placeholder="Place" type="text" autocomplete="on">
 
                 <h3>Private</h3>
-                <div id="privacy-button" onclick="togglePrivacy()">
+                <div id="privacy-button">
                   <div class="button-overlay off"></div>
                   <span>On</span><span>Off</span>
                 </div>

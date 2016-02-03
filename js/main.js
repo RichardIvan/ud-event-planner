@@ -22,6 +22,8 @@ var App = function() {
 
 	var EventManager = function() {
 
+		var self = this;
+
 		var elements = {};
 
 		this.registerElement = function( id ) {
@@ -99,6 +101,39 @@ var App = function() {
 
 			element.classList.remove( 'visible' );
 
+		}
+
+		this.attachEventsToInputs = function() {
+			var newAccountCallbacks = [ nameCheck, emailCheck, checkPass, checkPass, checkDOB, processEmployer, processJobTitle ];
+			var newEventCallbacks = [ processEventName, processEventType, processEventHost, processEventStartDate, processEventStartTime, processEventEndDate, processEventEndTime];
+
+			console.log( newAccountForm );
+			Array.prototype.forEach.call( newAccountForm, function( item, index ) {
+
+				var el = document.getElementById( item.id );
+				console.log( el );
+				var cb = newAccountCallbacks[index];
+				console.log( cb );
+				el.addEventListener('blur', cb );
+
+			})
+
+			console.log( newEventForm );
+			Array.prototype.forEach.call( newEventForm, function( item, index ) {
+
+				if ( index < 7 ) {
+
+					var el = document.getElementById( item.id );
+					
+					var cb = newEventCallbacks[index];
+					
+					el.addEventListener('blur', cb );
+					// EM.aBlur( item.id, newAccountCallbacks[index] );
+				}
+
+			})
+
+			self.aClick( 'privacy-button', togglePrivacy );
 		}
 
 	}
@@ -2475,7 +2510,6 @@ var App = function() {
 
 	};
 
-
 	var initAutocomplete = function() {
 
 		var input = newEventForm['google-event-location'];
@@ -2498,6 +2532,7 @@ var App = function() {
 		})
 
 	}
+	initAutocomplete();
 
 	var privacy = true;
 	var togglePrivacy = function() {
@@ -2848,8 +2883,12 @@ var App = function() {
 
 			console.log( 'TIME TO LOAD GOOGLE MAP!' );
 			M.load();
+
+			// load XLview functionality
 			XL.load();
 
+		} else {
+			EM.attachEventsToInputs();
 		}
 
 		// getSingleEventDimensions();
@@ -3179,6 +3218,8 @@ var App = function() {
 
 	searchInput.addEventListener( 'keyup', search );
 
+
+	//// THIS IS WHERE THE APPLICATION LOADS!!
 	var loadEvents = function() {
 
 		spinner.show()
@@ -3397,29 +3438,7 @@ var App = function() {
 				// or have a list of functions to be assigned..
 				// when mapping through of using for each
 
-				var newEventCallbacks = [ nameCheck, emailCheck, checkPass, checkPass, checkDOB, processEmployer, processJobTitle ];
-				var newAccountCallbacks = [ processEventName, processEventType, processEventHost, processEventStartDate, processEventStartTime, processEventEndDate, processEventEndTime];
-
-				console.log( newEventForm );
-				Array.prototype.forEach.call( newAccountForm, function( item, index ) {
-
-					var el = document.getElementById( item.id );
-					var cb = newEventCallbacks[index];
-					el.addEventListener('blur', cb );
-
-				})
-
-				Array.prototype.forEach.call( newEventForm, function( item, index ) {
-
-					if ( index < 7 ) {
-
-						var el = document.getElementById( item.id );
-						var cb = newAccountCallbacks[index];
-						el.addEventListener('blur', cb );
-						// EM.aBlur( item.id, newAccountCallbacks[index] );
-					}
-
-				})
+				EM.attachEventsToInputs();
 
 
 				console.log( newAccountForm );
