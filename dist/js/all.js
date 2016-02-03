@@ -1599,19 +1599,21 @@ var App = function () {
 
 	var processEventName = function () {
 
+		console.log('PROCESS EVENT NAME');
+
 		var id = 'event-name';
 		saveInputDataToObject(id, true);
 	};
 
 	var processEventType = function () {
 
-		var id = 'host';
+		var id = 'event-type';
 		saveInputDataToObject(id, true);
 	};
 
 	var processEventHost = function () {
 
-		var id = 'event-type';
+		var id = 'host';
 		saveInputDataToObject(id, true);
 	};
 
@@ -2991,6 +2993,44 @@ var App = function () {
 				// wire eventListeners
 				var accButton = document.getElementsByClassName('open-new-account-button')[0];
 				var evtButton = document.getElementsByClassName('open-new-event-button')[0];
+
+				var resetButton = document.getElementById('resetFields');
+
+				var cancelButton = document.getElementsByClassName('cancel-button')[0];
+
+				var nextButton = document.getElementById('next-button');
+
+				var confirmButton = document.getElementById('submit-button');
+
+				// for each element in new-account form.. assign listener
+				// use switch control flow
+
+				// or have a list of functions to be assigned..
+				// when mapping through of using for each
+
+				var newEventCallbacks = [nameCheck, emailCheck, checkPass, checkPass, checkDOB, processEmployer, processJobTitle];
+				var newAccountCallbacks = [processEventName, processEventType, processEventHost, processEventStartDate, processEventStartTime, processEventEndDate, processEventEndTime];
+
+				console.log(newEventForm);
+				Array.prototype.forEach.call(newAccountForm, function (item, index) {
+
+					var el = document.getElementById(item.id);
+					var cb = newEventCallbacks[index];
+					el.addEventListener('blur', cb);
+				});
+
+				Array.prototype.forEach.call(newEventForm, function (item, index) {
+
+					if (index < 7) {
+
+						var el = document.getElementById(item.id);
+						var cb = newAccountCallbacks[index];
+						el.addEventListener('blur', cb);
+						// EM.aBlur( item.id, newAccountCallbacks[index] );
+					}
+				});
+
+				console.log(newAccountForm);
 
 				accButton.addEventListener('click', self.openMyAccount);
 				evtButton.addEventListener('click', self.createNewEvent);
