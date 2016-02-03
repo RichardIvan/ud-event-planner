@@ -2999,6 +2999,8 @@ var App = function () {
 
 		this.unload = function () {
 			console.log('please remove and reattach overlay elements to dom, thank you');
+			body.appendChild(overlay);
+			sideContainer.removeChild(overlayContainer);
 		};
 
 		this.moveInfoToView = function (eventID) {
