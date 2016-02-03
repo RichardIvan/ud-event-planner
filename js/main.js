@@ -58,6 +58,7 @@ var App = function() {
 				el.clickListeners.map( function( cb ) {
 					el.element.removeEventListener( 'click', cb );
 				})
+				el.clickListeners = [];
 			}
 
 			el.element.addEventListener( 'click', callback );
@@ -136,6 +137,18 @@ var App = function() {
 			})
 
 			self.aClick( 'privacy-button', togglePrivacy );
+
+			var myAccountLogoutButton = document.getElementsByClassName('logout-button')[0];
+			myAccountLogoutButton.addEventListener( 'click', function() {
+				signOut();
+				// closeAccountAndEventOverlay();
+
+				EM.hide( overlay );
+				myAccountSection.hide();
+				XL.hideSideContainer();
+			})
+
+			self.aClick( 'submit-button', submitNewAccount );
 		}
 
 	}
@@ -420,6 +433,7 @@ var App = function() {
 		
 		mainSection.show();
 
+		XL.hideAll();
 
 		setTimeout( function(){
 			// remove all the classes
@@ -1218,6 +1232,10 @@ var App = function() {
 
 								closeAccountAndEventOverlay();
 
+								if ( XL.active ) {
+									XL.hideAll();
+								}
+
 								changeSignInButtonToMyAccount();
 
 								resetFields();
@@ -1466,8 +1484,14 @@ var App = function() {
 		EM.close( navOverlay );
 		EM.close( fadedOverlay );
 
+		// XL.hide()
 		// navOverlay.classList.remove( 'opened' );
 		// fadedOverlay.classList.remove( 'opened' );
+
+		if ( XL.active ) {
+			XL.showNewAccount();
+			return;
+		}
 
 		// overlay left
 		overlay.classList.add( 'from-left' ,'visible' );
@@ -1559,7 +1583,7 @@ var App = function() {
 	}
 
 
-	this.hideMyAccount = hideMyAccount;
+	// this.hideMyAccount = hideMyAccount;
 
 	var myEventsLoaded = false;
 	var showMyAccount = function() {
@@ -1679,9 +1703,9 @@ var App = function() {
 		});
 	}
 
-	console.log( showMyAccount );
-	this.showMyAccount = showMyAccount;
-	console.log( this.showMyAccount );
+	// console.log( showMyAccount );
+	// this.showMyAccount = showMyAccount;
+	// console.log( this.showMyAccount );
 
 	var changeSignInButtonToMyAccount = function() {
 		signInNavOverlay.children[0].lastChild.data = "My Account";
@@ -2513,33 +2537,39 @@ var App = function() {
 	};
 
 	
+	var autoCompleteInput = newEventForm['google-event-location'];
+	var autocomplete;
+	var autocompleteListener;
+	var autocompleteCallback = function() {
+		var place = autocomplete.getPlace();
+		// input.data = place;
 
+		if ( place.types.length > 1 ) {
+			input.value = place.name;
+		} else {
+
+			input.value = place['address_components'][1]['long_name'] + ' ' + place['address_components'][0]['long_name'];
+		}
+
+		var name = input.value;
+		savePlaceData( place, name );
+	}
 
 	var initAutocomplete = function() {
+		console.log( autocompleteListener );
+		if ( autocompleteListener !== undefined ) {
+			google.maps.event.removeListener(autocompleteListener);
+			autocompleteListener = undefined;
+		}
 
-		var input = newEventForm['google-event-location'];
-		var autocomplete = new google.maps.places.Autocomplete(input);
+		autocomplete = new google.maps.places.Autocomplete(autoCompleteInput);
+		// var input = newEventForm['google-event-location'];
+		// var autocomplete = new google.maps.places.Autocomplete(autoCompleteInput);
 
-		autocomplete.addListener( 'place_changed', function() {
-			var place = autocomplete.getPlace();
-			// input.data = place;
-
-			if ( place.types.length > 1 ) {
-				input.value = place.name;
-			} else {
-
-				input.value = place['address_components'][1]['long_name'] + ' ' + place['address_components'][0]['long_name'];
-			}
-
-			var name = input.value;
-			savePlaceData( place, name );
-
-		})
+		autocompleteListener = google.maps.event.addListener( autocomplete, 'place_changed', autocompleteCallback );
 
 	}
-	console.log( self );
 	self.initAutocomplete = initAutocomplete;
-	console.log( self.initAutocomplete );
 
 	var privacy = true;
 	var togglePrivacy = function() {
@@ -2739,6 +2769,9 @@ var App = function() {
 			if ( allTimesAreValid() ) {
 
 				closeAccountAndEventOverlay();
+				if ( XL.active ) {
+					XL.hideAll();
+				}
 
 				newEventObject['privacy'] = privacy;
 				newEventObject['guest-count'] = 1;
@@ -2894,10 +2927,9 @@ var App = function() {
 			// load XLview functionality
 			XL.load();
 
-		} else {
-			EM.attachEventsToInputs();
 		}
 
+		EM.attachEventsToInputs();
 		// getSingleEventDimensions();
 		spinner.hide();
 
@@ -3386,6 +3418,7 @@ var App = function() {
 			}
 		})
 
+		this.active = false;
 
 		var loaded = false;
 
@@ -3393,6 +3426,7 @@ var App = function() {
 
 			if ( !loaded ) {
 				loaded = true;
+				this.active = true;
 
 				eventKeys = Object.keys( events );
 
@@ -3417,12 +3451,12 @@ var App = function() {
 				})
 
 				// copy #overlay to #side-container
-				sideContainer.appendChild( overlayContainer.cloneNode( true ) );
+				// sideContainer.appendChild( overlayContainer.cloneNode( true ) );
 
 				// remove the original overlay element from dom
 				// so there is no id collisions...
 
-				body.removeChild( overlay );
+				// body.removeChild( overlay );
 
 
 				// reassign IDs
@@ -3431,13 +3465,13 @@ var App = function() {
 				var accButton = document.getElementsByClassName( 'open-new-account-button' )[0];
 				var evtButton = document.getElementsByClassName( 'open-new-event-button' )[0];
 
-				var resetButton = document.getElementById( 'resetFields' );
+				// var resetButton = document.getElementById( 'resetFields' );
 				
-				var cancelButton = document.getElementsByClassName( 'cancel-button' )[0];
+				// var cancelButton = document.getElementsByClassName( 'cancel-button' )[0];
 
-				var nextButton = document.getElementById( 'next-button' );
+				// var nextButton = document.getElementById( 'next-button' );
 
-				var confirmButton = document.getElementById( 'submit-button' );
+				// var confirmButton = document.getElementById( 'submit-button' );
 
 				// for each element in new-account form.. assign listener
 				// use switch control flow
@@ -3445,14 +3479,20 @@ var App = function() {
 				// or have a list of functions to be assigned..
 				// when mapping through of using for each
 
-				EM.attachEventsToInputs();
+				/// QUEASTION OF WHEN TO ATTACH EVENTAS
+				// EM.attachEventsToInputs();
 
 
-				console.log( newAccountForm );
+				// console.log( newAccountForm );
 
 
 				accButton.addEventListener( 'click', self.openMyAccount );
 				evtButton.addEventListener('click', self.createNewEvent );
+
+
+				// INIT AUTOCOMPLETE!!!
+				// console.log( "INIT AUTOCOMPLETE!!!" );
+				// initAutocomplete();
 
 			}
 
@@ -3479,22 +3519,143 @@ var App = function() {
 			// eventElements[ index ].scrollIntoView();
 		}
 
-		var openSideContainer = function() {
+		var na = overlay.getElementsByClassName('new-account-container')[0];
+		var ne = overlay.getElementsByClassName('new-event-container')[0];
 
-			sideContainer.classList.toggle( 'visible' );
-			mapContainer.classList.toggle( 'aside' );
+		this.hideAll = function() {
+			EM.hide( na );
+			EM.hide( ne );
+			EM.hide( myAcc );
+			EM.hide( createAcc );
+			EM.hide( overlay );
+			mapContainer.classList.remove( 'aside' );
+		}
+
+		this.openSideContainer = function() {
+
+			overlay.classList.add( 'visible' );
+			mapContainer.classList.add( 'aside' );
+
+		}
+
+		this.hideSideContainer = function() {
+
+			overlay.classList.remove( 'visible' );
+			mapContainer.classList.remove( 'aside' );
+
+			self.hideAll();
+
+		}
+
+		var myAcc = document.getElementById('my-account');
+		this.showMyAccount = function(){
+			EM.show( myAcc );
+		}
+
+		this.hideMyAccount = function(){
+			EM.hide( myAcc );
+		}
+
+		var createAcc = document.getElementById( 'create-account' );
+		this.hideCreateAccount = function() {
+			EM.hide( createAcc );
+		}
+
+		this.showCreateAccount = function() {
+			EM.show( createAcc );
+		}
+
+		// var newAccount = document.getElementById( 'create-account' );
+		// this.hideNewAccount = function() {
+
+		// }
+
+		this.showNewAccount = function() {
+			
+			if ( !overlay.classList.contains('visible') ) {
+
+				self.hideAll();
+
+				self.openSideContainer();
+				self.showCreateAccount();
+				EM.show( na );
+				self.hideMyAccount();
+
+
+			} else {
+
+				self.hideSideContainer();
+
+			}
 
 		}
 
 		this.openMyAccount = function() {
 
-			openSideContainer();
+			if ( !overlay.classList.contains('visible') ) {
+
+				if ( ref.getAuth() ) {
+					self.hideAll();
+
+					self.openSideContainer();
+					self.showMyAccount()
+					showMyAccount();
+				} else {
+					showSignIn();
+				}
+
+			} else {
+
+				self.hideSideContainer();
+
+			}
+
+		}
+
+		this.openNewAccount = function() {
+
+			if ( !overlay.classList.contains('visible') ) {
+
+				if ( ref.getAuth() ) {
+					self.hideAll();
+
+					self.openSideContainer();
+					self.showMyAccount()
+					showMyAccount();
+				} else {
+					showSignIn();
+				}
+
+			} else {
+
+				self.hideSideContainer();
+
+			}
 
 		}
 
 		this.createNewEvent = function() {
 
-			openSideContainer();
+			if ( !overlay.classList.contains('visible') ) {
+
+				if ( ref.getAuth() ) {
+					self.hideAll();
+
+					self.openSideContainer();
+					self.hideMyAccount();
+					self.showCreateAccount();
+					showNewEvent();
+				} else {
+					showSignIn();
+				}
+
+			} else {
+
+				self.hideSideContainer();
+
+			}
+
+			
 
 		}
 
