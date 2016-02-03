@@ -12,6 +12,8 @@
 
 var App = function() {
 
+	var self = this;
+
 	var ref = new Firebase('https://event-creator.firebaseio.com/');
 
 	// var Element = function( id ) {
@@ -2510,6 +2512,9 @@ var App = function() {
 
 	};
 
+	
+
+
 	var initAutocomplete = function() {
 
 		var input = newEventForm['google-event-location'];
@@ -2532,7 +2537,9 @@ var App = function() {
 		})
 
 	}
-	initAutocomplete();
+	console.log( self );
+	self.initAutocomplete = initAutocomplete;
+	console.log( self.initAutocomplete );
 
 	var privacy = true;
 	var togglePrivacy = function() {
@@ -3719,5 +3726,6 @@ var App = function() {
 }
 
 var app = new App();
+var initAutocomplete = app.initAutocomplete;
 
 

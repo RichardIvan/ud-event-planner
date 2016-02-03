@@ -8,6 +8,8 @@
 
 var App = function () {
 
+	var self = this;
+
 	var ref = new Firebase('https://event-creator.firebaseio.com/');
 
 	// var Element = function( id ) {
@@ -2231,6 +2233,9 @@ var App = function () {
 			savePlaceData(place, name);
 		});
 	};
+	console.log(self);
+	self.initAutocomplete = initAutocomplete;
+	console.log(self.initAutocomplete);
 
 	var privacy = true;
 	var togglePrivacy = function () {
@@ -3288,6 +3293,7 @@ var App = function () {
 };
 
 var app = new App();
+var initAutocomplete = app.initAutocomplete;
 /*! Hammer.JS - v2.0.6 - 2016-01-06
  * http://hammerjs.github.io/
  *
