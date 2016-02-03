@@ -2182,7 +2182,7 @@ body {
         position: fixed;
         height: 10em;
         width: 3em;
-        background: blue;
+        // background: blue;
         top: 2em;
         right: 2em;
         z-index: 10;
@@ -2207,17 +2207,7 @@ body {
         width: 25em;
         height: 14em;
 
-        
-
-        .container {
-            display: block;
-        }
-
-        .event-item {
-            display: block;
-        }
-
-        .expand-button, .close-button {
+        .expand-button, .close-button, .event-item, .container {
             display: block;
         }
 
@@ -2255,8 +2245,14 @@ body {
 
         }
 
+        .event-item.selected .event-info {
+    
+            background: gold;
+
+        }
 
         .event-item {
+
             display: none;
             position: relative;
             height: 13em;

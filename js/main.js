@@ -3442,6 +3442,23 @@ var App = function() {
 					clone.addEventListener( 'click', function() {
 
 						self.moveInfoToView( id );
+						var latLng = {};
+						latLng.lat = events[id]['event-location-data'].lat;
+						latLng.lng = events[id]['event-location-data'].lng;
+						M.map.setCenter( latLng );
+
+						if ( container.classList.contains( 'expand' ) ) {
+							container.classList.remove( 'expand' );
+						}
+
+						console.log( container );
+						console.log( container.children );
+						console.log( container.children[0].children[index])
+						Array.prototype.forEach.call( container.children[0].children, function( item ) {
+							console.log( item );
+							item.classList.remove( 'selected' );
+						})
+						container.children[0].children[index].classList.add( 'selected' );
 
 					})
 
