@@ -1172,6 +1172,7 @@ var App = function() {
 
 		} else if ( newAccountForm.pass.value !== newAccountForm['retype-pass'].value ) {
 			console.log( 'passwords do not match' );
+			newAccountForm['retype-pass'].value = '';
 			newAccountForm['retype-pass'].select();
 			showError( 5 );
 
@@ -2762,6 +2763,8 @@ var App = function() {
 
 	var isBeingSubmitted = false;
 	var submitNewEvent = function() {
+
+		console.log( 'SUBMITTING NEW EVENT!' );
 
 		if ( !isBeingSubmitted ) {
 

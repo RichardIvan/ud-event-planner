@@ -5,18 +5,14 @@ var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var eslint = require('gulp-eslint');
-var jasmine = require('gulp-jasmine-phantom');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var babel = require("gulp-babel");
 var sourcemaps = require("gulp-sourcemaps");
 var imagemin = require('gulp-imagemin');
 var pngquant = require("imagemin-pngquant");
+var imageResize = require('gulp-image-resize');
 var imageOptim = require('gulp-imageoptim');
-var zopfli = require("gulp-zopfli");
-var ngrok     = require('ngrok');
-var psi       = require('psi');
-var sequence  = require('run-sequence');
 var site      = 'localhost';
 var portVal   = 3000;
 
@@ -31,55 +27,6 @@ gulp.task('default', ['copy-html', 'copy-images', 'styles', 'lint', 'scripts'], 
 	});
 });
 
-gulp.task('ngrok-url', function(cb) {
-  return ngrok.connect(3000, function (err, url) {
-    site = url;
-    console.log('serving your tunnel from: ' + site);
-    cb();
-  });
-});
-
-gulp.task('psi-desktop', function (cb) {
-  psi(site, {
-    nokey: 'AIzaSyALFynU7Zgx5RVuzQ0kTZ-0HV_5d5a-8-Y',
-    strategy: 'desktop'
-  }, cb);
-});
-
-gulp.task('psi-mobile', function (cb) {
-  psi(site, {
-    nokey: 'AIzaSyALFynU7Zgx5RVuzQ0kTZ-0HV_5d5a-8-Y',
-    strategy: 'mobile'
-  }, cb);
-});
-
-// this is where your server task goes. I'm using browser sync
-gulp.task('browser-sync-psi', function() {
-  browserSync.init({
-    port: portVal,
-    open: false,
-    server: {
-      baseDir: './dist'
-    }
-  });
-});
-
-// psi sequence with 'browser-sync-psi' instead
-gulp.task('psi-seq', [], function (cb) {
-  return sequence(
-    'browser-sync-psi',
-    'ngrok-url',
-    'psi-desktop',
-    'psi-mobile',
-    cb
-  );
-});
-
-// psi task runs and exits
-gulp.task('psi', ['psi-seq'], function() {
-  console.log('Woohoo! Check out your page speed scores!')
-  process.exit();
-})
 
 gulp.task('dist', [
 	'copy-html',
@@ -103,7 +50,6 @@ gulp.task('scripts-dist', function() {
 		.pipe(babel())
 		.pipe(concat('all.js'))
 		.pipe(uglify())
-		.pipe(zopfli())
 		.pipe(gulp.dest('./dist/js'));
 });
 
@@ -124,7 +70,18 @@ gulp.task('optimize-images', function() {
             progressive: true,
             use: [pngquant()]
         }))
-        .pipe(gulp.dest('./dist/imgages'));
+        .pipe(gulp.dest('./dist/img'));
+});
+
+gulp.task('resize-image', function () {
+  gulp.src('img/nav_bg.jpg')
+    .pipe(imageResize({ 
+      width : 330,
+      height : 210,
+      crop : true,
+      upscale : false
+    }))
+    .pipe(gulp.dest('dist/img'));
 });
 
 gulp.task('styles', function() {
