@@ -970,6 +970,10 @@ var App = function() {
 				console.log( 'You are already attending this event' );
 				flashError( 'You are already attending this event' );
 				break;
+			case 30:
+				console.log( 'Location Have not been filled' );
+				flashError( 'Missing Location! Press Down Upon Entering Value!' );
+				break;
 		}
 
 	}
@@ -2661,6 +2665,12 @@ var App = function() {
 
 		// update logged in users' created events,
 		// so these can be displayed in my events
+
+		if ( !newEventObject['event-location-data'] ) {
+			showError( 30 );
+			spinner.hide();
+			return;
+		}
 
 		if ( !newEventObject.privacy ) {
 			// save to public events
