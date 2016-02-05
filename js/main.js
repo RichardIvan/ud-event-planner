@@ -2504,6 +2504,8 @@ var App = function() {
 
 	var dateTimeCheck = function( start ) {
 
+		console.log( 'dateTimeCheck' );
+
 		var time;
 
 		if ( start ) {
@@ -2527,11 +2529,14 @@ var App = function() {
 
 			if ( start ) {
 
-				if ( dateTimeTimestamp < now ) {
+				if ( dateTimeTimestamp > now ) {
 					newEventObject['event-start-time'] = dateTimeTimestamp;
 				} else {
-					showError( 23 );
+
+					// show error telling the user tha thte date is before today
+					showError( 27 );
 					newEventForm['event-start-time'].select();
+					newEventForm['event-start-time'].focus();
 					return;
 				}
 
@@ -2543,8 +2548,9 @@ var App = function() {
 					if ( dateTimeTimestamp > stDateTimeTimeStamp ) {
 						newEventObject['event-end-time'] = dateTimeTimestamp;
 					} else {
-						showError( 23 );
+						showError( 25 );
 						newEventForm['event-end-time'].select();
+						newEventForm['event-end-time'].focus();
 						return;
 					}
 				} else {
@@ -2566,7 +2572,7 @@ var App = function() {
 	var processEventEndTime = function() {
 
 		// checkTimeValue();
-		dateTimeCheck( true );
+		dateTimeCheck();
 
 	}
 
