@@ -974,6 +974,18 @@ var App = function() {
 				console.log( 'Location Have not been filled' );
 				flashError( 'Missing Location! Press Down Upon Entering Value!' );
 				break;
+			case 31:
+				console.log( 'Please Enter the Start Time First' );
+				flashError( 'Please Enter the Start Time First' );
+				break;
+			case 32:
+				console.log( 'Please Enter the Start Time' );
+				flashError( 'Please Enter the Start Time' );
+				break;
+			case 32:
+				console.log( 'Please Enter the End Time' );
+				flashError( 'Please Enter the End Time' );
+				break;
 		}
 
 	}
@@ -2555,9 +2567,16 @@ var App = function() {
 					}
 				} else {
 					// show error, enter start time first
+					showError( 31 );
 				}
 			}
 
+		} else {
+			if ( start ) {
+				newEventObject['event-start-time'] = '';
+			} else {
+				newEventObject['event-end-time'] = '';
+			}
 		}
 
 	}
@@ -2592,6 +2611,7 @@ var App = function() {
 		var place = p,
 			name = n;
 
+		console.log( p );
 
 		newEventObject['event-location-data'] = {};
 		newEventObject['event-location-data'].name = name;
@@ -2613,13 +2633,13 @@ var App = function() {
 		// input.data = place;
 
 		if ( place.types.length > 1 ) {
-			input.value = place.name;
+			autoCompleteInput.value = place.name;
 		} else {
 
-			input.value = place['address_components'][1]['long_name'] + ' ' + place['address_components'][0]['long_name'];
+			autoCompleteInput.value = place['address_components'][1]['long_name'] + ' ' + place['address_components'][0]['long_name'];
 		}
 
-		var name = input.value;
+		var name = autoCompleteInput.value;
 		savePlaceData( place, name );
 	}
 
@@ -2729,7 +2749,7 @@ var App = function() {
 		// update logged in users' created events,
 		// so these can be displayed in my events
 
-		if ( !newEventObject['event-location-data'] ) {
+		if ( !newEventObject['event-location-data'].lat ) {
 			showError( 30 );
 			spinner.hide();
 			return;
@@ -2842,34 +2862,32 @@ var App = function() {
 		if ( !isBeingSubmitted ) {
 
 			isBeingSubmitted = true;
-			if ( allTimesAreValid() ) {
+			closeAccountAndEventOverlay();
+			if ( XL.active ) {
+				XL.hideAll();
+			}
 
-				closeAccountAndEventOverlay();
-				if ( XL.active ) {
-					XL.hideAll();
+			newEventObject['privacy'] = privacy;
+			newEventObject['guest-count'] = 1;
+			newEventObject['guests'] = [];
+			newEventObject['guests'].push( ref.getAuth().uid );
+
+			Object.keys(newEventObject).map( function( key ) {
+
+				if ( typeof newEventObject[key] === 'string' ) {
+					newEventObject[key] = newEventObject[key].trim();
 				}
+			})
 
-				newEventObject['privacy'] = privacy;
-				newEventObject['guest-count'] = 1;
-				newEventObject['guests'] = [];
-				newEventObject['guests'].push( ref.getAuth().uid );
+			console.log( newEventObject );
 
-				Object.keys(newEventObject).map( function( key ) {
-
-					if ( typeof newEventObject[key] === 'string' ) {
-						newEventObject[key] = newEventObject[key].trim();
-					}
-				})
-
-				saveEventToDb( newEventObject );
-				resetFields();
+			saveEventToDb( newEventObject );
+			resetFields();
 
 
 
-				isBeingSubmitted = false;
+			isBeingSubmitted = false;
 
-			} else isBeingSubmitted = false;
-			
 		}
 
 
@@ -2926,7 +2944,7 @@ var App = function() {
 		console.log( 'FOCUS NEXT ELEMENT' );
 
 		// checkIfFormReadyForSubmit( true );
-		var elements = [ newEventForm['event-name'], newEventForm['event-start-date'], newEventForm['event-start-time'], newEventForm['event-end-date'], newEventForm['event-end-time'], newEventForm['google-event-location'] ];
+		var elements = [ newEventForm['event-name'], newEventForm['event-start-time'], newEventForm['event-end-time'], newEventForm['google-event-location'] ];
 		var len = elements.length;
 
 		for ( var i = 0; i < len; i++ ) {
@@ -2955,7 +2973,7 @@ var App = function() {
 
 		console.log( 'CHECK IF NEW EVENT READY FOR SUBMIT' );
 
-		var elements = [ newEventForm['event-name'], newEventForm['event-start-date'], newEventForm['event-start-time'], newEventForm['event-end-date'], newEventForm['event-end-time'], newEventForm['google-event-location'] ];
+		var elements = [ newEventForm['event-name'], newEventForm['event-start-time'], newEventForm['event-end-time'], newEventForm['google-event-location'] ];
 		var len = elements.length;
 
 		for ( var i = 0; i < len; i++ ) {
