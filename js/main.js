@@ -108,7 +108,7 @@ var App = function() {
 
 		this.attachEventsToInputs = function() {
 			var newAccountCallbacks = [ nameCheck, emailCheck, checkPass, checkPass, checkDOB, processEmployer, processJobTitle ];
-			var newEventCallbacks = [ processEventName, processEventType, processEventHost, processEventStartDate, processEventStartTime, processEventEndDate, processEventEndTime];
+			var newEventCallbacks = [ processEventName, processEventType, processEventHost, processEventStartTime, processEventEndTime];
 
 			console.log( newAccountForm );
 			Array.prototype.forEach.call( newAccountForm, function( item, index ) {
