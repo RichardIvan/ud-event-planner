@@ -2502,15 +2502,71 @@ var App = function() {
 
 	}
 
+	var dateTimeCheck = function( start ) {
+
+		var time;
+
+		if ( start ) {
+
+			time = newEventForm['event-start-time'].value;
+			// len = time.length;
+			// timeObj.start = true;
+
+		} else {
+
+			time = newEventForm['event-end-time'].value;
+			// len = time.length;
+			// timeObj.start = false;
+
+		}
+
+		if ( time !== '' ) {
+
+			var dateTimeTimestamp = Date.parse( time );
+			var now = Date.now();
+
+			if ( start ) {
+
+				if ( dateTimeTimestamp < now ) {
+					newEventObject['event-start-time'] = dateTimeTimestamp;
+				} else {
+					showError( 23 );
+					newEventForm['event-start-time'].select();
+					return;
+				}
+
+			} else {
+
+				var st = newEventForm['event-start-time'].value;
+				if ( st !== '' ) {
+					var stDateTimeTimeStamp = Date.parse( st );
+					if ( dateTimeTimestamp > stDateTimeTimeStamp ) {
+						newEventObject['event-end-time'] = dateTimeTimestamp;
+					} else {
+						showError( 23 );
+						newEventForm['event-end-time'].select();
+						return;
+					}
+				} else {
+					// show error, enter start time first
+				}
+			}
+
+		}
+
+	}
+
 	var processEventStartTime = function() {
 
-		checkTimeValue( true );
+		// checkTimeValue( true );
+		dateTimeCheck( true );
 
 	}
 
 	var processEventEndTime = function() {
 
-		checkTimeValue();
+		// checkTimeValue();
+		dateTimeCheck( true );
 
 	}
 
