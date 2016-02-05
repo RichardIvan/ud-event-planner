@@ -1315,13 +1315,13 @@ var App = function() {
 
 		var checkValidityOfNumbers = function( numbers ) {
 			var bday = numbers;
-			var day = bday.substring(0, 2);
+			var day = bday.substr(6, 2);
 			console.log( day )
 			if ( day > 0 && day <= 31 ) {
-				var month = bday.substring(2, 4);
+				var month = bday.substr(4, 2);
 				console.log( month )
 				if ( month > 0 && month <= 12 ) {
-					var year = bday.substring( 4, 8 );
+					var year = bday.substr( 0, 4 );
 					console.log( year )
 
 					var today = new Date();
@@ -1336,6 +1336,7 @@ var App = function() {
 						// error showing year is wrong
 						console.log( 'year is wrong' );
 						newAccountForm.birthday.select();
+						newAccountForm.birthday.focus();
 						showError( 9 );
 						return;
 					}
@@ -1379,7 +1380,7 @@ var App = function() {
 		} else if ( len === 10 ) {
 			// remove the '/' sign
 			var transformToNumbers = function( string ) {
-				var numbers = string.split( '/' ).join( '' );
+				var numbers = string.split( '-' ).join( '' );
 				bday = numbers;
 				// console.log( string );
 				return numbers;

@@ -212,11 +212,11 @@
             <div class="inputs">
               <div></div>
               <form id="new-account-form" action="" onsubmit="finalCheck" autocomplete="on">
-                <input id="name" placeholder="Name" type="text" required>
+                <input id="name" placeholder="Name" type="email" required autofocus>
                 <input id="email" placeholder="Email" type="text" required >
                 <input id="pass" placeholder="Password" type="password" required>
                 <input id="retype-pass" placeholder="Re-Type Password" type="password" required>
-                <input id="birthday" placeholder="Birthday - DD/MM/YYYY" type="datetime" required>
+                <input id="birthday" placeholder="Birthday - DD/MM/YYYY" type="date" required>
                 <input id="employer" placeholder="Employer" type="text" autocomplete="on">
                 <input id="jobtitle" placeholder="Job Title">
               </form>
@@ -243,7 +243,7 @@
             <div class="inputs">
               <div></div>
               <form id="new-event-form" action="" onsubmit="finalCheck()" autocomplete="on">
-                <input id="event-name" placeholder="Event Name" type="text">
+                <input id="event-name" placeholder="Event Name" type="text" autofocus>
                 <input list="types" id="event-type" placeholder="Event Type" type="text">
                 <datalist id="types">
                   <option value="Birthday">
@@ -349,9 +349,9 @@
         <h2>Sign In</h2>
         <form action="" id="sign-in-form">
           <label for="email" >Email</label>
-          <input id="email" type="email">
+          <input id="email" type="email" autofocus placeholder="email">
           <label for="password">Password</label>
-          <input id="password" type="password">
+          <input id="password" type="password" placeholder="password">
         </form>
         <a id="sign-up-button" href="#">Sign Up</a>
       </div>
