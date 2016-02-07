@@ -2443,6 +2443,8 @@ var App = function () {
 		var containingElement = getDistanceListContainer(id);
 
 		containingElement.appendChild(clone);
+
+		displayInfoForEmptyDistanceList();
 	};
 
 	var assignEventToUser = function (uid, id) {
@@ -2703,6 +2705,31 @@ var App = function () {
 		swapButtons(true);
 	};
 
+	var displayInfoForEmptyDistanceList = function () {
+
+		if (nearbyList.children.length === 1) {
+			EM.show(nearbyList.children[0]);
+		} else {
+			EM.hide(nearbyList.children[0]);
+		}
+
+		if (closebyList.children.length === 1) {
+			EM.show(closebyList.children[0]);
+		} else {
+			EM.hide(closebyList.children[0]);
+		}
+
+		if (farawayList.children.length === 1) {
+			EM.show(farawayList.children[0]);
+		} else {
+			EM.hide(farawayList.children[0]);
+		}
+
+		console.dir(nearbyList.children.length);
+		console.dir(closebyList);
+		console.dir(farawayList);
+	};
+
 	var buildEvents = function (evts) {
 
 		var events = evts;
@@ -2735,6 +2762,7 @@ var App = function () {
 
 		EM.attachEventsToInputs();
 		// getSingleEventDimensions();
+		displayInfoForEmptyDistanceList();
 		spinner.hide();
 	};
 
