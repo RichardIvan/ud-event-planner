@@ -2336,7 +2336,7 @@ var App = function () {
 				return;
 			}
 		});
-		newAccountObject['guest-list-invitations'] = listOfEmails;
+		newEventObject['guest-list-invitations'] = listOfEmails;
 	};
 
 	//
@@ -2462,6 +2462,7 @@ var App = function () {
 
 	var eventObject = {};
 	var saveEventToDb = function (obj) {
+		console.log(newEventObject);newEventObject;
 
 		spinner.show();
 
