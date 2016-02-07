@@ -243,7 +243,7 @@
             <div class="inputs">
               <div></div>
               <form id="new-event-form" action="" onsubmit="finalCheck()" autocomplete="on">
-                <input id="event-name" placeholder="Event Name" type="text" autofocus>
+                <input id="event-name" placeholder="Event Name" type="text" autofocus required>
                 <input list="types" id="event-type" placeholder="Event Type" type="text">
                 <datalist id="types">
                   <option value="Birthday">
@@ -255,11 +255,11 @@
                   <option value="Halloween">
                 </datalist>
                 <input id="host" placeholder="Event Host" type="text">
-                <input id="event-start-time" placeholder="Start time - HH:MM" type="datetime-local">
-                <input id="event-end-time" placeholder="End time - HH:MM" type="datetime-local">
+                <input id="event-start-time" placeholder="Start time - HH:MM" type="datetime-local" required>
+                <input id="event-end-time" placeholder="End time - HH:MM" type="datetime-local" required>
                 <!-- <input id="guestlist" type="text" placeholder="Guestlist - list of emails"> -->
-                <textarea name="guestlist" id="guestlist" cols="30" rows="3" placeholder="Guestlist - list of email adresses separated by coma"></textarea>
-                <input id="google-event-location" placeholder="Place" type="text" autocomplete="on">
+                <textarea name="guestlist" id="guestlist" cols="30" rows="3" placeholder="Guestlist - list of email adresses separated by coma" required></textarea>
+                <input id="google-event-location" placeholder="Place" type="text" autocomplete="on" required>
 
                 <h3>Private</h3>
                 <div id="privacy-button">
