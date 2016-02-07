@@ -2785,8 +2785,8 @@ var App = function () {
 		var startDate = new Date(info['event-start-time']);
 		var endDate = new Date(info['event-end-time']);
 
-		ul.children[0].innerText = 'Start: ' + startTime + ' / ' + startDate;
-		ul.children[1].innerText = 'End: ' + endTime + ' / ' + endDate;
+		ul.children[0].innerText = 'Start: ' + startDate.getHours() + ':' + startDate.getMinutes() + ' / ' + startDate.getDate() + '.' + startDate.getMonth() + 1 + '.' + startDate.getYear();
+		ul.children[1].innerText = 'End: ' + endDate.getHours() + ':' + endDate.getMinutes() + ' / ' + endDate.getDate() + '.' + endDate.getMonth() + 1 + '.' + endDate.getYear();
 		ul.children[2].innerText = 'Place: ' + info['event-location-data'].name;
 
 		element.setAttribute('data-id', info['id']);
