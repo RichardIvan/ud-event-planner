@@ -94,7 +94,7 @@ var App = function () {
 
 		this.attachEventsToInputs = function () {
 			var newAccountCallbacks = [nameCheck, emailCheck, checkPass, checkPass, checkDOB, processEmployer, processJobTitle];
-			var newEventCallbacks = [processEventName, processEventType, processEventHost, processEventStartTime, processEventEndTime];
+			var newEventCallbacks = [processEventName, processEventType, processEventHost, processEventStartTime, processEventEndTime, processGuestList];
 
 			console.log(newAccountForm);
 			Array.prototype.forEach.call(newAccountForm, function (item, index) {
@@ -109,7 +109,7 @@ var App = function () {
 			console.log(newEventForm);
 			Array.prototype.forEach.call(newEventForm, function (item, index) {
 
-				if (index < 7) {
+				if (index < 6) {
 
 					var el = document.getElementById(item.id);
 
@@ -901,9 +901,13 @@ var App = function () {
 				console.log('Please Enter the Start Time');
 				flashError('Please Enter the Start Time');
 				break;
-			case 32:
+			case 33:
 				console.log('Please Enter the End Time');
 				flashError('Please Enter the End Time');
+				break;
+			case 34:
+				console.log('Guestlist contains invalid email');
+				flashError('Guestlist contains invalid email');
 				break;
 		}
 	};
@@ -2298,6 +2302,43 @@ var App = function () {
 		dateTimeCheck();
 	};
 
+	var checkEmail = function (email) {
+		var twoParts = email.split('@');
+
+		if (twoParts.length === 2) {
+
+			var secondPart = twoParts[1].split('.');
+			console.log(secondPart);
+			var len = secondPart.length;
+
+			// console.log( len );
+
+			return len === 2 || len === 3 ? true : false;
+
+			// console.log( ( len === 2 || len === 3 ) ? true : false );
+		} else {
+
+				return false;
+			}
+	};
+
+	var processGuestList = function () {
+		console.log('process GuestList');
+		var emails = newEventForm.guestlist.value;
+		var listOfEmails = emails.split(',');
+		console.log(listOfEmails);
+		listOfEmails = listOfEmails.map(function (email) {
+			var email = email.trim();
+			if (checkEmail(email)) {
+				return email;
+			} else {
+				showError(34);
+				return;
+			}
+		});
+		newAccountObject['guest-list-invitations'] = listOfEmails;
+	};
+
 	//
 	// EVENT PLACE
 	//
@@ -2432,11 +2473,18 @@ var App = function () {
 		// upon save, update the events' ID
 		// with what firebase gave it
 
+		var emailAddresses = newEventObject['guest-list-invitations'];
+		delete newEventObject['guest-list-invitations'];
+
 		// update logged in users' created events,
 		// so these can be displayed in my events
 
 		if (!newEventObject['event-location-data'].lat) {
 			showError(30);
+			spinner.hide();
+			return;
+		} else if (!emailAddresses) {
+			showError(34);
 			spinner.hide();
 			return;
 		}
@@ -2472,6 +2520,8 @@ var App = function () {
 					assignEventToUser(ref.getAuth().uid, id);
 
 					appendNewEvent(id);
+
+					shareViaEmail(id, emailAddresses);
 
 					// update the saved item with ID..
 
@@ -2639,7 +2689,7 @@ var App = function () {
 
 		console.log('CHECK IF NEW EVENT READY FOR SUBMIT');
 
-		var elements = [newEventForm['event-name'], newEventForm['event-start-time'], newEventForm['event-end-time'], newEventForm['google-event-location']];
+		var elements = [newEventForm['event-name'], newEventForm['event-start-time'], newEventForm['event-end-time'], newEventForm['guestlist'], newEventForm['google-event-location']];
 		var len = elements.length;
 
 		for (var i = 0; i < len; i++) {
@@ -2732,17 +2782,9 @@ var App = function () {
 
 		var ul = element.querySelector('ul');
 
-		var startTime = info['event-start-time'];
-		startTime = startTime.substring(0, 2) + ':' + startTime.substring(2, 4);
+		var startDate = new Date(info['event-start-time']);
+		var endDate = new Date(info['event-end-time']);
 
-		var endTime = info['event-end-time'];
-		endTime = endTime.substring(0, 2) + ':' + endTime.substring(2, 4);
-
-		var startDate = info['event-start-date'];
-		startDate = startDate.substring(0, 2) + '.' + startDate.substring(2, 4) + '.' + startDate.substring(4, 6);
-
-		var endDate = info['event-start-date'];
-		endDate = startDate.substring(0, 2) + '.' + endDate.substring(2, 4) + '.' + endDate.substring(4, 6);
 		ul.children[0].innerText = 'Start: ' + startTime + ' / ' + startDate;
 		ul.children[1].innerText = 'End: ' + endTime + ' / ' + endDate;
 		ul.children[2].innerText = 'Place: ' + info['event-location-data'].name;
@@ -3505,13 +3547,18 @@ var App = function () {
 	var attendEventElement = document.getElementById('attend-event');
 	attendEventElement.addEventListener('click', attendEvent);
 
-	var shareViaEmail = function (ID) {
+	var shareViaEmail = function (ID, emails) {
 
 		var id = ID;
 		var name = events[ID]['event-name'];
-		var url = location.href + '#id=' + id;
+		var url = location.origin + '/#id=' + id;
 
-		window.open("mailto:xyz@abc.com?subject=Checkout This Event!&body=Hey, don't be shy and joing us at this '" + name + "' event! ---> " + url);
+		if (emails) {
+			var addresses = emails.join(',');
+			window.open("mailto:" + addresses + "?subject=Checkout This Event!&body=Hey, don't be shy and joing us at this '" + name + "' event! ---> " + url);
+		} else {
+			window.open("mailto:xyz@abc.com?subject=Checkout This Event!&body=Hey, don't be shy and joing us at this '" + name + "' event! ---> " + url);
+		}
 	};
 
 	var emailGuests = function () {
