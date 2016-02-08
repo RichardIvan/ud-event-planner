@@ -2799,7 +2799,9 @@ var App = function() {
 		// with what firebase gave it
 
 		var emailAddresses = newEventObject['guest-list-invitations'];
+		var messageForGuests = newEventObject['message-for-guests'];
 		delete newEventObject['guest-list-invitations'];
+		delete newEventObject['message-for-guests'];
 
 		// update logged in users' created events,
 		// so these can be displayed in my events
@@ -2847,7 +2849,7 @@ var App = function() {
 
 					appendNewEvent( id );
 
-					shareViaEmail( id, emailAddresses );
+					shareViaEmail( id, emailAddresses, messageForGuests );
 
 					// update the saved item with ID..
 
@@ -2887,6 +2889,8 @@ var App = function() {
 					assignEventToUser( ref.getAuth().uid, id );
 
 					appendNewEvent( id );
+
+					shareViaEmail( id, emailAddresses, messageForGuests );
 
 					// update the saved item with ID..
 
@@ -4024,15 +4028,16 @@ var App = function() {
 	attendEventElement.addEventListener( 'click', attendEvent );
 
 
-	var shareViaEmail = function( ID, emails ) {
+	var shareViaEmail = function( ID, emails, message ) {
 
 		var id = ID;
 		var name = events[ID]['event-name'];
 		var url = location.origin + '/#id=' + id;
 
 		if ( emails ) {
-			var addresses = emails.join(',')
-			window.open("mailto:" + addresses + "?subject=Checkout This Event!&body=Hey, don't be shy and joing us at this '" + name + "' event! ---> " + url );
+			var addresses = emails.join(',');
+			var msg = message;
+			window.open("mailto:" + addresses + "?subject=Checkout This Event!&body=" + msg + ", - Don't be shy and joing us at this '" + name + "' event! ---> " + url );
 		} else {
 			window.open("mailto:xyz@abc.com?subject=Checkout This Event!&body=Hey, don't be shy and joing us at this '" + name + "' event! ---> " + url );
 		}
