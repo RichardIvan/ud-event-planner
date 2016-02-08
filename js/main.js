@@ -108,7 +108,7 @@ var App = function() {
 
 		this.attachEventsToInputs = function() {
 			var newAccountCallbacks = [ nameCheck, emailCheck, checkPass, checkPass, checkDOB, processEmployer, processJobTitle ];
-			var newEventCallbacks = [ processEventName, processEventType, processEventHost, processEventStartTime, processEventEndTime, processGuestList];
+			var newEventCallbacks = [ processEventName, processEventType, processEventHost, processEventStartTime, processEventEndTime, processGuestList, processGuestMessage];
 
 			console.log( newAccountForm );
 			Array.prototype.forEach.call( newAccountForm, function( item, index ) {
@@ -124,7 +124,7 @@ var App = function() {
 			console.log( newEventForm );
 			Array.prototype.forEach.call( newEventForm, function( item, index ) {
 
-				if ( index < 6 ) {
+				if ( index < 7 ) {
 
 					var el = document.getElementById( item.id );
 					
