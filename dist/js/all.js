@@ -2339,6 +2339,13 @@ var App = function () {
 		newEventObject['guest-list-invitations'] = listOfEmails;
 	};
 
+	processGuestMessage = function () {
+		var message = newEventForm.message.value;
+		if (message) {
+			newEventObject['message-for-guests'] = message;
+		}
+	};
+
 	//
 	// EVENT PLACE
 	//
