@@ -2156,6 +2156,10 @@ body {
         display: none;
     }
 
+    body > div.pac-container {
+        display: block;
+    }
+
     html, body {
         display: block;
     }
@@ -2722,9 +2726,9 @@ body {
                     // smargin-top: 30px;
                 }
 
-                #google-event-location {
-                    display: none;
-                }
+                // #google-event-location {
+                //     display: none;
+                // }
 
                 #google-event-location-xl {
                     display: inline-block;
