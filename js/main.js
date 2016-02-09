@@ -1019,8 +1019,6 @@ var App = function() {
 
 
 
-
-
 	var resetFieldsButton = document.getElementById( 'reset-fields' );
 
 	var resetFields = function() {
@@ -1032,18 +1030,29 @@ var App = function() {
 		var h2 = overlay.querySelector( 'h2' );
 
 		if ( h2.innerText === "NEW ACCOUNT" ) {
-			var len = newAccountForm.length;
-			for ( var i = 0; i < len; i++ ) {
-				var element = newAccountForm.children[i];
-				element.value = '';
-			}
+			var inputs = newAccountForm.querySelectorAll( 'input' );
+			Array.prototype.map.call( inputs, function( item ) {
+				item.value = '';
+				console.log( item );
+			})
 			newAccountObject = {};
 		} else {
-			var len = newEventForm.length;
-			for ( var k = 0; k < len; k++ ) {
-				var element = newEventForm.children[k];
-				element.value = '';
-			}
+
+			var inputs = newEventForm.querySelectorAll( 'input' );
+			Array.prototype.map.call( inputs, function( item ) {
+				item.value = '';
+				console.log( item );
+			})
+
+			var guestlist = newEventForm.querySelectorAll( 'textarea' );
+			guestlist.value = '';
+
+			// for ( var k = 1; k < len * 2; k++ ) {
+			// 	var a = k * 2;
+			// 	var element = newEventForm.children[a];
+			// 	element.value = '';
+			// 	console.log( element );
+			// }
 			newEventObject = {};
 		}
 	}
@@ -2758,7 +2767,7 @@ var App = function() {
 
 	};
 
-	var appendEventToXL = function() {
+	var appendEventToXL = function( id ) {
 		var container = document.getElementById( 'info' );
 		var ElementToAppendTo = container.children[0];
 
@@ -2792,8 +2801,7 @@ var App = function() {
 
 		ElementToAppendTo.appendChild( clone );
 
-		eventElements.push( clone );
-
+		// XLview.eventElements.push( clone );
 
 	}
 
@@ -2805,7 +2813,7 @@ var App = function() {
 		fillElementWithData( clone, id );
 
 		if ( XL.active ) {
-			appendEventToXL();
+			appendEventToXL( id );
 		} else {
 			containingElement = getDistanceListContainer( id );
 			containingElement.appendChild( clone );
@@ -2893,6 +2901,8 @@ var App = function() {
 
 					appendNewEvent( id );
 
+					console.log( events[id] );
+
 					var latLng = {}
 					latLng.lat = events[id]['event-location-data'].lat;
 					latLng.lng = events[id]['event-location-data'].lng;
@@ -2907,8 +2917,6 @@ var App = function() {
 						XL.moveInfoToView( key );
 						console.log( key );
 					})
-
-					appendNewEvent( id );
 
 					shareViaEmail( id, emailAddresses, messageForGuests );
 
@@ -2977,9 +2985,6 @@ var App = function() {
 
 
 
-
-
-
 	var isBeingSubmitted = false;
 	var submitNewEvent = function() {
 
@@ -3011,14 +3016,8 @@ var App = function() {
 				}
 			})
 
-			console.log( newEventObject );
-
-
-
 			saveEventToDb( newEventObject );
 			resetFields();
-
-
 
 			isBeingSubmitted = false;
 
@@ -3639,7 +3638,7 @@ var App = function() {
 		var expandButton = container.children[2];
 		var openButton = container.children[3];
 
-		var eventElements = [];
+		// this.eventElements = [];
 
 		var sideContainer = document.getElementById( 'side-container' );
 		var mapContainer = document.getElementById( 'map' );
@@ -3708,7 +3707,7 @@ var App = function() {
 
 					ElementToAppendTo.appendChild( clone );
 
-					eventElements.push( clone );
+					// self.eventElements.push( clone );
 				})
 
 				// copy #overlay to #side-container
@@ -4106,7 +4105,12 @@ var App = function() {
 		if ( emails ) {
 			var addresses = emails.join(',');
 			var msg = message;
-			window.open("mailto:" + addresses + "?subject=Checkout This Event!&body=" + msg + ", - Don't be shy and joing us at this '" + name + "' event! ---> " + url );
+
+			if ( msg ) {
+				window.open("mailto:" + addresses + "?subject=Checkout This Event!&body=" + msg + ", - Don't be shy and joing us at this '" + name + "' event! ---> " + url );
+			} else {
+				window.open("mailto:" + addresses + "?subject=Checkout This Event!&body=Don't be shy and joing us at this '" + name + "' event! ---> " + url );
+			}
 		} else {
 			window.open("mailto:xyz@abc.com?subject=Checkout This Event!&body=Hey, don't be shy and joing us at this '" + name + "' event! ---> " + url );
 		}
