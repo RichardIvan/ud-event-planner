@@ -10,11 +10,15 @@ After installing npm, you are prepared to install gulp so you can test the appli
 
 Next go to the containing folder and run:
 
-```'npm install'```
+```
+'npm install'
+```
 
 Lastly run:
 
-```'gulp'```
+```
+'gulp'
+```
 
 
 ### Technologies Used.
