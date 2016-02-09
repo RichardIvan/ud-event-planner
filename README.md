@@ -23,11 +23,11 @@ Lastly run:
 
 ### Technologies Used.
 
-[Google Maps Places Autocomplete](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete)
-[Google Static Maps API](https://developers.google.com/maps/documentation/static-maps/intro)
-[Firebase](https://www.firebase.com/)
-HTML5
-CSS3
-Javascript
-SCSS
-Gulp
+*[Google Maps Places Autocomplete](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete)
+*[Google Static Maps API](https://developers.google.com/maps/documentation/static-maps/intro)
+*[Firebase](https://www.firebase.com/)
+*HTML5
+*CSS3
+*Javascript
+*SCSS
+*Gulp
