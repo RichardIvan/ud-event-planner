@@ -1333,6 +1333,14 @@ body {
                         width: 80%;
                         // smargin-top: 30px;
                     }
+
+                    #google-event-location-xl {
+                        display: none;
+                    }
+
+                    #google-event-location {
+                        display: inline-block;
+                    }
                 }
             }
         }
@@ -2703,16 +2711,24 @@ body {
                 }
 
                 input, textarea {
-                        // height: 3em;
-                        vertical-align: middle;
-                        border: none;
-                        margin: 3px 0 0 0;
-                        padding-left: 2em;
-                        padding: 1em 0 1em 2em;
-                        font-size: 18px;
-                        width: 80%;
-                        // smargin-top: 30px;
-                    }
+                    // height: 3em;
+                    vertical-align: middle;
+                    border: none;
+                    margin: 3px 0 0 0;
+                    padding-left: 2em;
+                    padding: 1em 0 1em 2em;
+                    font-size: 18px;
+                    width: 80%;
+                    // smargin-top: 30px;
+                }
+
+                #google-event-location {
+                    display: none;
+                }
+
+                #google-event-location-xl {
+                    display: inline-block;
+                }
             }
 
         }
