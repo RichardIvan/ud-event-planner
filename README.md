@@ -1,4 +1,4 @@
-## Event Planner
+## Gather - An Event Planner
 
 This first Udacity in the Senior Web Developer Nanodegree project lets you create an account and sign in into this created account. Furthermore, you will be able to create and view public and unlisted events ( account required ). Public events are visible to all users whether logged into the application or not while unlisted can be accessed only by using a link with appropriate ID. When you view the app on the displays higher than mobile phones you will see google map with all events created within the application. On mobile view you will see only zoomed in location of the event.
 
