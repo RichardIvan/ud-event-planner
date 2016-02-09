@@ -136,6 +136,11 @@ var App = function() {
 
 			})
 
+			var hideSignInOverlays = document.getElementsByClassName('hide-sign-in-overlay');
+			Array.prototype.forEach.call( hideSignInOverlays, function( item, index ) {
+				item.addEventListener( 'click', hideSignIn );
+			});
+
 			self.aClick( 'privacy-button', togglePrivacy );
 
 			var myAccountLogoutButton = document.getElementsByClassName('logout-button')[0];
@@ -2805,6 +2810,8 @@ var App = function() {
 
 		// update logged in users' created events,
 		// so these can be displayed in my events
+
+		console.log( newEventObject['event-location-data'].lat );
 
 		if ( !newEventObject['event-location-data'].lat ) {
 			showError( 30 );
