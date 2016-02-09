@@ -198,26 +198,22 @@
 
         <div class="new-account-container">
 
-            <div class="labels">
-              <ul>
-                <li><label for="name">Name</label></li>
-                <li><label for="email">Email</label></li>
-                <li><label for="pass">Password</label></li>
-                <li><label for="retype-pass">Re-type Password</label></li>
-                <li><label for="birthday">Birthday</label></li>
-                <li><label for="employer">Employer</label></li>
-                <li><label for="jobtitle">Job Title</label></li>
-              </ul>
-            </div>
             <div class="inputs">
               <div></div>
               <form id="new-account-form" action="" onsubmit="finalCheck" autocomplete="on">
+                <label for="name">Name</label>
                 <input id="name" placeholder="Name" type="email" required autofocus>
+                <label for="email">Email</label>
                 <input id="email" placeholder="Email" type="email" required >
+                <label for="pass">Password</label>
                 <input id="pass" placeholder="Password" type="password" required>
+                <label for="retype-pass">Re-type Password</label>
                 <input id="retype-pass" placeholder="Re-Type Password" type="password" required>
+                <label for="birthday">Birthday</label>
                 <input id="birthday" placeholder="Birthday - DD/MM/YYYY" type="date">
+                <label for="employer">Employer</label>
                 <input id="employer" placeholder="Employer" type="text" autocomplete="on">
+                <label for="jobtitle">Job Title</label>
                 <input id="jobtitle" placeholder="Job Title">
               </form>
               <div></div>
@@ -228,23 +224,12 @@
 
         <div class="new-event-container">
 
-            <div class="labels">
-              <ul>
-                <li><label for="event-name">Event Name</label></li>
-                <li><label for="event-type">Event Type</label></li>
-                <li><label for="host">Host</label></li>
-                <li><label for="event-start-time">Event Start Time</label></li>
-                <li><label for="event-end-time">Event End Time</label></li>
-                <li><label for="guest-list">Guest List</label></li>
-                <li><label for="Message">Message for Guests</label></li>
-                <li><label for="event-location">Event Location</label></li>
-                <li><label for="event-privacy">Privacy</label></li>
-              </ul>
-            </div>
             <div class="inputs">
               <div></div>
               <form id="new-event-form" action="" onsubmit="finalCheck()" autocomplete="on">
+                <label for="event-name">Event Name</label>
                 <input id="event-name" placeholder="Event Name" type="text" autofocus required>
+                <label for="event-type">Event Type</label>
                 <input list="types" id="event-type" placeholder="Event Type" type="text">
                 <datalist id="types">
                   <option value="Birthday">
@@ -255,12 +240,18 @@
                   <option value="Anniversary">
                   <option value="Halloween">
                 </datalist>
+                <label for="host">Host</label>
                 <input id="host" placeholder="Event Host" type="text">
+                <label for="event-start-time">Event Start Time</label>
                 <input id="event-start-time" placeholder="Start time - HH:MM" type="datetime-local" required>
+                <label for="event-end-time">Event End Time</label>
                 <input id="event-end-time" placeholder="End time - HH:MM" type="datetime-local" required>
                 <!-- <input id="guestlist" type="text" placeholder="Guestlist - list of emails"> -->
+                <label for="guest-list">Guest List</label>
                 <textarea name="guestlist" id="guestlist" cols="30" rows="3" placeholder="Guestlist - list of email adresses separated by coma" required></textarea>
+                <label for="Message">Message for Guests</label>
                 <input name="message" id="message" placeholder="Message to Guests ( Optional )"></input>
+                <label for="event-location">Event Location</label>
                 <input id="google-event-location" placeholder="Place" type="text" autocomplete="on" required>
 
                 <h3>Private</h3>

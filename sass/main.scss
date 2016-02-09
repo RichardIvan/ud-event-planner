@@ -1334,6 +1334,12 @@ body {
                         // smargin-top: 30px;
                     }
 
+                    label {
+                        margin-left: 1em;
+                        position: relative;
+                        float: left;
+                    }
+
                 }
             }
         }
@@ -2693,7 +2699,8 @@ body {
 
                 margin-top: 6em;
                 padding-bottom: 6em;
-                
+                text-align: center;
+
                 form {
                     flex-grow: 1;
                     width: 90%;
@@ -2701,7 +2708,7 @@ body {
                 }
 
                 input {
-                    display: block;
+                    display: inline-block;
                     width: 90%;
                     margin-top: 1em;
                     padding: 1em;
@@ -2719,11 +2726,13 @@ body {
                     // smargin-top: 30px;
                 }
 
+                label {
+                    margin-left: 1em;
+                    position: relative;
+                    float: left;
+                }
+
             }
-
-        }
-
-        #new-event-contianer {
 
         }
 
