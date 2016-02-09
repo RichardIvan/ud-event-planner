@@ -2758,6 +2758,45 @@ var App = function() {
 
 	};
 
+	var appendEventToXL = function() {
+		var container = document.getElementById( 'info' );
+		var ElementToAppendTo = container.children[0];
+
+		var clone = originalElement.cloneNode( true );
+		clone = fillElementWithData( clone, id, false, true );
+
+		clone.children[0].setAttribute( 'style', '' );
+
+		clone.addEventListener( 'click', function() {
+
+			XL.moveInfoToView( id );
+			var latLng = {};
+			latLng.lat = events[id]['event-location-data'].lat;
+			latLng.lng = events[id]['event-location-data'].lng;
+			M.map.setCenter( latLng );
+
+			if ( container.classList.contains( 'expand' ) ) {
+				container.classList.remove( 'expand' );
+			}
+
+			console.log( container );
+			console.log( container.children );
+			console.log( container.children[0].children[index])
+			Array.prototype.forEach.call( container.children[0].children, function( item ) {
+				console.log( item );
+				item.classList.remove( 'selected' );
+			})
+			container.children[0].children[index].classList.add( 'selected' );
+
+		})
+
+		ElementToAppendTo.appendChild( clone );
+
+		eventElements.push( clone );
+
+
+	}
+
 	var appendNewEvent = function( id ) {
 
 		var clone = originalElement.cloneNode( true );
@@ -2766,15 +2805,14 @@ var App = function() {
 		fillElementWithData( clone, id );
 
 		if ( XL.active ) {
-			var container = document.getElementById( 'info' );
-			containingElement = container.children[0];
+			appendEventToXL();
 		} else {
 			containingElement = getDistanceListContainer( id );
+			containingElement.appendChild( clone );
+			displayInfoForEmptyDistanceList();
 		}
 
-		containingElement.appendChild( clone );
-
-		displayInfoForEmptyDistanceList();
+		
 	};
 
 	var assignEventToUser = function( uid, id ) {
@@ -2813,6 +2851,12 @@ var App = function() {
 		delete newEventObject['guest-list-invitations'];
 		delete newEventObject['message-for-guests'];
 
+	 	if ( !emailAddresses ) {
+			showError( 34 );
+			spinner.hide();
+			return;
+		}
+
 		// update logged in users' created events,
 		// so these can be displayed in my events
 
@@ -2846,6 +2890,23 @@ var App = function() {
 					events[id] = obj;
 
 					assignEventToUser( ref.getAuth().uid, id );
+
+					appendNewEvent( id );
+
+					var latLng = {}
+					latLng.lat = events[id]['event-location-data'].lat;
+					latLng.lng = events[id]['event-location-data'].lng;
+
+					var marker = new google.maps.Marker({
+						position: latLng,
+						map: M.map,
+						animation: google.maps.Animation.DROP
+					});
+					marker.addListener( 'click', function() {
+						self.map.setCenter( latLng );
+						XL.moveInfoToView( key );
+						console.log( key );
+					})
 
 					appendNewEvent( id );
 
@@ -2928,10 +2989,6 @@ var App = function() {
 
 			if ( !newEventObject['event-location-data'] || !newEventObject['event-location-data'].lat ) {
 				showError( 30 );
-				spinner.hide();
-				return;
-			} else if ( !emailAddresses ) {
-				showError( 34 );
 				spinner.hide();
 				return;
 			}
