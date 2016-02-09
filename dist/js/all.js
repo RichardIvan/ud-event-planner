@@ -896,7 +896,7 @@ var App = function () {
 				break;
 			case 30:
 				console.log('Location Have not been filled');
-				flashError('Missing Location! Press Down Upon Entering Value!');
+				flashError('Location Have not been filled');
 				break;
 			case 31:
 				console.log('Please Enter the Start Time First');
@@ -2449,10 +2449,16 @@ var App = function () {
 	var appendNewEvent = function (id) {
 
 		var clone = originalElement.cloneNode(true);
+		var containingElement;
 
 		fillElementWithData(clone, id);
 
-		var containingElement = getDistanceListContainer(id);
+		if (XL.active) {
+			var container = document.getElementById('info');
+			containingElement = container.children[0];
+		} else {
+			containingElement = getDistanceListContainer(id);
+		}
 
 		containingElement.appendChild(clone);
 
@@ -2476,7 +2482,6 @@ var App = function () {
 
 	var eventObject = {};
 	var saveEventToDb = function (obj) {
-		console.log(newEventObject);newEventObject;
 
 		spinner.show();
 
@@ -2495,18 +2500,6 @@ var App = function () {
 
 		// update logged in users' created events,
 		// so these can be displayed in my events
-
-		console.log(newEventObject['event-location-data'].lat);
-
-		if (!newEventObject['event-location-data'].lat) {
-			showError(30);
-			spinner.hide();
-			return;
-		} else if (!emailAddresses) {
-			showError(34);
-			spinner.hide();
-			return;
-		}
 
 		if (!newEventObject.privacy) {
 			// save to public events
@@ -2605,6 +2598,16 @@ var App = function () {
 		console.log('SUBMITTING NEW EVENT!');
 
 		if (!isBeingSubmitted) {
+
+			if (!newEventObject['event-location-data'] || !newEventObject['event-location-data'].lat) {
+				showError(30);
+				spinner.hide();
+				return;
+			} else if (!emailAddresses) {
+				showError(34);
+				spinner.hide();
+				return;
+			}
 
 			isBeingSubmitted = true;
 			closeAccountAndEventOverlay();
