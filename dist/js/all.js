@@ -2388,20 +2388,14 @@ var App = function () {
 		savePlaceData(place, name);
 	};
 
-	var initAutocomplete = function (xl) {
+	var initAutocomplete = function () {
 		console.log(autocompleteListener);
 		if (autocompleteListener !== undefined) {
 			google.maps.event.removeListener(autocompleteListener);
 			autocompleteListener = undefined;
 		}
 
-		if (xl) {
-			var input = xl;
-		} else {
-			var input = autoCompleteInput;
-		}
-
-		autocomplete = new google.maps.places.Autocomplete(input);
+		autocomplete = new google.maps.places.Autocomplete(autoCompleteInput);
 		// var input = newEventForm['google-event-location'];
 		// var autocomplete = new google.maps.places.Autocomplete(autoCompleteInput);
 
@@ -3219,8 +3213,6 @@ var App = function () {
 			if (!loaded) {
 				loaded = true;
 				this.active = true;
-
-				initAutocomplete(newEventForm['google-event-location-xl']);
 
 				eventKeys = Object.keys(events);
 
