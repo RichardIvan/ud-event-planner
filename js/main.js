@@ -3,11 +3,11 @@
 
 
 
-// 
-// 
+//
+//
 // SETUP CODE
-// 
-// 
+//
+//
 
 
 var App = function() {
@@ -51,8 +51,6 @@ var App = function() {
 			}
 
 			el = elements[id];
-
-			console.log( el );
 
 			if ( el.clickListeners ) {
 				el.clickListeners.map( function( cb ) {
@@ -110,26 +108,22 @@ var App = function() {
 			var newAccountCallbacks = [ nameCheck, emailCheck, checkPass, checkPass, checkDOB, processEmployer, processJobTitle ];
 			var newEventCallbacks = [ processEventName, processEventType, processEventHost, processEventStartTime, processEventEndTime, processGuestList, processGuestMessage];
 
-			console.log( newAccountForm );
 			Array.prototype.forEach.call( newAccountForm, function( item, index ) {
 
 				var el = document.getElementById( item.id );
-				console.log( el );
 				var cb = newAccountCallbacks[index];
-				console.log( cb );
 				el.addEventListener('blur', cb );
 
 			})
 
-			console.log( newEventForm );
 			Array.prototype.forEach.call( newEventForm, function( item, index ) {
 
 				if ( index < 7 ) {
 
 					var el = document.getElementById( item.id );
-					
+
 					var cb = newEventCallbacks[index];
-					
+
 					el.addEventListener('blur', cb );
 					// EM.aBlur( item.id, newAccountCallbacks[index] );
 				}
@@ -254,9 +248,9 @@ var App = function() {
 
 
 
-	// 
+	//
 	// USER DATA
-	// 
+	//
 
 	var User = function() {
 		var location;
@@ -276,7 +270,6 @@ var App = function() {
 			return setUserLocation( loc );
 		}
 		this.handleLocationError = function( error ) {
-			console.log( error );
 			return false;
 		}
 		this.getUserLoation = function() {
@@ -315,9 +308,9 @@ var App = function() {
 	var eventOverlayCloseButton = document.querySelector( '.close-button' );
 
 
-	// 
+	//
 	// NAV ITEMS
-	// 
+	//
 
 
 	var hamburgerIcon = document.getElementsByClassName('icon')[0];
@@ -346,11 +339,11 @@ var App = function() {
 
 	var originalElement = document.getElementsByClassName( 'event-item' )[0];
 
-	// 
-	// 
+	//
+	//
 	// OVERLAY
-	// 
-	// 
+	//
+	//
 
 	var signInForm = document.getElementById( 'sign-in-form' );
 	var signInOverLay = document.getElementById( 'sign-in-overlay' );
@@ -362,9 +355,6 @@ var App = function() {
 
 	var newAccountForm = document.getElementById( 'new-account-form' );
 	var newEventForm = document.getElementById( 'new-event-form' );
-
-
-	console.log( nearbyButton );
 
 	nearbyButton.addEventListener( 'click', function() {
 		viewportElements.forEach( function( item ) {
@@ -387,11 +377,11 @@ var App = function() {
 	});
 
 
-	// 
-	// 
+	//
+	//
 	// NAV MENU
-	// 
-	// 
+	//
+	//
 
 
 
@@ -413,11 +403,11 @@ var App = function() {
 
 
 
-	// 
-	// 
+	//
+	//
 	// MAIN NAVIGATION ITEMS
-	// 
-	// 
+	//
+	//
 
 
 	var closeAccountAndEventOverlay = function() {
@@ -435,7 +425,7 @@ var App = function() {
 		// createAccount.querySelector( '.next-button' ).setAttribute( 'onclick', 'focusNextElement()' );
 
 		createAccount.classList.add( 'aside' );
-		
+
 		mainSection.show();
 
 		XL.hideAll();
@@ -454,28 +444,23 @@ var App = function() {
 
 			overlay.classList.remove( 'from-left' ,'visible', 'from-left-to-middle' );
 		}, 300 );
-		// console.log( 'hello' );
 	}
 
 	var len = cancelButtons.length;
 	for ( var i = 0; i < len; i++ ) {
-		// console.log( i );
-		// console.log( cancelButtons[i] );
 		cancelButtons[i].addEventListener( 'click', function() {
-
 			closeAccountAndEventOverlay();
-
 		})
 	}
 
 
 
 
-	// 
-	// 
+	//
+	//
 	// MAIN VIEW
-	// 
-	// 
+	//
+	//
 
 
 	var AnimationElement = function() {
@@ -864,135 +849,102 @@ var App = function() {
 
 		switch ( error ) {
 			case 1:
-				console.log( 'pass too short' );
 				flashError( 'Password too short' );
 				break;
 			case 2:
-				console.log( 'there is no number in pass' );
 				flashError( "Password doesn't contain number" );
 				break;
 			case 3:
-				console.log( 'there is no lowercase letter in pass' );
 				flashError( "Password doesn't contain lowercase letter" );
 				break;
 			case 4:
-				console.log( 'there is no UpperCase Letter in pass' );
 				flashError( "Password doesn't contain uppercase letter" );
 				break;
 			case 5:
-				console.log( 'passwords do not match' );
 				flashError( "Passwords do not match" );
 				break;
 			case 6:
-				console.log( 'invalid birthday' );
 				flashError( 'Invalid Birthday' );
 				break;
 			case 7:
-				console.log( 'day is wrong' );
 				flashError( 'Incorrect Day format' );
 				break;
 			case 8:
-				console.log( 'month is wrong' );
 				flashError( 'Incorrect Month format' );
 				break;
 			case 9:
-				console.log( 'year is wrong' );
 				flashError( 'Incorrect Year format' );
 				break;
 			case 10:
-				console.log( 'Invalid Characters in Name' );
 				flashError( 'Name containes invalid characters' );
 				break;
 			case 11:
-				console.log( 'Invalid Email' );
 				flashError( 'Invalid Email Address' );
 				break;
 			case 12:
-				console.log( 'Email Already in Use' );
 				flashError( 'Email Already in Use' );
 				break;
 			case 13:
-				console.log( 'Account Successfully Created' );
 				flashError( 'Account Successfully Created' );
 				break;
 			case 14:
-				console.log( 'Sign In Successful' );
 				flashError( 'Sign In Successful' );
 				break;
 			case 15:
-				console.log( 'Incorrect email or password' );
 				flashError( 'Incorrect email or password' );
 				break;
 			case 16:
-				console.log( 'Logged out' );
 				flashError( 'Logged out' );
 				break;
 			case 17:
-				console.log( 'The specified user does not exist' );
 				flashError( 'The specified user does not exist' );
 				break;
 			case 18:
-				console.log( 'Incorrect hour format' );
 				flashError( 'Incorrect hour format' );
 				break;
 			case 19:
-				console.log( 'Incorrect minute format' );
 				flashError( 'Incorrect minute format' );
 				break;
 			case 20:
-				console.log( 'Incorrect minute format' );
 				flashError( 'Invalid event start date format' );
 				break;
 			case 21:
-				console.log( 'Incorrect minute format' );
 				flashError( 'Invalid event end date format' );
 				break;
 			case 22:
-				console.log( 'No support for device location' );
 				flashError( 'No support for device location' );
 				break;
 			case 23:
-				console.log( 'Invalid Date Format' );
 				flashError( 'Invalid Date Format' );
 				break;
 			case 24:
-				console.log( 'Event Successfully Created' );
 				flashError( 'Event Successfully Created' );
 				break;
 			case 25:
-				console.log( 'Event End Date Is Before Start Date' );
 				flashError( 'Event End Date Is Before Start Date' );
 				break;
 			case 26:
-				console.log( 'Event End Time Is Before Start Time' );
 				flashError( 'Event End Time Is Before Start Time' );
 				break;
 			case 27:
-				console.log( 'Event Cannot Start Before Today' );
 				flashError( 'Event Cannot Start Before Today' );
 				break;
 			case 28:
-				console.log( 'You are already attending this event' );
 				flashError( 'You are already attending this event' );
 				break;
 			case 30:
-				console.log( 'Location Have not been filled' );
 				flashError( 'Location Have not been filled' );
 				break;
 			case 31:
-				console.log( 'Please Enter the Start Time First' );
 				flashError( 'Please Enter the Start Time First' );
 				break;
 			case 32:
-				console.log( 'Please Enter the Start Time' );
 				flashError( 'Please Enter the Start Time' );
 				break;
 			case 33:
-				console.log( 'Please Enter the End Time' );
 				flashError( 'Please Enter the End Time' );
 				break;
 			case 34:
-				console.log( 'Guestlist contains invalid email' );
 				flashError( 'Guestlist contains invalid email' );
 				break;
 		}
@@ -1033,7 +985,6 @@ var App = function() {
 			var inputs = newAccountForm.querySelectorAll( 'input' );
 			Array.prototype.map.call( inputs, function( item ) {
 				item.value = '';
-				console.log( item );
 			})
 			newAccountObject = {};
 		} else {
@@ -1041,29 +992,18 @@ var App = function() {
 			var inputs = newEventForm.querySelectorAll( 'input' );
 			Array.prototype.map.call( inputs, function( item ) {
 				item.value = '';
-				console.log( item );
 			})
 
 			var guestlist = newEventForm.querySelectorAll( 'textarea' );
 			guestlist.value = '';
 
-			// for ( var k = 1; k < len * 2; k++ ) {
-			// 	var a = k * 2;
-			// 	var element = newEventForm.children[a];
-			// 	element.value = '';
-			// 	console.log( element );
-			// }
 			newEventObject = {};
 		}
 	}
 
 
 	resetFieldsButton.addEventListener( 'click', function() {
-		// resetFieldsButton.classList.remove( 'end' );
-
 		resetFields();
-
-		// resetFields.classList.add( 'end' );
 	})
 
 
@@ -1106,9 +1046,9 @@ var App = function() {
 
 
 
-	// 
+	//
 	// ACCOUNT AND EVENT UTILITY
-	// 
+	//
 
 
 	var saveInputDataToObject = function( id, obj ) {
@@ -1129,15 +1069,15 @@ var App = function() {
 
 
 
-	// 
-	// 
-	// 
-	// 
+	//
+	//
+	//
+	//
 	// NEW ACCOUNT
-	// 
-	// 
-	// 
-	// 
+	//
+	//
+	//
+	//
 
 
 
@@ -1170,31 +1110,25 @@ var App = function() {
 		}
 		var re = /[0-9]/;
 		if ( !re.test( pass ) ) {
-			console.log( 'there is no number' );
 			showError( 2 );
 			passField.select();
 			return false;
 		}
 		re = /[a-z]/;
 		if ( !re.test( pass ) ) {
-			console.log( 'there is no lowercase letter' );
 			showError( 3 );
 			passField.select();
 			return false;
 		}
 		re = /[A-Z]/;
 		if ( !re.test( pass ) ) {
-			console.log( 'there is no UpperCase Letter' );
 			showError( 4 );
 			passField.select();
 			return false;
 		} else return true;
-
 	}
 
 	var checkPass = function() {
-
-
 		var inputValid = false;
 
 		// if it's only first field that we filled in, check only this field
@@ -1205,16 +1139,12 @@ var App = function() {
 			inputValid = validatePass( newAccountForm['pass'].value );
 
 		} else if ( newAccountForm.pass.value !== newAccountForm['retype-pass'].value ) {
-			console.log( 'passwords do not match' );
 			newAccountForm['retype-pass'].value = '';
 			newAccountForm['retype-pass'].select();
 			showError( 5 );
-
 		} else {
-
 			saveInputDataToObject( 'pass', false );
 			inputValid = true;
-
 		}
 
 		if ( inputValid ) {
@@ -1234,24 +1164,18 @@ var App = function() {
 			newAccountObject[key].trim();
 		})
 
-		// var len = newAccountForm.length;
-
 		var credentials = {};
 		credentials.email = newAccountObject['email'];
 		credentials.password = newAccountObject['pass'];
 
 		ref.createUser( credentials, function( error, user ) {
 			if ( error ) {
-				console.log( error );
 				showError( 12 );
 			} else {
-				console.log( user );
 				ref.authWithPassword( credentials, function( error, user ) {
 					if( error ) {
 						console.log( error );
 					} else {
-						console.log( user );
-
 						var uid = user.auth.uid;
 						var obj = {};
 						delete newAccountObject['email'];
@@ -1277,25 +1201,10 @@ var App = function() {
 								newAccountObject = {};
 
 								spinner.hide();
-
 								showError( 13 );
-
 							}
-
 						} );
 
-						// if the previous state was that the user wanted to
-						// create an event but didn't have an account, then
-						// the state shoudl return to event creation page.
-
-						// figure out the State of the applicatino and if the user
-						// was creating a new event before
-						// the app should switch back to that state..
-
-
-						// showSignIn();
-
-						// close the overlay and all
 					}
 				})
 			}
@@ -1313,19 +1222,11 @@ var App = function() {
 			return false;
 		} else {
 			newAccountForm.name.select();
-			console.log( 'Invalid Characters' );
 			showError( 10 );
 		}
 	}
 
 	var checkDOB = function() {
-
-		// if ( inputValid ) {
-		// 	checkIfFormReadyForSubmit( true );
-		// } else {
-		// 	// switch next/confirm buttons
-		// 	checkIfFormReadyForSubmit( false );
-		// }
 
 		var bday = newAccountForm.birthday.value;
 		var len = bday.length;
@@ -1337,7 +1238,6 @@ var App = function() {
 
 		var checkIfAllDigits = function( numbers ) {
 			var re = /^\d+$/;
-			console.log( re.test( numbers ) );
 			if ( re.test( numbers ) ) {
 				return true;
 			} else return false;
@@ -1346,25 +1246,18 @@ var App = function() {
 		var checkValidityOfNumbers = function( numbers ) {
 			var bday = numbers;
 			var day = bday.substr(6, 2);
-			console.log( day )
 			if ( day > 0 && day <= 31 ) {
 				var month = bday.substr(4, 2);
-				console.log( month )
 				if ( month > 0 && month <= 12 ) {
 					var year = bday.substr( 0, 4 );
-					console.log( year )
 
 					var today = new Date();
 					var minYear = today.getFullYear() - 100;
 					var maxYear = today.getFullYear() - 13;
 
 					if ( year >= minYear && year <= maxYear ) {
-						console.log( 'OK' );
-						console.log( bday );
 						return;
 					} else {
-						// error showing year is wrong
-						console.log( 'year is wrong' );
 						newAccountForm.birthday.select();
 						newAccountForm.birthday.focus();
 						showError( 9 );
@@ -1373,14 +1266,12 @@ var App = function() {
 
 				} else {
 					//error showing wrong month
-					console.log( 'month is wrong' );
 					newAccountForm.birthday.select();
 					showError( 8 );
 					return;
 				}
 			} else {
 				// error showing wrong day
-				console.log( 'day is wrong' );
 				newAccountForm.birthday.select();
 				showError( 7 );
 				return;
@@ -1412,7 +1303,6 @@ var App = function() {
 			var transformToNumbers = function( string ) {
 				var numbers = string.split( '-' ).join( '' );
 				bday = numbers;
-				// console.log( string );
 				return numbers;
 			}
 
@@ -1433,8 +1323,7 @@ var App = function() {
 
 		} else {
 			// form is invalid
-			// select 
-			console.log( 'its all wrong' );
+			// select
 			newAccountForm.birthday.select();
 			// check if error code is correct
 			// error 'incorrect date'
@@ -1446,7 +1335,6 @@ var App = function() {
 		// THE BIRTHDAY IS CORRECT, IF IT WASN'T THE FUNCTION WOULD NOT GET THIS FAR
 		checkIfFormReadyForSubmit( true );
 		saveInputDataToObject( 'birthday', false );
-		//console.log( newAccountForm.birthday );
 	}
 
 	var emailCheck = function() {
@@ -1495,7 +1383,6 @@ var App = function() {
 					showError( 11 );
 					newAccountForm.email.select();
 					// invalid email
-
 				}
 			}
 		}
@@ -1585,8 +1472,6 @@ var App = function() {
 			loadSingleEvent();
 		});
 
-		console.log( li );
-
 		return li;
 
 	}
@@ -1601,12 +1486,9 @@ var App = function() {
 			userEvents.appendChild( buildListItem( evt ) );
 		} else {
 
-			console.log( 'GETTING UNLISTED EVENT' )
 			ref.child( 'events/unlisted' ).child( id ).once( 'value', function( snap ) {
 
 				if ( snap.val() ) {
-
-					console.log( snap.val() );
 
 					events[ snap.val().id ] = snap.val();
 					userEvents.appendChild( buildListItem( snap.val() ) );
@@ -1638,7 +1520,6 @@ var App = function() {
 		if ( !myEventsLoaded ) {
 
 			ref.child( 'users' ).child( ref.getAuth().uid ).once( 'value', function( snap ) {
-				console.log( snap.val() );
 
 				var userEvents = snap.val().events;
 
@@ -1647,7 +1528,6 @@ var App = function() {
 				userEvents.map( function( item ) {
 
 					if ( item !== 'true' ) {
-						console.log( item );
 						attachEventToList( item );
 					}
 
@@ -1669,11 +1549,11 @@ var App = function() {
 
 
 
-	// 
-	// 
+	//
+	//
 	// NEW EVENT VIEW
-	// 
-	// 
+	//
+	//
 
 
 
@@ -1688,11 +1568,11 @@ var App = function() {
 
 
 
-	// 
-	// 
+	//
+	//
 	// SIGN IN OVERLAY AND VIEW
-	// 
-	// 
+	//
+	//
 
 
 
@@ -1708,12 +1588,9 @@ var App = function() {
 		fadedOverlay.classList.remove( 'opened' );
 		EM.hide( signInOverLay );
 		// signInOverLay.classList.remove( 'visible' );
-		console.dir( 'sign in hide');
 	}
 
 	var showSignIn = function() {
-
-		console.log( "HELLO" );
 
 		closeNav();
 		fadedOverlay.addEventListener( 'click', hideSignIn );
@@ -1734,18 +1611,14 @@ var App = function() {
 				console.log("Login Failed!", error);
 			} else {
 				showError( 14 );
-				console.log("Authenticated successfully with payload:", authData);
 			}
 		});
 	}
 
-	// console.log( showMyAccount );
 	// this.showMyAccount = showMyAccount;
-	// console.log( this.showMyAccount );
 
 	var changeSignInButtonToMyAccount = function() {
 		signInNavOverlay.children[0].lastChild.data = "My Account";
-		// console.log( showMyAccount )
 		signInNavOverlay.removeEventListener( 'click', showSignIn );
 		signInNavOverlay.addEventListener( 'click', showMyAccount );
 	}
@@ -1864,14 +1737,14 @@ var App = function() {
 
 
 
-	// 
-	// 
+	//
+	//
 	//
 	//
 	// 										NEW EVENT PAGE
 	//
 	//
-	// 
+	//
 
 
 
@@ -1881,8 +1754,6 @@ var App = function() {
 
 
 	var processEventName = function() {
-
-		console.log( 'PROCESS EVENT NAME' );
 
 		var id = 'event-name';
 		saveInputDataToObject( id, true );
@@ -1904,9 +1775,9 @@ var App = function() {
 
 
 
-	// 
+	//
 	// EVENT DATE CHECK
-	// 
+	//
 
 	var selectDateElement = function( start ) {
 
@@ -1940,33 +1811,6 @@ var App = function() {
 		var p1 = new DateObject( d1 );
 		var p2 = new DateObject( d2 );
 
-		// var check = function( primD, secD ) {
-
-		// 	var primValue = primD;
-		// 	var secValue = secD;
-
-		// 	if ( primValue <= secValue || primValue === secValue ) {
-
-
-		// 		console.log ( primValue );
-		// 		console.log( secValue );
-
-		// 		console.log( 'DATES OK' );
-		// 		return true;
-
-		// 	} else {
-
-		// 		console.log( 'day is before current day' );
-		// 		console.log( 'date preceeds today or event start date' );
-
-		// 		console.log( 'show error 26');
-		// 		showError( 27 );
-		// 		return false;
-
-		// 	}
-
-		// }
-
 
 		var isTimeGreater = function() {
 
@@ -1974,95 +1818,9 @@ var App = function() {
 			var t2 = parseInt( newEventObject['event-end-time'] );
 
 			if ( t1 !== NaN || t2 !== NaN ) {
-
 				return ( t1 >= t2 ) ? false : true;
-
 			}
-
-
-			// if ( parseInt(newEventObject['event-start-time'] ) >= parseInt( newEventObject['event-end-time'] ) ) {
-			// 	// the event end time is before the start time
-			// 	console.log( 'show error 26');
-			// 	showError( 26 );
-			// 	return false;
-			// } else {
-
-			// 	// return error stating the time cant be lower
-
-			// }
-
 		}
-
-
-		// var checkDay = function() {
-
-		// 	if ( p1.day <= p2.day ) {
-
-		// 		if ( p1.day === p2.day ) {
-
-		// 			console.log( 'day is the same' );
-
-					
-
-		// 		}
-
-		// 	} else {
-
-		// 		console.log( 'day is before current day' );
-
-		// 		console.log( 'show error 26');
-		// 		showError( 27 );
-		// 		return false;
-
-		// 	}
-
-		// }
-
-		// var checkMonth = function() {
-
-		// 	if ( p1.month <= p2.month ) {
-
-		// 		if ( p1.month === p2.month ) {
-
-		// 			console.log( 'month is the same' );
-
-					
-
-		// 		}
-
-		// 	} else {
-
-		// 		console.log( 'month is before current month' );
-
-		// 		// return month cant be this
-		// 		console.log( 'show error 26');
-		// 		showError( 27 );
-		// 		return false;
-
-		// 	}
-
-		// }
-
-		// var checkYear = function() {
-		// 	if ( p1.year <= p2.year ) {
-
-		// 		if ( p1.year === p2.year ) {
-
-		// 			console.log( 'year is the same' );
-		// 			return true;
-
-		// 		}
-
-		// 	} else {
-
-		// 		console.log( 'year is before current year' );
-
-		// 		console.log( 'show error 26');
-		// 		showError( 27 );
-		// 		return false;
-
-		// 	}
-		// }
 
 		var selectIncorrectField = function( time ) {
 
@@ -2110,29 +1868,15 @@ var App = function() {
 
 		if ( isGreaterOrEqual( p1.year, p2.year ) ) {
 
-			console.log( 'isGreaterOrEqual no. 1' );
-
 			if ( isSame( p1.year, p2.year ) ) {
-
-				console.log( 'isSame no. 1' );
 
 				if ( isGreaterOrEqual( p1.month, p2.month ) ) {
 
-					console.log( 'isGreaterOrEqual no. 2' );
-
 					if ( isSame( p1.month, p2.month ) ) {
-
-						console.log( 'isSame no. 2' );
 
 						if ( isGreaterOrEqual( p1.day, p2.day ) ) {
 
-							console.log( 'isGreaterOrEqual no. 3' );
-
 							if ( isSame( p1.day, p2.day ) ) {
-
-								console.log( 'isSame no. 2' );
-
-								console.log( isTimeGreater() );
 
 								if ( !isTimeGreater() ) {
 
@@ -2175,17 +1919,6 @@ var App = function() {
 
 		var dateObj = dObj;
 
-		console.log( dateObj );
-
-		// var sD = newEventForm['event-start-date'].value;
-		// var eD = newEventForm['event-end-date'].value;
-
-		// if ( sd !== '' || eD !== '' ) {
-
-
-
-		// }
-
 		if( dateObj.start ) {
 
 			var today = new Date();
@@ -2212,42 +1945,16 @@ var App = function() {
 
 			};
 
-			// var today = parseInt( today );
-			// var eventStartDate = parseInt( newEventObject['event-start-date'] );
-
-
-			// var eventStartDay = dateObj.day;
-			// var eventStartMonth = dateObj.month;
-			// var eventStartYear = dateObj.year;
-
 		} else {
 
 			var sD = newEventObject['event-start-date'];
-
-
-			// var dd = parseInt( sD.substr( 0, 2 ) );
-			// var mm = parseInt( sD.substr( 2, 2 ) );
-			// var yy = parseInt( sD.substr( 4, 2 ) );
-
-			// console.log( dd );
-			// console.log( mm );
-			// console.log( yy );
-
-			// var sD = {};
-			// sD.day = dd;
-			// sD.month = mm;
-			// sD.year = yy;
 
 			if ( compareDates( sD, dateObj.date, false ) ) {
 
 				newEventObject['event-end-date'] = dateObj.date;
 
 			};
-
 		}
-
-		
-
 	}
 
 
@@ -2334,10 +2041,7 @@ var App = function() {
 
 				dateObj.date = date;
 
-
-
 				verifyDate( getDayMonthYear( dateObj ) );
-
 
 			} else if ( len === 8 ) {
 
@@ -2348,12 +2052,7 @@ var App = function() {
 
 					dateObj.date = date;
 
-
-
 					verifyDate( getDayMonthYear( dateObj ) );
-
-
-
 
 				} else showError( 23 );
 
@@ -2389,9 +2088,9 @@ var App = function() {
 
 
 
-	// 
+	//
 	// CHECK EVENT TIME
-	// 
+	//
 
 
 	var saveTimeToObject = function( start, time ) {
@@ -2432,18 +2131,6 @@ var App = function() {
 			return ( t1 >= t2 ) ? false : true;
 
 		}
-
-
-		// if ( parseInt(newEventObject['event-start-time'] ) >= parseInt( newEventObject['event-end-time'] ) ) {
-		// 	// the event end time is before the start time
-		// 	console.log( 'show error 26');
-		// 	showError( 26 );
-		// 	return false;
-		// } else {
-
-		// 	// return error stating the time cant be lower
-
-		// }
 
 	}
 
@@ -2534,8 +2221,6 @@ var App = function() {
 
 	var dateTimeCheck = function( start ) {
 
-		console.log( 'dateTimeCheck' );
-
 		var time;
 
 		if ( start ) {
@@ -2619,14 +2304,9 @@ var App = function() {
 		if ( twoParts.length === 2 ) {
 
 			var secondPart = twoParts[1].split( '.' );
-			console.log( secondPart );
 			var len = secondPart.length;
 
-			// console.log( len );
-
 			return ( len === 2 || len === 3 ) ? true : false;
-
-			// console.log( ( len === 2 || len === 3 ) ? true : false );
 
 		} else {
 
@@ -2636,10 +2316,8 @@ var App = function() {
 	}
 
 	var processGuestList = function() {
-		console.log( 'process GuestList' );
 		var emails = newEventForm.guestlist.value;
 		var listOfEmails = emails.split(',');
-		console.log( listOfEmails );
 		listOfEmails = listOfEmails.map( function( email ) {
 			var email = email.trim()
 			if ( checkEmail( email ) ) {
@@ -2660,9 +2338,9 @@ var App = function() {
 	}
 
 
-	// 
+	//
 	// EVENT PLACE
-	// 
+	//
 
 
 
@@ -2675,8 +2353,6 @@ var App = function() {
 		var place = p,
 			name = n;
 
-		console.log( p );
-
 		newEventObject['event-location-data'] = {};
 		newEventObject['event-location-data'].name = name;
 
@@ -2688,7 +2364,7 @@ var App = function() {
 
 	};
 
-	
+
 	var autoCompleteInput = newEventForm['google-event-location'];
 	var autocomplete;
 	var autocompleteListener;
@@ -2708,15 +2384,12 @@ var App = function() {
 	}
 
 	var initAutocomplete = function() {
-		console.log( autocompleteListener );
 		if ( autocompleteListener !== undefined ) {
 			google.maps.event.removeListener(autocompleteListener);
 			autocompleteListener = undefined;
 		}
 
 		autocomplete = new google.maps.places.Autocomplete(autoCompleteInput);
-		// var input = newEventForm['google-event-location'];
-		// var autocomplete = new google.maps.places.Autocomplete(autoCompleteInput);
 
 		autocompleteListener = google.maps.event.addListener( autocomplete, 'place_changed', autocompleteCallback );
 
@@ -2750,17 +2423,14 @@ var App = function() {
 
 		if ( latDiff < 0.1 && latDiff > -0.1 && lngDiff < 0.1 && lngDiff > -0.1 ) {
 
-			console.log( "EVENT IS NEARBY" );
 			return nearbyList
 
 		} else if ( latDiff < 0.3 && latDiff > -0.3 && lngDiff < 0.3 && lngDiff > -0.3 ) {
 
-			console.log( "EVENT IS CLOSEBY" );
 			return closebyList
 
 		} else {
 
-			console.log( "EVENT IS FARAWAY" );
 			return farawayList;
 
 		}
@@ -2788,11 +2458,7 @@ var App = function() {
 				container.classList.remove( 'expand' );
 			}
 
-			console.log( container );
-			console.log( container.children );
-			console.log( container.children[0].children[index])
 			Array.prototype.forEach.call( container.children[0].children, function( item ) {
-				console.log( item );
 				item.classList.remove( 'selected' );
 			})
 			container.children[0].children[index].classList.add( 'selected' );
@@ -2820,7 +2486,7 @@ var App = function() {
 			displayInfoForEmptyDistanceList();
 		}
 
-		
+
 	};
 
 	var assignEventToUser = function( uid, id ) {
@@ -2870,7 +2536,6 @@ var App = function() {
 
 		if ( !newEventObject.privacy ) {
 			// save to public events
-			console.log( 'save to public events' );
 			var pushedData = ref.child( 'events/public' ).push( newEventObject, function( error, data ) {
 				if( error ) {
 					console.dir( error );
@@ -2901,8 +2566,6 @@ var App = function() {
 
 					appendNewEvent( id );
 
-					console.log( events[id] );
-
 					var latLng = {}
 					latLng.lat = events[id]['event-location-data'].lat;
 					latLng.lng = events[id]['event-location-data'].lng;
@@ -2915,7 +2578,6 @@ var App = function() {
 					marker.addListener( 'click', function() {
 						self.map.setCenter( latLng );
 						XL.moveInfoToView( key );
-						console.log( key );
 					})
 
 					shareViaEmail( id, emailAddresses, messageForGuests );
@@ -2925,10 +2587,9 @@ var App = function() {
 					// update the user.events with the event id
 				}
 			})
-			
+
 		} else {
 			// save to private events
-			console.log( 'save to private events' );
 			var pushedData = ref.child( 'events/unlisted' ).push( newEventObject, function( error, data ) {
 				if( error ) {
 					console.dir( error );
@@ -2940,10 +2601,7 @@ var App = function() {
 
 						if( error ) {
 							// show error
-
-							console.dir( error );
 						} else {
-
 							spinner.hide();
 						}
 
@@ -2977,8 +2635,6 @@ var App = function() {
 		var d1 = newEventObject['event-start-date'];
 		var d2 = newEventObject['event-end-date'];
 
-		console.log( compareDates( d1, d2 ) );
-
 		return compareDates( d1, d2 );
 
 	}
@@ -2987,8 +2643,6 @@ var App = function() {
 
 	var isBeingSubmitted = false;
 	var submitNewEvent = function() {
-
-		console.log( 'SUBMITTING NEW EVENT!' );
 
 		if ( !isBeingSubmitted ) {
 
@@ -3023,58 +2677,9 @@ var App = function() {
 
 		}
 
-
-		// ref.createUser( credentials, function( error, user ) {
-		// 	if ( error ) {
-		// 		console.log( error );
-		// 		showError( 12 );
-		// 	} else {
-		// 		console.log( user );
-		// 		ref.authWithPassword( credentials, function( error, user ) {
-		// 			if( error ) {
-		// 				console.log( error );
-		// 			} else {
-		// 				console.log( user );
-
-		// 				var uid = user.auth.uid;
-		// 				var obj = {};
-		// 				obj.name = newAccountForm.name.value;
-		// 				obj.birthday = newAccountForm.birthday.value;
-		// 				obj.employer = newAccountForm.employer.value;
-		// 				obj.job = newAccountForm.jobtitle.value;
-		// 				console.log( obj );
-		// 				ref.child( uid ).child( 'info' ).set( obj );
-
-		// 				// if the previous state was that the user wanted to
-		// 				// create an event but didn't have an account, then
-		// 				// the state shoudl return to event creation page.
-		// 				closeAccountAndEventOverlay();
-
-		// 				resetFields();
-
-		// 				showError( 13 );
-
-		// 				changeSignInButtonToMyAccount();
-
-		// 				// figure out the State of the applicatino and if the user
-		// 				// was creating a new event before
-		// 				// the app should switch back to that state..
-						
-
-
-		// 				// showSignIn();
-						
-		// 				// close the overlay and all
-		// 			}
-		// 		})
-		// 	}
-		// })
-
 	}
 
 	var focusNextElementInNewEvent = function( element ) {
-
-		console.log( 'FOCUS NEXT ELEMENT' );
 
 		// checkIfFormReadyForSubmit( true );
 		var elements = [ newEventForm['event-name'], newEventForm['event-start-time'], newEventForm['event-end-time'], newEventForm['google-event-location'] ];
@@ -3090,21 +2695,9 @@ var App = function() {
 		}
 
 		checkIfNewEventFormReadyForSubmit();
-
-		// if ( elements[0].value === '' ) {
-		// 	elements[0].focus();
-		// } else if ( elements[1].value === '' ) {
-		// 	elements[1].scrollIntoView(true);
-		// 	elements[1].focus();
-		// } else {
-			
-		// }
-
 	}
 
 	var checkIfNewEventFormReadyForSubmit = function( status ) {
-
-		console.log( 'CHECK IF NEW EVENT READY FOR SUBMIT' );
 
 		var elements = [ newEventForm['event-name'], newEventForm['event-start-time'], newEventForm['event-end-time'], newEventForm['guestlist'], newEventForm['google-event-location'] ];
 		var len = elements.length;
@@ -3140,10 +2733,6 @@ var App = function() {
 		} else {
 			EM.hide( farawayList.children[0] );
 		}
-
-		console.dir( nearbyList.children.length );
-		console.dir( closebyList );
-		console.dir( farawayList );
 	}
 
 
@@ -3164,14 +2753,9 @@ var App = function() {
 
 		var width = body.offsetWidth;
 
-			// console.log( dimensions );
-
-			// var body = document.getElementsByTagName( 'body' )[0];
-			// console.log( body );
 
 		if ( width >= 426 ) {
 
-			console.log( 'TIME TO LOAD GOOGLE MAP!' );
 			M.load();
 
 			// load XLview functionality
@@ -3228,15 +2812,15 @@ var App = function() {
 		// var mapImg = element.querySelector( 'img' );
 		// var url = 'https://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=19&markers=color:red%7C' + lat + ',' + lng + '4&size=400x400&maptype=roadmap&key=AIzaSyBPSBuZde1QlCpGe7IhH674CWPSFSDTknk'
 		// mapImg.setAttribute( 'src', url );
-		
+
 		var h2 = element.querySelector( 'h2' );
 		h2.innerHTML = info['event-name'] + '<span></span>';
-		
+
 		var ul = element.querySelector( 'ul' );
 
 		var startDate = new Date( info['event-start-time'] );
 		var endDate = new Date( info['event-end-time'] );
-		
+
 		ul.children[0].innerText = 'Start: ' + startDate.getHours() + ':' + startDate.getMinutes() + ' / ' + startDate.getDate() + '.' + startDate.getMonth() + 1 + '.' + startDate.getYear();
 		ul.children[1].innerText = 'End: ' + endDate.getHours() + ':' + endDate.getMinutes() + ' / ' + endDate.getDate() + '.' + endDate.getMonth() + 1 + '.' + endDate.getYear();
 		ul.children[2].innerText = 'Place: ' + info['event-location-data'].name;
@@ -3252,7 +2836,7 @@ var App = function() {
 
 			var addressField = content.children[0].children[1];
 			addressField.innerHTML = '<span>' + info['event-location-data'].address + '</span>';
-		
+
 			var guestCountField = content.children[0].children[3];
 			guestCountField.innerHTML = '<span>' + info['guest-count'] + '</span>';
 
@@ -3306,7 +2890,7 @@ var App = function() {
 		var latDiff = lat - userLat;
 		var lngDiff = lng - userLng;
 
-		
+
 
 		var clone = eventItem.cloneNode( true );
 
@@ -3315,22 +2899,17 @@ var App = function() {
 
 		if ( latDiff < 0.1 && latDiff > -0.1 && lngDiff < 0.1 && lngDiff > -0.1 ) {
 
-			console.log( "EVENT IS NEARBY" );
 			nearbyList.appendChild( clone );
 
 		} else if ( latDiff < 0.3 && latDiff > -0.3 && lngDiff < 0.3 && lngDiff > -0.3 ) {
 
-			console.log( "EVENT IS CLOSEBY" );
 			closebyList.appendChild( clone );
 
 		} else {
 
-			console.log( "EVENT IS FARAWAY" );
 			farawayList.appendChild( clone );
 
 		}
-
-
 
 	}
 
@@ -3389,8 +2968,6 @@ var App = function() {
 		// if we don't have user location
 
 		interval = setInterval( function() {
-
-			console.log( 'RUNNING INTERVAL' );
 
 			if ( events !== undefined && locationHashContainsId() && !singleViewLoaded ) {
 
@@ -3536,17 +3113,13 @@ var App = function() {
 		this.map;
 
 		this.load = function() {
-			
-			if ( !this.map ) {
-				console.log( 'LOADING GOOGLE MAP!' );
 
+			if ( !this.map ) {
 
 				this.map = new google.maps.Map(document.getElementById('map'), {
 					center: {lat: u.getUserLoation().lat, lng: u.getUserLoation().lng },
 					zoom: 8
 				});
-
-				console.log( events );
 
 				var keys = Object.keys( events );
 
@@ -3563,21 +3136,13 @@ var App = function() {
 					marker.addListener( 'click', function() {
 						self.map.setCenter( latLng );
 						XL.moveInfoToView( key );
-						console.log( key );
 					})
 
-					// console.log( marker );
-
-					// markers.push( marker );
 				})
 
 				Array.prototype.map.call( events, function( evt ) {
-					console.log( evt );
+					// console.log( evt );
 				});
-
-				// events.map( function( evt ) {
-				// 	console.log( evt );
-				// })
 
 			}
 
@@ -3595,7 +3160,7 @@ var App = function() {
 	var markers = [];
 	var loadGoogleMap = function() {
 
-		
+
 
 		// function initMap() {
 
@@ -3675,8 +3240,6 @@ var App = function() {
 
 				Array.prototype.map.call( eventKeys, function( id, index ) {
 
-					// console.log( evt );
-
 					var clone = originalElement.cloneNode( true );
 					clone = fillElementWithData( clone, id, false, true );
 
@@ -3694,11 +3257,7 @@ var App = function() {
 							container.classList.remove( 'expand' );
 						}
 
-						console.log( container );
-						console.log( container.children );
-						console.log( container.children[0].children[index])
 						Array.prototype.forEach.call( container.children[0].children, function( item ) {
-							console.log( item );
 							item.classList.remove( 'selected' );
 						})
 						container.children[0].children[index].classList.add( 'selected' );
@@ -3726,7 +3285,7 @@ var App = function() {
 				var evtButton = document.getElementsByClassName( 'open-new-event-button' )[0];
 
 				// var resetButton = document.getElementById( 'resetFields' );
-				
+
 				// var cancelButton = document.getElementsByClassName( 'cancel-button' )[0];
 
 				// var nextButton = document.getElementById( 'next-button' );
@@ -3759,7 +3318,6 @@ var App = function() {
 		}
 
 		this.unload = function() {
-			console.log( 'please remove and reattach overlay elements to dom, thank you' );
 			body.appendChild( overlay );
 			sideContainer.removeChild( overlayContainer );
 		}
@@ -3767,16 +3325,9 @@ var App = function() {
 		this.moveInfoToView = function( eventID ) {
 			var index = eventKeys.indexOf( eventID );
 
-			console.log( index );
-
 			percentsToMove = 'translateY(' + '-' + index * 100 + '%)';
 			ElementToAppendTo.style.transform = percentsToMove;
 
-			console.log( ElementToAppendTo );
-			console.log( ElementToAppendTo.style );
-
-			console.log( ElementToAppendTo.style.transform );
-			// eventElements[ index ].scrollIntoView();
 		}
 
 		var na = overlay.getElementsByClassName('new-account-container')[0];
@@ -3831,7 +3382,7 @@ var App = function() {
 		// }
 
 		this.showNewAccount = function() {
-			
+
 			if ( !overlay.classList.contains('visible') ) {
 
 				self.hideAll();
@@ -3915,7 +3466,7 @@ var App = function() {
 
 			}
 
-			
+
 
 		}
 
@@ -3938,7 +3489,6 @@ var App = function() {
 
 			if ( width >= 426 ) {
 
-				console.log( 'TIME TO LOAD GOOGLE MAP!' );
 				M.load();
 				XL.load();
 
@@ -3962,7 +3512,7 @@ var App = function() {
 		// elements.forEach( function( el ) {
 		// 	console.log( el );
 		// });
-		
+
 
 		// var dimensions = getSingleEventDimensions();
 		// var height = dimensions.height;
@@ -4007,11 +3557,11 @@ var App = function() {
 	}
 
 
-	// 
-	// 
+	//
+	//
 	// UTILITY
-	// 
-	// 
+	//
+	//
 	window.onresize = processResize;
 
 
@@ -4050,7 +3600,6 @@ var App = function() {
 					obj['guests'] = arr;
 					ref.child( 'events/public' ).child( id ).update( obj, function( error ) {
 						if ( error ) {
-							console.log( 'error' );
 							console.log( error );
 						} else {
 
@@ -4137,20 +3686,12 @@ var App = function() {
 		signInNavOverlay.addEventListener( 'click', showMyAccount );
 		// signInNavOverlay.setAttribute( 'onclick', 'app.showMyAccount()' );
 
-		// reauthenticate 
-		ref.authWithCustomToken( ref.getAuth().token, function( error, data) {
-			if ( !error ) {
-				console.log( 'AUTHENTICATED' );
-			}
-		} );
+		// reauthenticate
+		ref.authWithCustomToken( ref.getAuth().token );
 
 		var interval = 60000 * 60 * 23;
 		setInterval( function() {
-			ref.authWithCustomToken( ref.getAuth().token, function( error, data) {
-				if ( !error ) {
-					console.log( 'horay' );
-				}
-			});
+			ref.authWithCustomToken( ref.getAuth().token );
 		}, interval );
 	} else {
 		signInNavOverlay.addEventListener( 'click', showSignIn );
@@ -4160,5 +3701,3 @@ var App = function() {
 
 var app = new App();
 var initAutocomplete = app.initAutocomplete;
-
-
