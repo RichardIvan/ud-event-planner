@@ -3687,11 +3687,11 @@ var App = function() {
 		// signInNavOverlay.setAttribute( 'onclick', 'app.showMyAccount()' );
 
 		// reauthenticate
-		ref.authWithCustomToken( ref.getAuth().token );
+		ref.authWithCustomToken( ref.getAuth().token, funtion() {} );
 
 		var interval = 60000 * 60 * 23;
 		setInterval( function() {
-			ref.authWithCustomToken( ref.getAuth().token );
+			ref.authWithCustomToken( ref.getAuth().token, function() {} );
 		}, interval );
 	} else {
 		signInNavOverlay.addEventListener( 'click', showSignIn );
