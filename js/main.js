@@ -3687,7 +3687,7 @@ var App = function() {
 		// signInNavOverlay.setAttribute( 'onclick', 'app.showMyAccount()' );
 
 		// reauthenticate
-		ref.authWithCustomToken( ref.getAuth().token, funtion() {} );
+		ref.authWithCustomToken( ref.getAuth().token, function() {} );
 
 		var interval = 60000 * 60 * 23;
 		setInterval( function() {
