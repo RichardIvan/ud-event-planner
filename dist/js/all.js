@@ -1,10 +1,11 @@
 'use strict';
 
-//
-//
+// 
+// 
 // SETUP CODE
-//
-//
+// 
+// 
+
 
 var App = function () {
 
@@ -15,6 +16,7 @@ var App = function () {
 	// var Element = function( id ) {
 	// 	var el = document.getElementById( id );
 	// }
+
 
 	var EventManager = function () {
 
@@ -226,9 +228,9 @@ var App = function () {
 
 	var spinner = new Spinner();
 
-	//
+	// 
 	// USER DATA
-	//
+	// 
 
 	var User = function () {
 		var location;
@@ -283,9 +285,10 @@ var App = function () {
 	var eventOverlay = document.getElementById('event-overlay');
 	var eventOverlayCloseButton = document.querySelector('.close-button');
 
-	//
+	// 
 	// NAV ITEMS
-	//
+	// 
+
 
 	var hamburgerIcon = document.getElementsByClassName('icon')[0];
 	var navOverlay = document.getElementById('nav-overlay');
@@ -310,11 +313,11 @@ var App = function () {
 
 	var originalElement = document.getElementsByClassName('event-item')[0];
 
-	//
-	//
+	// 
+	// 
 	// OVERLAY
-	//
-	//
+	// 
+	// 
 
 	var signInForm = document.getElementById('sign-in-form');
 	var signInOverLay = document.getElementById('sign-in-overlay');
@@ -348,11 +351,12 @@ var App = function () {
 		});
 	});
 
-	//
-	//
+	// 
+	// 
 	// NAV MENU
-	//
-	//
+	// 
+	// 
+
 
 	var closeNav = function () {
 		navOverlay.classList.remove('opened');
@@ -368,11 +372,12 @@ var App = function () {
 		fadedOverlay.classList.add('opened');
 	});
 
-	//
-	//
+	// 
+	// 
 	// MAIN NAVIGATION ITEMS
-	//
-	//
+	// 
+	// 
+
 
 	var closeAccountAndEventOverlay = function () {
 
@@ -421,11 +426,12 @@ var App = function () {
 		});
 	}
 
-	//
-	//
+	// 
+	// 
 	// MAIN VIEW
-	//
-	//
+	// 
+	// 
+
 
 	var AnimationElement = function () {
 		var element;
@@ -597,6 +603,7 @@ var App = function () {
 	// 			text.classList.add( 'invisible' );
 	// 			border.classList.add( 'invisible' );
 
+
 	// 			//next step is to expand width,
 	// 			// this can be doen with class
 
@@ -614,7 +621,9 @@ var App = function () {
 
 	// 			// capture height
 
+
 	// 			setTimeout( function() {
+
 
 	// 				var el = {};
 	// 				var img = {};
@@ -628,12 +637,15 @@ var App = function () {
 	// 				// left position
 	// 				el.leftMargin = element.offsetLeft;
 
+
 	// 				var eventOverlay = document.getElementById( 'event-overlay' );
 	// 				eventOverlay.classList.add( 'expand1' );
 	// 				// eventOverlay.classList.add(  );
 	// 				element.classList.add( 'expand' );
 
+
 	// 				var sum = parseInt( element.style.top ) - element.offsetLeft;
+
 
 	// 				setTimeout( function() {
 	// 					element.style.top = sum + 'px';
@@ -649,11 +661,13 @@ var App = function () {
 	// 					}, 2000 )
 	// 				}, 100 )
 
+
 	// 			}, 600)
 
 	// 			break;
 	// 		}
 	// 	}
+
 
 	// }
 
@@ -1012,9 +1026,10 @@ var App = function () {
 		}
 	};
 
-	//
+	// 
 	// ACCOUNT AND EVENT UTILITY
-	//
+	// 
+
 
 	var saveInputDataToObject = function (id, obj) {
 
@@ -1030,15 +1045,16 @@ var App = function () {
 		}
 	};
 
-	//
-	//
-	//
-	//
+	// 
+	// 
+	// 
+	// 
 	// NEW ACCOUNT
-	//
-	//
-	//
-	//
+	// 
+	// 
+	// 
+	// 
+
 
 	var newAccountObject = {};
 
@@ -1178,6 +1194,7 @@ var App = function () {
 						// was creating a new event before
 						// the app should switch back to that state..
 
+
 						// showSignIn();
 
 						// close the overlay and all
@@ -1283,43 +1300,43 @@ var App = function () {
 				// check if last four is nuber between 1900 and 2015 or new date minus 13 yerars
 				// if not then the person is too young
 			} else {
-					showError(6);
-					newAccountForm.birthday.select();
-				}
+				showError(6);
+				newAccountForm.birthday.select();
+			}
 			// double check if the error code is correctly wired
 		} else if (len === 10) {
-				// remove the '/' sign
-				var transformToNumbers = function (string) {
-					var numbers = string.split('-').join('');
-					bday = numbers;
-					// console.log( string );
-					return numbers;
-				};
+			// remove the '/' sign
+			var transformToNumbers = function (string) {
+				var numbers = string.split('-').join('');
+				bday = numbers;
+				// console.log( string );
+				return numbers;
+			};
 
-				if (checkIfAllDigits(transformToNumbers(bday))) {
-					// check if frist two is between 1 and 31
-					checkValidityOfNumbers(bday);
+			if (checkIfAllDigits(transformToNumbers(bday))) {
+				// check if frist two is between 1 and 31
+				checkValidityOfNumbers(bday);
 
-					// check if second two is between 1 and 12
+				// check if second two is between 1 and 12
 
-					// check if last four is nuber between 1900 and 2015 or new date minus 13 yerars
-					// if not then the person is too young
-				} else {
-						showError(6);
-						// above error is invalid characters
-						newAccountForm.birthday.select();
-					}
+				// check if last four is nuber between 1900 and 2015 or new date minus 13 yerars
+				// if not then the person is too young
 			} else {
-				// form is invalid
-				// select
-				console.log('its all wrong');
-				newAccountForm.birthday.select();
-				// check if error code is correct
-				// error 'incorrect date'
 				showError(6);
-				checkIfFormReadyForSubmit(false);
-				return;
+				// above error is invalid characters
+				newAccountForm.birthday.select();
 			}
+		} else {
+			// form is invalid
+			// select 
+			console.log('its all wrong');
+			newAccountForm.birthday.select();
+			// check if error code is correct
+			// error 'incorrect date'
+			showError(6);
+			checkIfFormReadyForSubmit(false);
+			return;
+		}
 
 		// THE BIRTHDAY IS CORRECT, IF IT WASN'T THE FUNCTION WOULD NOT GET THIS FAR
 		checkIfFormReadyForSubmit(true);
@@ -1345,32 +1362,32 @@ var App = function () {
 				// showError invalid email
 			} else {
 
-					var twoParts = email.split('@');
+				var twoParts = email.split('@');
 
-					if (twoParts.length === 2) {
+				if (twoParts.length === 2) {
 
-						var secondPart = twoParts[1].split('.');
-						var len = secondPart.length;
+					var secondPart = twoParts[1].split('.');
+					var len = secondPart.length;
 
-						if (len === 2 || len === 3) {
+					if (len === 2 || len === 3) {
 
-							// EMAIL IS CORRECT!
+						// EMAIL IS CORRECT!
 
-							checkIfFormReadyForSubmit(true);
-							saveInputDataToObject('email', false);
-						} else {
-
-							showError(11);
-							newAccountForm.email.select();
-							// invalid email
-						}
+						checkIfFormReadyForSubmit(true);
+						saveInputDataToObject('email', false);
 					} else {
 
-							showError(11);
-							newAccountForm.email.select();
-							// invalid email
-						}
+						showError(11);
+						newAccountForm.email.select();
+						// invalid email
+					}
+				} else {
+
+					showError(11);
+					newAccountForm.email.select();
+					// invalid email
 				}
+			}
 		}
 	};
 
@@ -1522,17 +1539,19 @@ var App = function () {
 		}
 	};
 
-	//
-	//
+	// 
+	// 
 	// NEW EVENT VIEW
-	//
-	//
+	// 
+	// 
 
-	//
-	//
+
+	// 
+	// 
 	// SIGN IN OVERLAY AND VIEW
-	//
-	//
+	// 
+	// 
+
 
 	var hideSignIn = function () {
 
@@ -1611,20 +1630,20 @@ var App = function () {
 				// showError( 15 );
 			} else {
 
-					spinner.hide();
-					hideSignIn();
+				spinner.hide();
+				hideSignIn();
 
-					// reset Sign in
-					resetLoginFields();
+				// reset Sign in
+				resetLoginFields();
 
-					//
-					changeSignInButtonToMyAccount();
-					showError(14);
-					var interval = 60000 * 60 * 23;
-					setInterval(function () {
-						signInWithToken(ref.getAuth().token);
-					}, interval);
-				}
+				//
+				changeSignInButtonToMyAccount();
+				showError(14);
+				var interval = 60000 * 60 * 23;
+				setInterval(function () {
+					signInWithToken(ref.getAuth().token);
+				}, interval);
+			}
 		});
 	};
 
@@ -1682,16 +1701,19 @@ var App = function () {
 	// this script is taken and used from
 	// https://gist.github.com/ricardozea/abb9f98a19f6d04a0269
 
+
 	// var selectAll = fucn
 
-	//
-	//
+
+	// 
+	// 
 	//
 	//
 	// 										NEW EVENT PAGE
 	//
 	//
-	//
+	// 
+
 
 	var newEventObject = {};
 
@@ -1715,9 +1737,9 @@ var App = function () {
 		saveInputDataToObject(id, true);
 	};
 
-	//
+	// 
 	// EVENT DATE CHECK
-	//
+	// 
 
 	var selectDateElement = function (start) {
 
@@ -1757,6 +1779,7 @@ var App = function () {
 
 		// 	if ( primValue <= secValue || primValue === secValue ) {
 
+
 		// 		console.log ( primValue );
 		// 		console.log( secValue );
 
@@ -1775,6 +1798,7 @@ var App = function () {
 		// 	}
 
 		// }
+
 
 		var isTimeGreater = function () {
 
@@ -1806,6 +1830,7 @@ var App = function () {
 
 		// 			console.log( 'day is the same' );
 
+
 		// 		}
 
 		// 	} else {
@@ -1827,6 +1852,7 @@ var App = function () {
 		// 		if ( p1.month === p2.month ) {
 
 		// 			console.log( 'month is the same' );
+
 
 		// 		}
 
@@ -1959,6 +1985,7 @@ var App = function () {
 
 		// if ( sd !== '' || eD !== '' ) {
 
+
 		// }
 
 		if (dateObj.start) {
@@ -1988,31 +2015,32 @@ var App = function () {
 			// var today = parseInt( today );
 			// var eventStartDate = parseInt( newEventObject['event-start-date'] );
 
+
 			// var eventStartDay = dateObj.day;
 			// var eventStartMonth = dateObj.month;
 			// var eventStartYear = dateObj.year;
 		} else {
 
-				var sD = newEventObject['event-start-date'];
+			var sD = newEventObject['event-start-date'];
 
-				// var dd = parseInt( sD.substr( 0, 2 ) );
-				// var mm = parseInt( sD.substr( 2, 2 ) );
-				// var yy = parseInt( sD.substr( 4, 2 ) );
+			// var dd = parseInt( sD.substr( 0, 2 ) );
+			// var mm = parseInt( sD.substr( 2, 2 ) );
+			// var yy = parseInt( sD.substr( 4, 2 ) );
 
-				// console.log( dd );
-				// console.log( mm );
-				// console.log( yy );
+			// console.log( dd );
+			// console.log( mm );
+			// console.log( yy );
 
-				// var sD = {};
-				// sD.day = dd;
-				// sD.month = mm;
-				// sD.year = yy;
+			// var sD = {};
+			// sD.day = dd;
+			// sD.month = mm;
+			// sD.year = yy;
 
-				if (compareDates(sD, dateObj.date, false)) {
+			if (compareDates(sD, dateObj.date, false)) {
 
-					newEventObject['event-end-date'] = dateObj.date;
-				};
-			}
+				newEventObject['event-end-date'] = dateObj.date;
+			};
+		}
 	};
 
 	var verifyDate = function (d) {
@@ -2123,9 +2151,10 @@ var App = function () {
 		checkEventDateFormat();
 	};
 
-	//
+	// 
 	// CHECK EVENT TIME
-	//
+	// 
+
 
 	var saveTimeToObject = function (start, time) {
 		if (start) {
@@ -2257,10 +2286,10 @@ var App = function () {
 			// timeObj.start = true;
 		} else {
 
-				time = newEventForm['event-end-time'].value;
-				// len = time.length;
-				// timeObj.start = false;
-			}
+			time = newEventForm['event-end-time'].value;
+			// len = time.length;
+			// timeObj.start = false;
+		}
 
 		if (time !== '') {
 
@@ -2334,8 +2363,8 @@ var App = function () {
 			// console.log( ( len === 2 || len === 3 ) ? true : false );
 		} else {
 
-				return false;
-			}
+			return false;
+		}
 	};
 
 	var processGuestList = function () {
@@ -2362,9 +2391,10 @@ var App = function () {
 		}
 	};
 
-	//
+	// 
 	// EVENT PLACE
-	//
+	// 
+
 
 	//
 	// GOOGLE PLACES API FUNCTION
@@ -2608,45 +2638,45 @@ var App = function () {
 				}
 			});
 		} else {
-				// save to private events
-				console.log('save to private events');
-				var pushedData = ref.child('events/unlisted').push(newEventObject, function (error, data) {
-					if (error) {
-						console.dir(error);
-					} else {
+			// save to private events
+			console.log('save to private events');
+			var pushedData = ref.child('events/unlisted').push(newEventObject, function (error, data) {
+				if (error) {
+					console.dir(error);
+				} else {
 
-						var id = pushedData.key();
+					var id = pushedData.key();
 
-						ref.child('events/unlisted').child(id).update({ 'id': id }, function (error, data) {
+					ref.child('events/unlisted').child(id).update({ 'id': id }, function (error, data) {
 
-							if (error) {
-								// show error
+						if (error) {
+							// show error
 
-								console.dir(error);
-							} else {
+							console.dir(error);
+						} else {
 
-								spinner.hide();
-							}
-						});
+							spinner.hide();
+						}
+					});
 
-						showError(24);
-						newEventObject = new Object();
+					showError(24);
+					newEventObject = new Object();
 
-						obj['id'] = id;
-						events[id] = obj;
+					obj['id'] = id;
+					events[id] = obj;
 
-						assignEventToUser(ref.getAuth().uid, id);
+					assignEventToUser(ref.getAuth().uid, id);
 
-						appendNewEvent(id);
+					appendNewEvent(id);
 
-						shareViaEmail(id, emailAddresses, messageForGuests);
+					shareViaEmail(id, emailAddresses, messageForGuests);
 
-						// update the saved item with ID..
+					// update the saved item with ID..
 
-						// update the user.events with the event id
-					}
-				});
-			}
+					// update the user.events with the event id
+				}
+			});
+		}
 	};
 
 	var allTimesAreValid = function () {
@@ -2731,6 +2761,7 @@ var App = function () {
 		// 				// figure out the State of the applicatino and if the user
 		// 				// was creating a new event before
 		// 				// the app should switch back to that state..
+
 
 		// 				// showSignIn();
 
@@ -3082,10 +3113,10 @@ var App = function () {
 			// searchResults.appendChild( fillElementWithData( element, id, original ) )
 		} else {
 
-				if (displayedResults.length !== 0) {
-					clearSearchResults(true);
-				}
+			if (displayedResults.length !== 0) {
+				clearSearchResults(true);
 			}
+		}
 	};
 
 	var clearSearchResults = function (whatever) {
@@ -3331,6 +3362,7 @@ var App = function () {
 
 				// body.removeChild( overlay );
 
+
 				// reassign IDs
 
 				// wire eventListeners
@@ -3354,7 +3386,9 @@ var App = function () {
 				/// QUEASTION OF WHEN TO ATTACH EVENTAS
 				// EM.attachEventsToInputs();
 
+
 				// console.log( newAccountForm );
+
 
 				accButton.addEventListener('click', self.openMyAccount);
 				evtButton.addEventListener('click', self.createNewEvent);
@@ -3546,9 +3580,11 @@ var App = function () {
 		// 	console.log( el );
 		// });
 
+
 		// var dimensions = getSingleEventDimensions();
 		// var height = dimensions.height;
 		// var width = dimensions.height;
+
 
 		Array.prototype.forEach.call(elements, function (el) {
 
@@ -3583,11 +3619,11 @@ var App = function () {
 		// resetImagesOnElements( height, width );
 	};
 
-	//
-	//
+	// 
+	// 
 	// UTILITY
-	//
-	//
+	// 
+	// 
 	window.onresize = processResize;
 
 	var attendEvent = function () {
@@ -3637,10 +3673,10 @@ var App = function () {
 				}
 			} else {
 
-					// show error saying that the user is already attending!
+				// show error saying that the user is already attending!
 
-					showError(28);
-				}
+				showError(28);
+			}
 		} else {
 
 			showSignIn();
@@ -3695,7 +3731,7 @@ var App = function () {
 		signInNavOverlay.addEventListener('click', showMyAccount);
 		// signInNavOverlay.setAttribute( 'onclick', 'app.showMyAccount()' );
 
-		// reauthenticate
+		// reauthenticate 
 		ref.authWithCustomToken(ref.getAuth().token, function (error, data) {
 			if (!error) {
 				console.log('AUTHENTICATED');

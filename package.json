@@ -1,5 +1,5 @@
 {
-  "name": "Event Creator Project",
+  "name": "event-creator-project",
   "version": "1.0.0",
   "description": "Project for creating Events",
   "main": "index.html",
@@ -12,20 +12,21 @@
   "author": "Richard Ivan",
   "license": "ISC",
   "devDependencies": {
-    "browser-sync": "^2.11.1",
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-babel": "^6.1.1",
+    "browser-sync": "^2.15.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",
     "gulp-eslint": "^1.1.1",
     "gulp-exit": "0.0.2",
-    "gulp-image-resize": "^0.7.1",
+    "gulp-image-resize": "^0.7.2",
     "gulp-imagemin": "^2.4.0",
-    "gulp-jasmine-phantom": "^2.0.1",
-    "gulp-sass": "^2.2.0",
+    "gulp-imageoptim": "^0.3.6",
+    "gulp-jasmine-phantom": "^2.1.2",
+    "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.1",
-    "imagemin-pngquant": "^4.2.0"
+    "gulp-uglify": "^1.5.4",
+    "imagemin-pngquant": "^4.2.2"
   },
   "dependencies": {
     "gulp-imageoptim": "^0.3.4",
